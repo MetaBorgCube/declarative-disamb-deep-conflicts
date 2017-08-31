@@ -1,0 +1,49 @@
+module pp
+
+imports
+
+  libstratego-gpp
+  libspoofax/sdf/pp
+  libspoofax/editor/refactoring/-
+  pp/Java-parenthesize
+  pp/Java-pp
+
+rules
+
+  editor-format:
+    (node, _, ast, path, project-path) -> (filename, result)
+    with
+      ext      := <get-extension> path
+    ; filename := <guarantee-extension(|$[pp.[ext]])> path
+    ; result   := <pp-debug> node
+
+rules
+  
+  pp-Java-string =
+    parenthesize-Java
+    ; prettyprint-Java-start-symbols
+    ; !V([], <id>)
+    ; box2text-string(|120)
+      
+  pp-partial-Java-string =
+    parenthesize-Java
+    ; prettyprint-Java
+    ; !V([], <id>)
+    ; box2text-string(|120)
+    
+  pp-partial-Java-string(|sort) =
+    parenthesize-Java
+    ; prettyprint-Java(|sort)
+    ; !V([], <id>)
+    ; box2text-string(|120)  
+      
+  pp-debug :
+    ast -> result
+    with
+       result := <pp-Java-string> ast
+    <+ <bottomup(try(not(is-string); not(is-list); not(pp-Java-string); debug(!"cannot pp ")))> ast
+    ;  result := ""
+
+rules
+  
+  construct-textual-change = construct-textual-change(pp-partial-Java-string, parenthesize, override-reconstruction, resugar)

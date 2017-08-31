@@ -1,0 +1,9 @@
+---
+id: org.metaborg:Java.test:0.1.0-SNAPSHOT
+name: Java
+dependencies:
+  compile:
+  - org.metaborg:Java:0.1.0-SNAPSHOT
+  - org.metaborg:org.metaborg.meta.lang.spt:${metaborgVersion}
+build:
+  useBuildSystemSpec: true
