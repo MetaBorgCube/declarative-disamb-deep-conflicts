@@ -1,0 +1,15 @@
+module Basic19
+
+language CamlLight start symbol Start
+
+test Basic19 [[let v1 = make_vect 0 `A` ;;
+(* v1 : char vect = [||] *)
+
+let v2 = make_vect 2 `B` ;;
+(* v2 : char vect = [|`B`; `B`|] *)
+
+let v3 = make_vect 1 `C` ;;
+(* v3 : char vect = [|`C`|] *)
+
+concat_vect (concat_vect v1 v2) v3 ;;
+(* - : char vect = [|`B`; `B`; `C`|] *)]] parse succeeds

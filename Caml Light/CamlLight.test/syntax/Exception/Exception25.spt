@@ -1,0 +1,12 @@
+module Exception25
+
+language CamlLight start symbol Start
+
+test Exception25 [[type e == exn ;;
+(* Type e defined. *)
+
+exception E1 ;;
+(* Exception E1 defined. *)
+
+(E1 : e) ;;
+(* - : e = E1 *)]] parse succeeds

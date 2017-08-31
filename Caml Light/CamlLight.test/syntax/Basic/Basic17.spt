@@ -1,0 +1,8 @@
+module Basic17
+
+language CamlLight start symbol Start
+
+test Basic17 [[let f = function x -> function y -> x + y
+ in f 1 2
+;;
+(* - : int = 3 *)]] parse succeeds

@@ -1,0 +1,6 @@
+module OL1
+
+language CamlLight start symbol Start
+
+test OL1 [[1+2*3;;
+(* - : int = 7 *)]] parse succeeds

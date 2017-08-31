@@ -1,0 +1,9 @@
+module Basic5
+
+language CamlLight start symbol Start
+
+test Basic5 [[let double = function x -> x + x ;;
+(* double : int -> int = <fun> *)
+
+double 7;;
+(* - : int = 14 *)]] parse succeeds

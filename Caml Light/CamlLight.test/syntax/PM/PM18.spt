@@ -1,0 +1,8 @@
+module PM18
+
+language CamlLight start symbol Start
+
+test PM18 [[match (3 > 4) with
+  | false -> 0
+  | true  -> 1 ;;
+(* - : int = 0 *)]] parse succeeds

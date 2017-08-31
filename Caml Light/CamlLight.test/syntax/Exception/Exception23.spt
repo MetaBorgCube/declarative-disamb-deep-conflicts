@@ -1,0 +1,10 @@
+module Exception23
+
+language CamlLight start symbol Start
+
+test Exception23 [[let f = function 0 -> `X` ;;
+(* f : int -> char = <fun> *)
+
+try f 1
+with Match_failure _ -> `O` ;;
+(* - : char = `O` *)]] parse succeeds

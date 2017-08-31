@@ -1,0 +1,17 @@
+module ValRes4
+
+language CamlLight start symbol Start
+
+test ValRes4 [[(* Value restriction test. *)
+
+let fst (a,b) = a ;;
+(* fst : 'a * 'b -> 'a = <fun> *)
+
+let pair = ((function x -> x), 22) ;;
+(* pair : ('a -> 'a) * int = <fun>, 22 *)
+
+(fst pair) 7 ;;
+(* 7 *)
+
+(fst pair) true ;;
+(* true *)]] parse succeeds

@@ -1,0 +1,19 @@
+module Input2
+
+language CamlLight start symbol Start
+
+test Input2 [[let n = print_string("Enter your name: ") ;
+        read_line()
+;;
+
+print_string("Hello " ^ n ^ "!") ;
+print_newline()
+;;
+  
+(*
+Enter your name: Neil
+n : string = "Neil"
+Hello Neil!
+- : unit = ()
+- : unit = ()
+*)]] parse succeeds

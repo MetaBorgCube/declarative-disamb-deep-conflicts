@@ -1,0 +1,13 @@
+module Advanced6
+
+language CamlLight start symbol Start
+
+test Advanced6 [[type ('a,'b) either = Left of 'a | Right of 'b;;
+(* Type either defined. *)
+
+let elim_either l r = function Left  x -> l x
+                             | Right y -> r y ;;
+(* elim_either : ('a -> 'b) -> ('c -> 'b) -> ('a, 'c) either -> 'b = <fun> *)
+
+elim_either (function x -> x) (function y -> y + 1) (Right 5);;
+(* - : int = 6 *)]] parse succeeds

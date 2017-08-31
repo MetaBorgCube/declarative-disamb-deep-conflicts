@@ -1,0 +1,19 @@
+module OL16
+
+language CamlLight start symbol Start
+
+test OL16 [[let insertion_sort a =
+  for i = 1 to vect_length a - 1 do
+    let val_i = a.(i) in
+    let j = ref i in
+    while !j > 0 && val_i < a.(!j - 1) do
+      a.(!j) <- a.(!j - 1);
+      j := !j - 1
+    done;
+    a.(!j) <- val_i
+  done;;
+(* insertion_sort : 'a vect -> unit = <fun> *)
+
+let a = [| 5 ; 4 ; 1 ; 87 |] in
+   insertion_sort a; a;;
+(* - : int vect = [|1; 4; 5; 87|] *)]] parse succeeds

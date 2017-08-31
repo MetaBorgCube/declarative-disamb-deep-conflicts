@@ -1,0 +1,32 @@
+module OL8
+
+language CamlLight start symbol Start
+
+test OL8 [[type sign = Positive | Negative;;
+(* Type sign defined. *)
+
+let sign_int n = (if n >= 0 then Positive else Negative : sign);;
+(* sign_int : int -> sign = <fun> *) 
+
+sign_int 14;;
+(* - : sign = Positive *)
+
+type number = Int of int | Float of float | Error;;
+(* Type number defined *)
+
+let add_num (n1 : number) (n2 : number) =
+  ( match (n1, n2) with
+    (Int i1, Int i2) ->
+      (* Check for map_overflow of integer addition *)
+      if sign_int i1 = sign_int i2 && sign_int(i1 + i2) <> sign_int i1
+      then Float(float_of_int i1 +. float_of_int i2)
+      else Int(i1 + i2)
+  | (Int i1, Float f2) -> Float(float_of_int i1 +. f2)
+  | (Float f1, Int i2) -> Float(f1 +. float_of_int i2)
+  | (Float f1, Float f2) -> Float(f1 +. f2)
+  | (Error, _) -> Error
+  | (_, Error) -> Error : number);;
+(* add_num : number -> number -> number = <fun> *)
+
+add_num (Int 123) (Float 3.14159);;
+(* - : number = Float 126.14159 *)]] parse succeeds

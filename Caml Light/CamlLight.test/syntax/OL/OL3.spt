@@ -1,0 +1,6 @@
+module OL3
+
+language CamlLight start symbol Start
+
+test OL3 [[(1 < 2) = false;;
+(* - : bool = false *)]] parse succeeds

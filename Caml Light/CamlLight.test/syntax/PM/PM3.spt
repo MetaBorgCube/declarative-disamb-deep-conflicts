@@ -1,0 +1,9 @@
+module PM3
+
+language CamlLight start symbol Start
+
+test PM3 [[match (1,2) with
+    ((2,1)|(1,2)) -> `A`
+  | _             -> `B`
+;;
+(* - : char = `A` *)]] parse succeeds

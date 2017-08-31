@@ -1,0 +1,6 @@
+module Basic9
+
+language CamlLight start symbol Start
+
+test Basic9 [[(1+2, 3+4) ;;
+(* - : int * int = 3, 7 *)]] parse succeeds

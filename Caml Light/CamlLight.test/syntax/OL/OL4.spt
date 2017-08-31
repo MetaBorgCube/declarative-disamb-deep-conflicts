@@ -1,0 +1,26 @@
+module OL4
+
+language CamlLight start symbol Start
+
+test OL4 [[let rec
+        (sort : ('a -> 'a -> bool) -> 'a list -> 'a list) =
+	            fun leq lst -> match lst with
+                                 []           -> []
+                               | head :: tail -> insert leq head (sort leq tail)
+and
+        (insert : ('a -> 'a -> bool) -> 'a -> 'a list -> 'a list) =
+        	    fun leq elt lst -> match lst with
+                                     []           -> [elt]
+                                   | head :: tail -> if leq elt head
+                                                       then elt :: lst
+                                                       else head :: insert leq elt tail
+;;
+(* sort : ('a -> 'a -> bool) -> 'a list -> 'a list = <fun>
+   insert : ('a -> 'a -> bool) -> 'a -> 'a list -> 'a list = <fun>
+*)
+
+sort (prefix <=) [6;2;5];;
+(* - : int list = [2; 5; 6] *)
+
+sort (prefix <=.) [3.14; 2.718];;
+(* - : float list = [2.718; 3.14] *)]] parse succeeds

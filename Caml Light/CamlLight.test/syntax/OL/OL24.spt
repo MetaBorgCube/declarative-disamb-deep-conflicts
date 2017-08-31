@@ -1,0 +1,18 @@
+module OL24
+
+language CamlLight start symbol Start
+
+test OL24 [[type ratio = {num: int; denom: int};;
+(* Type ratio defined. *)
+
+let add_ratio (r1 : ratio) (r2 : ratio) =
+  match r1 with
+  | { num = r1n; denom = r1d} ->
+  match r2 with
+  | { num = r2n; denom = r2d} ->
+  {num = r1n * r2d + r2n * r1d;
+   denom = r1d * r2d};;
+(* add_ratio : ratio -> ratio -> ratio = <fun> *)
+
+add_ratio {num=1; denom=3} {num=2; denom=5};;
+(* - : ratio = {num = 11; denom = 15} *)]] parse succeeds

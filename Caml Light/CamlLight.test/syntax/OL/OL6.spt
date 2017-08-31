@@ -1,0 +1,11 @@
+module OL6
+
+language CamlLight start symbol Start
+
+test OL6 [[let rec map = fun f xs -> match xs with
+                            []       -> []
+                          | hd :: tl -> f hd :: map f tl ;;
+(* map : ('a -> 'b) -> 'a list -> 'b list = <fun> *)
+
+map (function n -> n * 2 + 1) [0;1;2;3;4];;
+(* - : int list = [1; 3; 5; 7; 9] *)]] parse succeeds

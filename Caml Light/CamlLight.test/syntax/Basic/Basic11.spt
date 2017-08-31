@@ -1,0 +1,6 @@
+module Basic11
+
+language CamlLight start symbol Start
+
+test Basic11 [[(1+2) :: if true then [] else (1 :: []) ;;
+(* - : int list = [3] *)]] parse succeeds

@@ -1,0 +1,18 @@
+module PM19
+
+language CamlLight start symbol Start
+
+test PM19 [[type tyC = C of int ;;
+(* Type tyC defined. *)
+
+let (C x) = C 7 ;;
+(* x : int = 7 *)
+
+x ;;
+(* - : int = 7 *)
+
+type tyA = A ;;
+(* Type tyA defined. *)
+
+let A = A ;;
+(* *)]] parse succeeds

@@ -1,0 +1,20 @@
+module Input1
+
+language CamlLight start symbol Start
+
+test Input1 [[let n = print_string("Enter a natural number: ") ;
+        read_int()
+;;
+
+print_string("Your number doubled is: ") ;
+print_int(2*n) ;
+print_newline()
+;;
+
+(*
+Enter a natural number: 8
+n : int = 8
+Your number doubled is: 16
+- : unit = ()
+- : unit = ()
+*)]] parse succeeds

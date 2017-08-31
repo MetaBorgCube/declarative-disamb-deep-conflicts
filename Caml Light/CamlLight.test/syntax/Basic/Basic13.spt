@@ -1,0 +1,12 @@
+module Basic13
+
+language CamlLight start symbol Start
+
+test Basic13 [[(function x -> x) 1 ;;
+(* - : int = 1 *)
+
+let f = (function x -> x) (prefix + 1) ;;
+(* - : int -> int = <fun> *)
+
+f 3 ;;
+(* - : int = 4 *)]] parse succeeds

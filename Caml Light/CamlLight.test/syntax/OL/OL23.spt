@@ -1,0 +1,102 @@
+module OL23
+
+language CamlLight start symbol Start
+
+test OL23 [[type expression =
+    Const of float
+  | Var of string
+  | Sum of expression * expression    (* e1 + e2 *)
+  | Diff of expression * expression   (* e1 - e2 *)
+  | Prod of expression * expression   (* e1 * e2 *)
+  | Quot of expression * expression   (* e1 / e2 *)
+;;
+(* Type expression defined. *)
+
+exception Not_found ;;
+(* Exception Not_found defined. *)
+
+let rec (assoc : 'a -> ('a * 'b) list -> 'b) = function x ->
+   function
+     | []         -> raise Not_found
+     | (y,z)::yzs -> if x = y then z else assoc x yzs;;
+(* assoc : 'a -> ('a * 'b) list -> 'b = <fun> *)
+
+exception Unbound_variable of string;;
+(* Exception Unbound_variable defined. *)
+
+let rec (eval : (string * float) list -> expression -> float) =
+  fun env exp ->
+  (match exp with
+    Const c -> c 
+  | Var v -> (try assoc v env with Not_found -> raise(Unbound_variable v))
+  | Sum(f, g) -> eval env f +. eval env g
+  | Diff(f, g) -> eval env f -. eval env g
+  | Prod(f, g) -> eval env f *. eval env g
+  | Quot(f, g) -> eval env f /. eval env g);;
+(* eval : (string * float) list -> expression -> float = <fun> *)
+
+let rec (deriv : expression -> string -> expression) =
+  fun exp dv ->
+  match exp with
+    Const c -> Const 0.0
+  | Var v -> if v = dv then Const 1.0 else Const 0.0
+  | Sum(f, g) -> Sum(deriv f dv, deriv g dv)
+  | Diff(f, g) -> Diff(deriv f dv, deriv g dv)
+  | Prod(f, g) -> Sum(Prod(f, deriv g dv), Prod(deriv f dv, g))
+  | Quot(f, g) -> Quot(Diff(Prod(deriv f dv, g), Prod(f, deriv g dv)),Prod(g, g))
+;;
+(* deriv : expression -> string -> expression = <fun> *)
+
+let print_expr = function (exp : expression) ->
+  (* Local function definitions *)
+  let open_paren prec op_prec =
+    if prec > op_prec then print_string "(" in
+  let close_paren prec op_prec =
+    if prec > op_prec then print_string ")" in
+  let rec (print : int -> expression -> unit) =
+   fun prec (exp : expression) -> ( (* prec is the current precedence *)
+    match exp with
+      Const c -> print_float c
+    | Var v -> print_string v
+    | Sum(f, g) ->
+        open_paren prec 0;
+        print 0 f; print_string " + "; print 0 g;
+        close_paren prec 0
+    | Diff(f, g) ->
+        open_paren prec 0;
+        print 0 f; print_string " - "; print 1 g;
+        close_paren prec 0
+    | Prod(f, g) ->
+        open_paren prec 2;
+        print 2 f; print_string " * "; print 2 g;
+        close_paren prec 2
+    | Quot(f, g) ->
+        open_paren prec 2;
+        print 2 f; print_string " / "; print 3 g;
+        close_paren prec 2 )
+  in print 0 exp ; print_newline() ;;
+(* print_expr : expression -> unit = <fun> *)
+
+let e = (Sum(Prod(Const 2.0, Var "x"), Const 1.0) : expression);;
+(* e : expression = Sum (Prod (Const 2.0, Var "x"), Const 1.0) *)
+
+eval [("x", 1.0); ("y", 3.14)] (Prod(Sum(Var "x", Const 2.0), Var "y"));;
+(* - : float = 9.42 *)
+
+deriv (Quot(Const 1.0, Var "x")) "x";;
+(* - : expression =
+  Quot (Diff (Prod (Const 0.0, Var "x"), Prod (Const 1.0, Const 1.0)),
+  Prod (Var "x", Var "x"))
+*)
+
+print_expr e ;;
+(*
+   2.0 * x + 1.0
+   - : unit = ()
+*)
+
+print_expr (deriv e "x") ;;
+(*
+   2.0 * 1.0 + 0.0 * x + 0.0
+   - : unit = ()
+*)]] parse succeeds

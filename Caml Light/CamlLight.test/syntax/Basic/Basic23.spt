@@ -1,0 +1,9 @@
+module Basic23
+
+language CamlLight start symbol Start
+
+test Basic23 [[match string_of_int 1 with
+  | "1" -> "okay"
+  | _   -> "bad"
+;;
+(* - : string = "okay" *)]] parse succeeds

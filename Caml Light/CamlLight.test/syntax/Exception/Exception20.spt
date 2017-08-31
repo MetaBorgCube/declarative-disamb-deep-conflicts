@@ -1,0 +1,10 @@
+module Exception20
+
+language CamlLight start symbol Start
+
+test Exception20 [[exception E1 and E2 ;;
+(* Exception E1 defined.
+   Exception E2 defined. *)
+
+while raise E1 do raise E2 done ;;
+(* Uncaught exception: E1 *)]] parse succeeds

@@ -1,0 +1,12 @@
+module Syntax1
+
+language CamlLight start symbol Start
+
+test Syntax1 [[ [ 1 ; ] ;;
+(* - : int list = [1] *)
+
+[ 1 ; 2 ; ] ;;
+(* - : int list = [1; 2] *)
+
+[ 1 ; 2 ; 3 ; ] ;;
+(* - : int list = [1; 2; 3] *)]] parse succeeds

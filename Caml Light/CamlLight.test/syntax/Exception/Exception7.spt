@@ -1,0 +1,13 @@
+module Exception7
+
+language CamlLight start symbol Start
+
+test Exception7 [[exception E1 and E2 ;;
+(* Exception E1 defined.
+   Exception E2 defined. *)
+
+type 'a ty = C of 'a ;;
+(* Type ty defined. *)
+
+C (1, 2, raise E1, raise E2, 3, 4) ;;
+(* Uncaught exception: E2 *)]] parse succeeds

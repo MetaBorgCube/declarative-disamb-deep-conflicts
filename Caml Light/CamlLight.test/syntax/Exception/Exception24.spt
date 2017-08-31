@@ -1,0 +1,14 @@
+module Exception24
+
+language CamlLight start symbol Start
+
+test Exception24 [[exception E ;;
+(* Exception E defined. *)
+
+let f = function 0 -> `X` ;;
+(* f : int -> char = <fun> *)
+
+try f 1
+with E -> `Z`
+   | Match_failure _ -> `O` ;;
+(* - : char = `O` *)]] parse succeeds

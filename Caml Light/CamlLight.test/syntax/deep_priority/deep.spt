@@ -1,0 +1,44 @@
+module deep 
+
+language CamlLight   
+start symbol Start  
+
+test ifInfix [[ 1 + if 2 then 3 + 4 ;;]] analysis succeeds 0 warnings
+
+test dangling else [[ if 1 then if 2 then 3 else if 4 then 5 else 6 ;;]] analysis succeeds 0 warnings
+
+test deep1 [[ let x = 1 + if 2 then if 3 then 4 else if 5 then 6 + 5 else 2 + 2  ;; ]] analysis succeeds 0 warnings
+
+test deep2 [[ let x = 1 + if 2 then if 3 then 4 else if 5 then 6 + 5 else 2 + 2  ;; ]] analysis succeeds 0 warnings
+
+test deep3 [[ let x = 1 + 1 * if 2 then if 3 then 4 else if 5 then 6 + 5 else 2 * 2 + 2  ;;]] analysis succeeds 0 warnings
+
+test ifAdd [[ 1 + if 2 then 3 + 4 - 5 ;;]] analysis succeeds 0 warnings 
+
+test LetInf [[ 1 - let x = 1 in x + 2 + 3;;]] analysis succeeds 0 warnings 
+
+test LetRecInf [[ 1 * let rec x = 1 in x + 2 + 3;;]] analysis succeeds 0 warnings 
+
+test NotInf [[ 1 * not 2 + 3;;]] analysis succeeds 0 warnings 
+
+test FunctionInf [[ 1 mod function _ -> 3 mod 4;;]] analysis succeeds 0 warnings 
+
+test IfInf [[ 1 / if 2 then 3 + 3;;]] analysis succeeds 0 warnings 
+
+test IfEInf [[ 1 * if 2 then 2 else 4 + 3;;]] analysis succeeds 0 warnings 
+
+test TryInf [[ 1 +. try 2 + 3 with _ -> 3 - 3;;]] analysis succeeds 0 warnings 
+
+test FunInf [[ 1 * fun _ -> 2 + 3;;]] analysis succeeds 0 warnings 
+
+test FieldUpdate [[ 2 / if 1 then 2.a__b <- 2;;]] analysis succeeds 0 warnings 
+
+test XAnd [[ 1 + 2 + fun _ -> 2 && 3;;]] analysis succeeds 0 warnings 
+
+test Appl [[4 / f try 2 with _ -> 3 / 3 ;;]] analysis succeeds 0 warnings 
+
+test InfXSeq [[ 1 + 2 ; 3 ; + 2 + 3;;]] analysis succeeds 0 warnings 
+
+test Or [[ 1 or function _ -> 2 or 3;;]] analysis succeeds 0 warnings 
+
+test And [[ 1 & try 3 with _ -> 2 & 3;;]] analysis succeeds 0 warnings 

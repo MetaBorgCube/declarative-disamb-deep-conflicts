@@ -1,0 +1,14 @@
+module Exception42
+
+language CamlLight start symbol Start
+
+test Exception42 [[let v = [| 1 ; 2 ; 3 |] ;;
+(* v : int vect = [|1; 2; 3|] *)
+
+try v.(3) 
+with Invalid_argument s -> 4
+   | _                  -> 5 ;;
+(* - : int = 4 *)
+
+v.(4) <- 77 ;;
+(* Uncaught exception: Invalid_argument "vect_assign" *)]] parse succeeds

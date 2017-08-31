@@ -1,0 +1,18 @@
+module OL20
+
+language CamlLight start symbol Start
+
+test OL20 [[exception Not_found ;;
+(* Exception Not_found defined. *)
+
+let rec (assoc : 'a -> ('a * 'b) list -> 'b) = fun x l ->
+   match l with
+   | [] -> raise Not_found
+   | (y,z)::yzs -> if x = y then z else assoc x yzs ;;
+(* assoc : 'a -> ('a * 'b) list -> 'b = <fun> *)
+
+assoc 1 [(0, "zero"); (1, "one")] ;;
+(* - : string = "one" *)
+
+assoc 2 [(0, "zero"); (1, "one")] ;;
+(* Uncaught exception: Not_found *)]] parse succeeds

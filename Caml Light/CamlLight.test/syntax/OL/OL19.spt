@@ -1,0 +1,18 @@
+module OL19
+
+language CamlLight start symbol Start
+
+test OL19 [[exception Empty_list;;
+(* Exception Empty_list defined. *)
+
+let head (l : 'a list) =
+  match l with
+    [] -> raise Empty_list
+  | hd :: tl -> hd;;
+(* head : 'a list -> 'a = <fun> *)
+
+head [1;2];;
+(* - : int = 1 *)
+
+head [] ;;
+(* Uncaught exception: Empty_list *)]] parse succeeds

@@ -1,0 +1,6 @@
+module Basic20
+
+language CamlLight start symbol Start
+
+test Basic20 [[let rec (f : bool -> bool) = function b -> not (f b) ;;
+(* f : bool -> bool = <fun> *)]] parse succeeds

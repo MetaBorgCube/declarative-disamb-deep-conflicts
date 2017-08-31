@@ -1,0 +1,311 @@
+module CL-Lexical
+
+lexical syntax
+
+// Blanks
+  LAYOUT = [\ \n\r\t]
+
+// Comments
+  LAYOUT = CL-block-comment
+  CL-block-comment = "(*" CL-comment-part* "*)" 
+  CL-comment-part = ~[\(\)\*]
+  CL-comment-part = CL-asterisk
+  CL-comment-part = CL-left-paren
+  CL-comment-part = CL-right-paren
+  CL-comment-part = CL-block-comment
+  CL-asterisk = [\*]
+  CL-left-paren = [\(] 
+  CL-right-paren = [\)]
+
+// Identifiers
+lexical syntax
+  CL-ident = CL-lowercase-ident
+  CL-ident = CL-capitalized-ident
+  CL-ident = CL-keyword {reject}
+  CL-ident = [A-Za-z] [A-Za-z0-9\_]* "__" [A-Za-z0-9\_]* {reject}
+// added:
+  CL-lowercase-ident = [a-z] [A-Za-z0-9\_]*
+  CL-lowercase-ident = CL-keyword {reject}
+  CL-lowercase-ident = [a-z] [A-Za-z0-9\_]* "__" [A-Za-z0-9\_]* {reject}
+  CL-capitalized-ident = [A-Z] [A-Za-z0-9\_]*
+  CL-capitalized-ident = [a-z] [A-Za-z0-9\_]* "__" [A-Za-z0-9\_]* {reject}
+  CL-quote = [\']
+
+  CL-ident-plus = CL-ident+
+  CL-lowercase-ident-plus = CL-lowercase-ident+
+  CL-capitalized-ident-plus = CL-capitalized-ident+
+
+// Integer literals
+context-free syntax
+  CL-integer-literal.CLNatural = 
+  	CL-natural-literal
+  CL-integer-literal.CLMinusNatural = 
+  	"-" CL-natural-literal
+
+  CL-natural-literal.CLDecimal = 
+  	CL-decimal-plus
+  CL-natural-literal.CLHexadecimalx = 
+  	"0x" CL-hexadecimal-plus
+  CL-natural-literal.CLHexadecimalX = 
+  	"0X" CL-hexadecimal-plus
+  CL-natural-literal.CLOctalo = 
+  	"0o" CL-octal-plus
+  CL-natural-literal.CLOctalO = 
+  	"0O" CL-octal-plus
+  CL-natural-literal.CLBinaryb = 
+  	"0b" CL-binary-plus
+  CL-natural-literal.CLBinaryB = 
+  	"0B" CL-binary-plus
+
+lexical syntax
+  CL-decimal          = [0-9]
+  CL-decimal-plus     = [0-9]+
+  CL-hexadecimal      = [0-9A-Fa-f]
+  CL-hexadecimal-plus = [0-9A-Fa-f]+
+  CL-octal            = [0-7]
+  CL-octal-plus       = [0-7]+
+  CL-binary           = [0-1]
+  CL-binary-plus      = [0-1]+
+
+// Floating-point literals
+context-free syntax
+  CL-float-literal.CLNonnegFloat =
+  	CL-nonneg-float-literal
+  CL-float-literal.CLMinusFloat =
+  	"-" CL-nonneg-float-literal
+  
+  CL-nonneg-float-literal.CLDecimalDot =
+  	CL-decimal-plus "."
+  CL-nonneg-float-literal.CLDecimalDotDecimal =
+  	CL-decimal-plus "." CL-decimal-plus
+  CL-nonneg-float-literal.CLDecimalDotDecimalExponent =
+  	CL-decimal-plus "." CL-decimal-plus CL-float-exponent
+  CL-nonneg-float-literal.CLDecimalDotExponent =
+  	CL-decimal-plus "." CL-float-exponent
+  CL-nonneg-float-literal.CLDecimalExponent =
+  	CL-decimal-plus CL-float-exponent
+  
+  CL-float-exponent.CLeSignDecimal =
+  	"e" CL-integer-sign? CL-decimal-plus
+  CL-float-exponent.CLESignDecimal =
+  	"E" CL-integer-sign? CL-decimal-plus
+
+lexical syntax
+  CL-integer-sign = "+" | "-"
+
+// Character literals
+syntax
+  CL-char-literal-CF.CLCharLiteral = 
+  	"`" CL-character-CF "`"
+syntax
+  CL-character-CF.CLRegularChar = CL-regular-char-CF
+  CL-character-CF.CLEscapedChar = "\\" CL-escaped-char-CF
+  CL-character-CF.CLEscapedCharcode = "\\" CL-escaped-charcode-CF
+
+context-free syntax
+  CL-regular-char = CL-regular-char-lex
+  CL-escaped-char = CL-escaped-char-lex
+  CL-escaped-charcode = CL-escaped-charcode-lex
+  
+lexical syntax
+  CL-regular-char-lex = ~[\\\`\n\r\t]
+  CL-escaped-char-lex = [\\\`ntbr]
+  CL-escaped-charcode-lex = [0-9] [0-9] [0-9]
+
+// String literals
+
+
+syntax
+  CL-string-literal-CF.CLStringLiteral = 
+  	"\"" CL-string-character-star-CF "\""
+
+  CL-string-character-star-CF = 
+  	CL-string-character-plus-CF				{avoid}
+  CL-string-character-star-CF.CLNone =  	{avoid}
+
+  CL-string-character-plus-CF.CLSome = 
+  	CL-string-character-CF CL-string-character-star-CF {avoid}
+
+syntax
+  CL-string-character-CF.CLRegularStringChar = CL-regular-string-char-CF
+  CL-string-character-CF.CLEscapedStringChar = "\\" CL-escaped-string-char-CF
+  CL-string-character-CF.CLEscapedStringCharcode = "\\" CL-escaped-string-charcode-CF
+
+context-free syntax
+  CL-regular-string-char = CL-regular-string-char-lex
+  CL-escaped-string-char = CL-escaped-string-char-lex
+  CL-escaped-string-charcode = CL-escaped-string-charcode-lex
+
+lexical syntax
+  CL-regular-string-char-lex = ~[\\\"\n\r\t]
+  CL-escaped-string-char-lex = [\\\"ntbr]
+  CL-escaped-string-charcode-lex = [0-9] [0-9] [0-9]
+
+
+// Keywords
+lexical syntax
+  CL-keyword = "and"
+  CL-keyword = "as"
+  CL-keyword = "begin"
+  CL-keyword = "do"
+  CL-keyword = "done"
+  CL-keyword = "downto"
+  CL-keyword = "else"
+  CL-keyword = "end"
+  CL-keyword = "exception"
+  CL-keyword = "false" // added
+  CL-keyword = "for"
+  CL-keyword = "fun"
+  CL-keyword = "function"
+  CL-keyword = "if"
+  CL-keyword = "in"
+  CL-keyword = "let"
+  CL-keyword = "match"
+  CL-keyword = "mod"
+  CL-keyword = "mutable"
+  CL-keyword = "not"
+  CL-keyword = "of"
+  CL-keyword = "or"
+  CL-keyword = "prefix"
+  CL-keyword = "rec"
+  CL-keyword = "then"
+  CL-keyword = "to"
+  CL-keyword = "true" // added
+  CL-keyword = "try"
+  CL-keyword = "type"
+  CL-keyword = "value"
+  CL-keyword = "where"
+  CL-keyword = "while"
+  CL-keyword = "with"      
+
+// Key symbols
+  CL-keysymbol = "#"
+  CL-keysymbol = "!"
+  CL-keysymbol = "!="
+  CL-keysymbol = "&"
+  CL-keysymbol = "("
+  CL-keysymbol = ")"
+  CL-keysymbol = "*"
+  CL-keysymbol = "*."
+  CL-keysymbol = "+"
+  CL-keysymbol = "+."
+  CL-keysymbol = ","
+  CL-keysymbol = "-"
+  CL-keysymbol = "-."
+  CL-keysymbol = "->"
+  CL-keysymbol = "."
+  CL-keysymbol = "/"
+  CL-keysymbol = "/."
+  CL-keysymbol = ":"
+  CL-keysymbol = "::"
+  CL-keysymbol = ":="
+  CL-keysymbol = ";"
+  CL-keysymbol = ";;"
+  CL-keysymbol = "<"
+  CL-keysymbol = "<."
+  CL-keysymbol = "<-"
+  CL-keysymbol = "<="
+  CL-keysymbol = "<=."
+  CL-keysymbol = "<>"
+  CL-keysymbol = "<>."
+  CL-keysymbol = "="
+  CL-keysymbol = "=."
+  CL-keysymbol = "=="
+  CL-keysymbol = ">"
+  CL-keysymbol = ">."
+  CL-keysymbol = ">="
+  CL-keysymbol = ">=."
+  CL-keysymbol = "@"
+  CL-keysymbol = "["
+  CL-keysymbol = "[|"
+  CL-keysymbol = "]"
+  CL-keysymbol = "^"
+  CL-keysymbol = "_"
+  CL-keysymbol = "__"
+  CL-keysymbol = "{"
+  CL-keysymbol = "|"
+  CL-keysymbol = "|]"
+  CL-keysymbol = "}"
+  CL-keysymbol = "'"
+  CL-keysymbol = "&&"
+  CL-keysymbol = "||"
+
+// Added classes of prefix and infix operators
+  CL-prefix-op-1 = "!"
+  CL-prefix-op-2 = "-"
+  CL-prefix-op-2 = "-."
+  CL-infix-op-1 = "**"
+  CL-infix-op-2 = "mod"
+  CL-infix-op-3 = "*"
+  CL-infix-op-3 = "/"
+  CL-infix-op-3 = "*."
+  CL-infix-op-3 = "/."
+  CL-infix-op-4 = "+"
+  CL-infix-op-4 ="-"
+  CL-infix-op-4 ="+."
+  CL-infix-op-4 ="-."
+  CL-infix-op-5 = "@"
+  CL-infix-op-5 = "^"
+  CL-infix-op-6 = "="
+  CL-infix-op-6 = "<>"
+  CL-infix-op-6 = "=="
+  CL-infix-op-6 = "!="
+  CL-infix-op-6 = "<"
+  CL-infix-op-6 = "<="
+  CL-infix-op-6 = ">"
+  CL-infix-op-6 = ">="
+  CL-infix-op-6 = "<."
+  CL-infix-op-6 = "<=."
+  CL-infix-op-6 = ">."
+  CL-infix-op-6 = ">=."
+  CL-infix-op-7 = ":="
+
+// Ambiguities
+context-free restrictions
+  LAYOUT? -/- [\ \n\r\t]
+  LAYOUT? -/- [\(].[\*]
+  CL-integer-literal -/- [0-9eE]
+  CL-float-literal -/- [0-9Ee]
+
+lexical restrictions
+  CL-asterisk   -/- [\)]
+  CL-left-paren -/- [\*]
+
+  CL-ident 
+  CL-lowercase-ident 
+  CL-capitalized-ident   -/- [A-Za-z0-9]
+  CL-ident 
+  CL-lowercase-ident 
+  CL-capitalized-ident   -/- [\_] . ~[\_]
+
+  CL-decimal-plus     -/- [0-9]
+  CL-hexadecimal-plus -/- [0-9A-Fa-f]
+  CL-octal-plus       -/- [0-7]
+  CL-binary-plus      -/- [0-1]
+  CL-float-exponent   -/- [0-9]
+  
+  "and"  "as"   "begin"     "do"    "done"    "downto"
+  "else" "end"  "exception" "for"   "fun"     "function"
+  "if"   "in"   "let"       "match" "mutable" "not"
+  "of"   "or"   "prefix"    "rec"   "then"    "to"
+  "try"  "type" "value"     "where" "while"   "with"
+  "mod"  "true" "false"  -/- [A-Za-z0-9\_] 
+
+  "*" "+" "-" "/" "<" "<=" "<>" "=" ">" ">="
+                         -/- [\.]
+  "!" ":" "<" "=" ">"    -/- [\=]
+  "-" "<"                -/- [\>]
+  "<"                    -/- [\-]
+  "["                    -/- [\|]
+  "|"                    -/- [\]]
+  ":"                    -/- [\:]
+  ";"                    -/- [\;]
+  "_"                    -/- [\_]
+
+// Language extensions: Alternate syntax
+lexical syntax
+  CL-keysymbol = "&&"
+  CL-keysymbol = "||"
+lexical restrictions
+  "|" -/- [\|]
+  "&" -/- [\&]

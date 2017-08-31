@@ -1,0 +1,8 @@
+module PM15
+
+language CamlLight start symbol Start
+
+test PM15 [[match [ 0 ] with
+    [] | 0 :: [] -> "good"
+  | 1 :: []      -> "bad" ;;
+(* - : string = "good" *)]] parse succeeds

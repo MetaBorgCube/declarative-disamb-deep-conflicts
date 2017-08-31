@@ -1,0 +1,21 @@
+module Syntax4
+
+language CamlLight start symbol Start
+
+test Syntax4 [[type r1 = { n : int } ;;
+(* Type r1 defined. *)
+
+{ n = 1 ; } ;;
+(* - : r1 = {n = 1} *)
+
+type r2 = { a : int ; b : int } ;;
+(* Type r2 defined. *)
+
+{ a = 1 ; b = 2 ; } ;;
+(* - : r2 = {a = 1; b = 2} *)
+
+type r3 = { x : int ; y : int ; z : int } ;;
+(* Type r3 defined. *)
+
+{ x = 1 ; y = 2 ; z = 3 ; } ;;
+(* - : r3 = {x = 1; y = 2; z = 3} *)]] parse succeeds

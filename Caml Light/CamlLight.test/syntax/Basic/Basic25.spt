@@ -1,0 +1,9 @@
+module Basic25
+
+language CamlLight start symbol Start
+
+test Basic25 [[let rec prefix * x y = if x > 50 then x else (x+y) * y ;;
+(* * : int -> int -> int = <fun> *)
+
+4 * 10 ;;
+(* - : int = 54 *)]] parse succeeds

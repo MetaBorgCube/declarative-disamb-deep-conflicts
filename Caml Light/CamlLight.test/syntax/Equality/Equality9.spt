@@ -1,0 +1,23 @@
+module Equality9
+
+language CamlLight start symbol Start
+
+test Equality9 [[1 = 2
+;;
+(* - : bool = false *)
+
+1 = 1
+;;
+(* - : bool = true *)
+
+true = false
+;;
+(* - : bool = false *)
+
+false = false
+;;
+(* - : bool = true *)
+
+true = true
+;;
+(* - : bool = true *)]] parse succeeds

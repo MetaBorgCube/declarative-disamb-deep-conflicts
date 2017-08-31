@@ -1,0 +1,7 @@
+module Basic22
+
+language CamlLight start symbol Start
+
+test Basic22 [[let x = true
+in match 0 with _ -> x ;;
+(* - : bool = true *)]] parse succeeds

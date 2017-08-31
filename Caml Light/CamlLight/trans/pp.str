@@ -1,0 +1,49 @@
+module pp
+
+imports
+
+  libstratego-gpp
+  libspoofax/sdf/pp
+  libspoofax/editor/refactoring/-
+  pp/CamlLight-parenthesize
+  pp/CamlLight-pp
+
+rules
+
+  editor-format:
+    (node, _, ast, path, project-path) -> (filename, result)
+    with
+      ext      := <get-extension> path
+    ; filename := <guarantee-extension(|$[pp.[ext]])> path
+    ; result   := <pp-debug> node
+
+rules
+  
+  pp-CamlLight-string =
+    parenthesize-CamlLight
+    ; prettyprint-CamlLight-start-symbols
+    ; !V([], <id>)
+    ; box2text-string(|120)
+      
+  pp-partial-CamlLight-string =
+    parenthesize-CamlLight
+    ; prettyprint-CamlLight
+    ; !V([], <id>)
+    ; box2text-string(|120)
+    
+  pp-partial-CamlLight-string(|sort) =
+    parenthesize-CamlLight
+    ; prettyprint-CamlLight(|sort)
+    ; !V([], <id>)
+    ; box2text-string(|120)  
+      
+  pp-debug :
+    ast -> result
+    with
+       result := <pp-CamlLight-string> ast
+    <+ <bottomup(try(not(is-string); not(is-list); not(pp-CamlLight-string); debug(!"cannot pp ")))> ast
+    ;  result := ""
+
+rules
+  
+  construct-textual-change = construct-textual-change(pp-partial-CamlLight-string, parenthesize, override-reconstruction, resugar)

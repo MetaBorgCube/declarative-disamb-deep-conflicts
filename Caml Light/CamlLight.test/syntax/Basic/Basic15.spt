@@ -1,0 +1,9 @@
+module Basic15
+
+language CamlLight start symbol Start
+
+test Basic15 [[type 'a option = None | Some of 'a ;;
+(* Type option defined. *)
+
+(function None -> 1+2 | Some x -> 1+x) (Some 4) ;;
+(* - : int = 5 *)]] parse succeeds

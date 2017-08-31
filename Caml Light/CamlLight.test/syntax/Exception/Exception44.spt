@@ -1,0 +1,12 @@
+module Exception44
+
+language CamlLight start symbol Start
+
+test Exception44 [[exception E ;;
+(* Exception E defined. *)
+
+let e = E ;;
+(* e : exn = E *)
+
+raise e ;;
+(* Uncaught exception: E *)]] parse succeeds

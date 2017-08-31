@@ -1,0 +1,9 @@
+module PM1
+
+language CamlLight start symbol Start
+
+test PM1 [[match 1 with
+    2 -> 2
+  | 3 -> 3
+;;
+(* Uncaught exception: Match_failure *)]] parse succeeds

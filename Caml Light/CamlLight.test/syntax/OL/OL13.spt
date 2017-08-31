@@ -1,0 +1,6 @@
+module OL13
+
+language CamlLight start symbol Start
+
+test OL13 [[`a`;;
+(* - : char = `a` *)]] parse succeeds

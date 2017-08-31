@@ -1,0 +1,12 @@
+module Exception31
+
+language CamlLight start symbol Start
+
+test Exception31 [[exception E1 and E2 ;;
+(*
+Exception E1 defined.
+Exception E2 defined.
+*)
+
+(raise E1) ; (raise E2) ;;
+(* Uncaught exception: E1 *)]] parse succeeds

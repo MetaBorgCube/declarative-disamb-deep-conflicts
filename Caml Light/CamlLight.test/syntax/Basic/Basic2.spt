@@ -1,0 +1,11 @@
+module Basic2
+
+language CamlLight start symbol Start
+
+test Basic2 [[not true
+;;
+(* - : bool = false *)
+
+not false
+;;
+(* - : bool = true *)]] parse succeeds

@@ -1,0 +1,14 @@
+module PM20
+
+language CamlLight start symbol Start
+
+test PM20 [[type 'a t = A | B ;;
+(* Type t defined. *)
+
+let a = A ;;
+(* a : 'a t = A *)
+
+match a with
+    B -> `B`
+  | A -> `A` ;;
+(* - : char = `A`   *)]] parse succeeds

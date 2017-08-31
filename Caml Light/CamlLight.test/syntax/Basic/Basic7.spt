@@ -1,0 +1,6 @@
+module Basic7
+
+language CamlLight start symbol Start
+
+test Basic7 [[if (5 < 3) then print_string "bad" ;;
+(* - : unit = () *)]] parse succeeds

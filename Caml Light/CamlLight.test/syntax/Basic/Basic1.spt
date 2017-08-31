@@ -1,0 +1,31 @@
+module Basic1
+
+language CamlLight start symbol Start
+
+test Basic1 [[1+2
+;;
+(* - : int = 3 *)
+
+1- 2
+;;
+(* - : int = -1 *)
+
+5 * 4
+;;
+(* - : int = 20 *)
+
+- 1
+;;
+(* - : int = -1 *)
+
+5/4
+;;
+(* - : int = 1 *)
+
+1073741823 + 1
+;;
+(* - : int = -1073741824 *)
+
+-1073741824 - 1
+;;
+(* - : int = 1073741823 *)]] parse succeeds

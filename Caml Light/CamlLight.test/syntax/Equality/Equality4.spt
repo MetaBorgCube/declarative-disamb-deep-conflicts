@@ -1,0 +1,11 @@
+module Equality4
+
+language CamlLight start symbol Start
+
+test Equality4 [[(1,2) = (1,2)
+;;
+(* - : bool = true *)
+
+(1,2) = (1,4)
+;;
+(* - : bool = false *)]] parse succeeds

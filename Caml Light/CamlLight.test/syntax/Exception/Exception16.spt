@@ -1,0 +1,12 @@
+module Exception16
+
+language CamlLight start symbol Start
+
+test Exception16 [[exception E ;;
+(* Exception E defined. *)
+
+type r = { x : int } ;;
+(* Type r defined. *)
+
+(raise E).x ;;
+(* Uncaught exception: E *)]] parse succeeds

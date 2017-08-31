@@ -1,0 +1,6 @@
+module Basic4
+
+language CamlLight start symbol Start
+
+test Basic4 [[not not true ;;
+(* - : bool = true *)]] parse succeeds

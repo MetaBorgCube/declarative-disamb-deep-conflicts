@@ -1,0 +1,12 @@
+module Basic21
+
+language CamlLight start symbol Start
+
+test Basic21 [[let v = [| true |] ;;
+(* v : bool vect = [|true|] *)
+
+let r = ref v ;;
+(* r : (bool vect) ref = ref [|true|] *)
+
+!r.(0) ;;
+(* - : bool = true *)]] parse succeeds

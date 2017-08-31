@@ -1,0 +1,9 @@
+module Exception5
+
+language CamlLight start symbol Start
+
+test Exception5 [[exception E ;;
+(* Exception E defined. *)
+
+((raise E) : int) ;;
+(* Uncaught exception: E *)]] parse succeeds

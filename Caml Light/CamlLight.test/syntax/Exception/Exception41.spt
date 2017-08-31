@@ -1,0 +1,11 @@
+module Exception41
+
+language CamlLight start symbol Start
+
+test Exception41 [[try 7 / 0
+with Division_by_zero -> 1
+   | Match_failure _  -> 2
+   | _                -> 3
+;;
+(* - : int = 1 *)
+ ]] parse succeeds
