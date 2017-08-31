@@ -1,0 +1,167 @@
+module Config
+
+ language Haskell start symbol Module
+
+ test Config [[{-# LANGUAGE NoImplicitPrelude #-}
+module Bamboo.Type.Config where
+
+import Bamboo.Helper.PreludeEnv
+import Bamboo.Type.Common
+import Bamboo.Type.Extension
+import Bamboo.Type.Reader
+import Bamboo.Type.StaticWidget (StaticWidget)
+import Bamboo.Type.Theme (ThemeConfig)
+import Data.Default
+
+data ConfigData = 
+    BlogTitle
+  | BlogSubtitle
+  | HostName
+  | AuthorEmail
+  | PerPage
+  | Navigation
+  | Sidebar
+  | Footer
+  | Favicon
+  | AnalyticsAccountId
+  | Extensions
+  | Theme
+  | PostDateFormat
+  | CommentDateFormat
+  | UrlDateFormat
+  | UrlDateMatcher
+  | UrlTitleSubs
+  | UrlDateTitleSeperator
+  | Cut
+  | SummaryForRoot
+  | SummaryForTag
+  | SummaryForRss
+  | PicturePrefix
+  | NumberOfLatestPosts
+  | UseCache
+  | BambooUrl
+  | Js
+  | Css
+  deriving (Show)
+
+
+data Config = Config
+  {
+      blog_title                :: String
+    , blog_subtitle             :: String
+    , host_name                 :: String
+    , author_email              :: String
+    , per_page                  :: Int
+    , navigation                :: [String]
+    , bamboo_url                :: String
+    , default_reader            :: Reader
+    , sidebar                   :: [StaticWidget]
+    , footer                    :: Maybe StaticWidget
+    , favicon                   :: String
+
+    -- extensions
+    , analytics_account_id      :: String
+    , extensions                :: [Extension]
+                              
+    -- theme                  
+    , theme_config              :: ThemeConfig
+                              
+    -- custom                 
+    , post_date_format          :: String
+    , comment_date_format       :: String
+    , url_date_format           :: String
+    , url_date_matcher          :: String
+    , url_title_subs            :: Assoc
+    , url_date_title_seperator  :: String
+
+    -- summary
+    , cut                       :: String
+    , summary_for_root          :: Bool
+    , summary_for_tag           :: Bool
+    , summary_for_rss           :: Bool
+
+    -- album
+    , picture_prefix            :: String
+
+    -- latest
+    , number_of_latest_posts    :: Int
+
+    -- count
+    , count_meta                :: String
+
+    -- cache
+    , use_cache                 :: Bool
+    
+    
+    -- dir structure
+    , db_id                     :: String
+    , flat_id                   :: String
+    , post_id                   :: String
+    , config_id                 :: String
+    , tag_id                    :: String
+    , comment_id                :: String
+    , sidebar_id                :: String
+    , theme_id                  :: String
+    , config_file_id            :: String
+    , album_id                  :: String
+    , image_id                  :: String
+    , public_id                 :: String
+    , static_id                 :: String
+    , topic_id                  :: String
+    , thumb_id                  :: String
+    , stat_id                   :: String
+    , cache_id                  :: String
+  }
+  deriving (Show)
+
+instance Default Config where
+  def = Config
+    {
+        blog_title                = def
+      , blog_subtitle             = def
+      , host_name                 = def
+      , author_email              = def
+      , per_page                  = 7
+      , navigation                = def
+      , bamboo_url                = bamboo_url_current
+      , default_reader            = def
+      , sidebar                   = def
+      , footer                    = def
+      , favicon                   = def
+      , analytics_account_id      = def
+      , extensions                = [Comment, Search, Analytics]
+      , theme_config              = def
+      , post_date_format          = "%y-%m-%d"
+      , comment_date_format       = "%y-%m-%d %T"
+      , url_date_format           = "%y-%m-%d"
+      , url_date_matcher          = "\\d{2}-\\d{2}-\\d{2}"
+      , url_title_subs            = def
+      , url_date_title_seperator  = " "
+      , cut                       = "✂-----"
+      , summary_for_root          = True
+      , summary_for_tag           = True
+      , summary_for_rss           = False
+      , picture_prefix            = "\\d+-"
+      , number_of_latest_posts    = 15
+      , count_meta                = "count.meta"
+      , use_cache                 = True
+      , db_id                     = "db"
+      , flat_id                   = "."
+      , post_id                   = "blog"
+      , config_id                 = "config"
+      , tag_id                    = "tag"
+      , comment_id                = "comment"
+      , sidebar_id                = "sidebar"
+      , theme_id                  = "theme"
+      , config_file_id            = "site.txt"
+      , album_id                  = "album"
+      , image_id                  = "images"
+      , public_id                 = "public"
+      , static_id                 = "static"
+      , topic_id                  = "forum/post"
+      , thumb_id                  = "thumb"
+      , stat_id                   = "stat"
+      , cache_id                  = "cache"
+    }
+    where
+      bamboo_url_current = "http://github.com/nfjinjing/bamboo/tree/master"]] parse succeeds

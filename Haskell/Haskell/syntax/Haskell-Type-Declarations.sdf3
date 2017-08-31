@@ -1,0 +1,32 @@
+module Haskell-Type-Declarations
+
+imports
+  Haskell-Types
+  Haskell-Identifier-Sorts
+  Haskell-Type-Classes
+
+context-free syntax
+
+  Topdecl.TypeDecl = "type" Tycon Tyvar* "=" Type 
+  Topdecl.Data = "data" Context? Type "=" Constrs Deriving 
+  Topdecl.NewTypeDecl = "newtype" Context? Type "=" Newconstr Deriving 
+
+context-free syntax
+
+  Deriving.Derive = "deriving" Qtycls 
+  Deriving.NoDeriving = "deriving" "(" ")" 
+  Deriving.Derive = "deriving" "(" {Qtycls ","}+ ")" 
+  Deriving.NoDeriving =  
+
+context-free syntax
+
+  Constrs = {Constr "|"}+ 
+  Constr.ConstrDecl = Conid Satype* 
+  Constr.InfixConstr = Sbtype Conop Sbtype 
+  Newconstr = Conid Type 
+  Newconstr = Conid LabeledConstr 
+  LabeledConstr.LabeledConstr = "{" Var "::" Type "}" {ignore-layout}
+  Satype = AType 
+  Satype = "!" AType 
+  Sbtype = Type 
+  Sbtype = "!" Type 

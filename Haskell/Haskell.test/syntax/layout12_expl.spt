@@ -1,0 +1,8 @@
+module layout12_expl
+
+language Haskell start symbol Module
+
+test layout12_expl [[-- do and if
+f x = do {x
+         ;if x 
+          then x else x}]] parse succeeds

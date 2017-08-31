@@ -1,0 +1,13 @@
+module Haskell-Qualifiers
+
+imports
+  Haskell-Patterns
+  Haskell-Expressions
+  Haskell-Value-Definitions  
+
+context-free syntax
+
+  Quals = {Qual ","}+ 
+  Qual.QualBind = Pat "<-" Exp 
+  Qual = Exp 
+  Qual.QualLet = "let" Declbinds 

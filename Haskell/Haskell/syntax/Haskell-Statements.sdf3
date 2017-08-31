@@ -1,0 +1,51 @@
+module Haskell-Statements
+
+imports
+  Haskell-Expressions
+  Haskell-Patterns
+  Haskell-Identifier-Sorts
+  Haskell-Value-Definitions
+
+context-free syntax
+
+  Stmt.BindStmt = Pat "<-" Exp 
+  Stmt.ExpStmt = Exp 
+  Stmt.LetStmt = "let" Declbinds 
+  Fbind.FBind = Qvar "=" Exp 
+
+context-free syntax
+
+  StmtList.StmtList = NoOffsideStmtBlock 
+  StmtList.StmtList = OffsideStmtList 
+  NoOffsideStmtBlock = "{" NoOffsideStmtListSem "}" {bracket, ignore-layout}
+
+context-free priorities
+
+  NoOffsideStmt = Stmt 
+  >
+  NoOffsideStmt = NoOffsideStmt ";" 
+
+context-free syntax
+
+  NoOffsideStmtList = NoOffsideStmt 
+  NoOffsideStmtList.StmtSeq = NoOffsideStmt ";" NoOffsideStmtList 
+  NoOffsideStmtListSem = NoOffsideStmtList 
+  NoOffsideStmtListSem = ";" NoOffsideStmtListSem 
+
+context-free priorities
+
+  OffsideStmt = Stmt {layout("1.first.col < 1.left.col")}
+  >
+  OffsideStmt = OffsideStmt ";" {layout("1.first.col < 2.first.col")}
+  >
+  OffsideStmt = ";" OffsideStmt {layout("1.first.col < 2.first.col")}
+  >
+  OffsideStmt = OffsideStmt ";" Stmt
+          {cons("StmtSeq"),
+           layout("1.first.col < 2.first.col && 1.first.col < 3.first.col && 1.first.col < 3.left.col")}
+  
+context-free syntax
+
+  OffsideStmtList = OffsideStmt 
+  OffsideStmtList.StmtSeq = OffsideStmtNEWLINE OffsideStmtList {layout("1.first.col == 2.first.col")}
+  OffsideStmtNEWLINE = OffsideStmt LAYOUT? {enforce-newline}

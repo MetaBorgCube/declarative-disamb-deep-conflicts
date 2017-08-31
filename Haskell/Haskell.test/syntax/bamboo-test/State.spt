@@ -1,0 +1,105 @@
+module State
+
+ language Haskell start symbol Module
+
+ test State [[{-# LANGUAGE NoImplicitPrelude #-}
+
+module Bamboo.Type.State where
+
+import Bamboo.Helper (static_config)
+import Bamboo.Helper.PreludeEnv
+import Bamboo.Model.Post
+import Bamboo.Model.Comment
+import Bamboo.Model.Tag
+import Bamboo.Model.Static
+import Bamboo.Type
+import Data.Default
+import Hack (Env)
+import Random (randomRs, mkStdGen)
+import System.Time
+import qualified Bamboo.Type.Config as C
+
+
+data State = State
+  -- model state
+  { uid               :: String       -- current view resource
+  , pager             :: Pager        -- pager
+  , status            :: Int
+  , tag_name          :: String
+  , search_key        :: String
+  , tags              :: [Tag]
+  , nav_location      :: String
+  , resource_title    :: String
+  , human_test_data   :: HumanTestData
+  , latest_posts      :: [Post]
+  , posts             :: [Post]
+  , comments          :: [Comment]
+  , static            :: Static
+  , env               :: Env
+  , config            :: C.Config
+  }
+  deriving (Show)
+
+data HumanTestData = HumanTestData 
+  { left  :: Int
+  , right :: Int
+  , op    :: Op
+  } deriving (Show)
+
+instance Default HumanTestData where
+  def = HumanTestData def def def
+
+data Op = Plus | Minus deriving (Show)
+
+instance Default Op where
+  def = Plus
+
+instance Default State where
+  def = State def def def def def def 
+    def def def def def def def def static_config
+
+
+show_left, show_right, show_op :: State -> String
+show_left   = human_test_data > left > show
+show_right  = human_test_data > right > show
+show_op     = human_test_data > op > display_op
+
+display_op :: Op -> String
+display_op Plus  = "+"
+display_op Minus = "-"
+
+read_op :: String -> Op
+read_op "+" = Plus
+read_op "-" = Minus
+read_op x   = error ("can not read operator: " ++ x)
+
+nums :: [Int]
+nums = [0, 5, 10, 15, 20]
+
+ops :: [Op]
+ops = [Plus, Minus]
+
+simple_eval :: Int -> Int -> Op -> Int
+simple_eval a b Plus = a + b
+simple_eval a b Minus = a - b
+
+mk_human_test :: IO HumanTestData
+mk_human_test = do
+  seed <- (getClockTime >>= toCalendarTime) ^ ctPicosec ^ from_i
+  let (a,b,c) = 
+        randomRs (0,100) (mkStdGen seed)
+          .in_group_of 3
+          .map make_sample
+          .lb good_test
+          .first
+  return $ HumanTestData a b c
+
+  where
+    make_sample [a,b,c] = ((get_num a), (get_num b), (get_op c))
+    make_sample _       = error "human test sample fail"
+    good_test           = splash3 simple_eval > belongs_to nums
+    get_num n           = nums.at (n `mod` (nums.length))
+    get_op  n           = ops.at (n `mod` (ops.length))
+
+
+  ]] parse succeeds

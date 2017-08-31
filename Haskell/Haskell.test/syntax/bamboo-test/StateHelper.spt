@@ -1,0 +1,57 @@
+module StateHelper
+
+ language Haskell start symbol Module
+
+ test StateHelper [[-- trying to merge this helper with the generic one results in cyclic imports
+
+{-# LANGUAGE NoMonomorphismRestriction#-}
+{-# LANGUAGE NoImplicitPrelude #-}
+
+module Bamboo.Helper.StateHelper where
+
+import Bamboo.Env hiding (cut)
+import Hack
+import Hack.Contrib.Utils
+import System.Time
+import System.Locale (defaultTimeLocale)
+import System.Time.Parse (parseCalendarTime)
+import qualified Bamboo.Type.Config as C
+import qualified Data.ByteString.Char8 as S
+
+uri :: Env -> String
+uri = path_info > unescape_uri > tail > remove_trailing_slash > b2u
+
+-- global
+parse_date :: String -> String -> Maybe CalendarTime
+parse_date format s = parseCalendarTime defaultTimeLocale format s ^
+  (\d -> if d.ctYear < 1980 then d {ctYear = d.ctYear + 100} else d )
+
+format_time :: String -> CalendarTime -> String
+format_time = formatCalendarTime defaultTimeLocale
+
+default_date :: CalendarTime
+default_date = parse_date "%Y-%m-%d %T" "2000-1-1 00:00:00".fromJust
+
+parse_post_date :: String -> Maybe CalendarTime
+parse_post_date = parse_date $ static_config.post_date_format
+
+default_parse_date :: String -> CalendarTime
+default_parse_date = parse_post_date > fromMaybe default_date
+
+has_extension :: Extension -> Bool
+has_extension x = static_config.extensions.has x
+
+html_only_for :: Extension -> Html -> Html
+html_only_for ext x = if has_extension ext then x else toHtml ""
+
+-- controller
+cut :: S.ByteString
+cut = static_config.C.cut.to_sb
+match_cut, is_cut :: S.ByteString -> Bool
+match_cut = S.lines > any (S.isPrefixOf cut)
+is_cut    = S.isPrefixOf cut
+
+-- model
+path, id_to_path :: SC
+path id = static_config.flat_uri / id
+id_to_path = path]] parse succeeds

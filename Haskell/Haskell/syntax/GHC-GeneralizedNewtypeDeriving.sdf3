@@ -1,0 +1,15 @@
+module GHC-GeneralizedNewtypeDeriving
+
+imports
+  GHC-Flexible-Stuff
+  Haskell-Types
+  Haskell-Type-Declarations
+  Haskell-Identifier-Sorts   
+
+context-free syntax
+
+  Topdecl.NewTypeDecl = <newtype <Context?> <Type> = <Newconstr> <GeneralizedDeriving>> 
+  GeneralizedDeriving = <deriving ( <{GDerive ","}+> )> 
+  GDerive = <<Qtycls> <AType+>> 
+  GDerive = Qtycls 
+  GeneralizedDeriving = Deriving {reject}

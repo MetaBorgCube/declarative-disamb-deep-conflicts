@@ -1,0 +1,13 @@
+module Terminal
+
+ language Haskell start symbol Module
+
+ test Terminal [[module System.Terminal
+    (
+      module System.Terminal.Core,
+      module System.Terminal.Utility
+    )
+  where
+
+import System.Terminal.Core
+import System.Terminal.Utility]] parse succeeds

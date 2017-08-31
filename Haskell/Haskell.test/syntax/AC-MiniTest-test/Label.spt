@@ -1,0 +1,95 @@
+module Label
+
+ language Haskell start symbol Module
+
+ test Label [[{- |
+  Defines the 'Label' type, for making values 'show'able.
+-}
+
+{-# LANGUAGE FlexibleContexts #-}
+
+module Test.AC.Label where
+
+---------------------------------------------------------------------
+
+{- |
+  The @Label@ type.
+
+  A value of type @Label x@ is really a value of type @x@, but with
+  a textual label. The 'Show' instance returns this label.
+
+  This can be tremendously useful for allowing you to 'show' values
+  which would not otherwise be printable. For example, functions.
+  Rather than passing a function, you can pass a labelled function.
+  This allows you to know, at runtime, /which/ function you're
+  dealing with, which is very useful for test purposes.
+
+  You can use 'label' to extract the label text, and 'value' to
+  extract the actual data value.
+
+  The 'Show' instance uses the 'label', but the other instances use
+  only the 'value', ignoring the 'label'. (In particular, any
+  operations which alter the 'value' leave the 'label' untouched.)
+-}
+data Label x = Label {label :: String, value :: !x}
+
+instance Eq x => Eq (Label x) where
+  x == y = (value x) == (value y)
+
+instance Ord x => Ord (Label x) where
+  compare x y = compare (value x) (value y)
+
+instance Enum x => Enum (Label x) where
+  succ x = x {value = succ (value x)}
+  pred x = x {value = pred (value x)}
+  toEnum i = Label {label = "toEnum", value = toEnum i}
+  fromEnum = fromEnum . value
+  enumFrom       x     = map (Label (label x)) (enumFrom       (value x)                    )
+  enumFromThen   x y   = map (Label (label x)) (enumFromThen   (value x) (value y)          )
+  enumFromTo     x y   = map (Label (label x)) (enumFromTo     (value x) (value y)          )
+  enumFromThenTo x y z = map (Label (label x)) (enumFromThenTo (value x) (value y) (value z))
+
+instance Bounded x => Bounded (Label x) where
+  minBound = Label "minBound" minBound
+  maxBound = Label "maxBound" maxBound
+
+instance Show (Label x) where show = label
+
+---------------------------------------------------------------------
+
+{- |
+  This type is similar to 'Label'. However, 'Label' cannot be made
+  an instance of higher-kinded classes such as 'Functor' and 'Monad'.
+  This type gets around that irritating limitation.
+-}
+data Label1 c x1 = Label1 {label1 :: String, value1 :: c x1}
+
+instance Eq (c x1) => Eq (Label1 c x1) where
+  x == y = (value1 x) == (value1 y)
+
+instance Ord (c x1) => Ord (Label1 c x1) where
+  compare x y = compare (value1 x) (value1 y)
+
+instance Enum (c x1) => Enum (Label1 c x1) where
+  succ x = x {value1 = succ (value1 x)}
+  pred x = x {value1 = pred (value1 x)}
+  toEnum i = Label1 {label1 = "toEnum", value1 = toEnum i}
+  fromEnum = fromEnum . value1
+  enumFrom       x     = map (Label1 (label1 x)) (enumFrom       (value1 x)                      )
+  enumFromThen   x y   = map (Label1 (label1 x)) (enumFromThen   (value1 x) (value1 y)           )
+  enumFromTo     x y   = map (Label1 (label1 x)) (enumFromTo     (value1 x) (value1 y)           )
+  enumFromThenTo x y z = map (Label1 (label1 x)) (enumFromThenTo (value1 x) (value1 y) (value1 z))
+
+instance Bounded (c x1) => Bounded (Label1 c x1) where
+  minBound = Label1 "minBound" minBound
+  maxBound = Label1 "maxBound" maxBound
+
+instance Show (Label1 c x1) where show = label1
+
+instance Functor c => Functor (Label1 c) where
+  fmap f l = l {value1 = fmap f (value1 l)}
+
+instance Monad c => Monad (Label1 c) where
+  return x = Label1 {label1 = "return", value1 = return x}
+
+  lc >>= f = lc {value1 = value1 lc >>= \ x -> let lc' = f x in value1 lc'}]] parse succeeds

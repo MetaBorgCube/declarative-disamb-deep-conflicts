@@ -1,0 +1,25 @@
+module Vector
+
+ language Haskell start symbol Module
+
+ test Vector [[{- |
+  Convinience module providing all directly vector-related functionallity in one place.
+-}
+
+module Data.Vector
+    (
+      module Data.Vector.Class,
+      module Data.Vector.V1,
+      module Data.Vector.V2,
+      module Data.Vector.V3,
+      module Data.Vector.V4,
+      module Data.Vector.Fancy,
+    )
+  where
+
+import Data.Vector.Class
+import Data.Vector.V1
+import Data.Vector.V2
+import Data.Vector.V3
+import Data.Vector.V4
+import Data.Vector.Fancy]] parse succeeds

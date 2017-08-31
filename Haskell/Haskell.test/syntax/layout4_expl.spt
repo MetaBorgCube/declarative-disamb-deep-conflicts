@@ -1,0 +1,5 @@
+module layout4_expl
+
+language Haskell start symbol Module
+
+test layout4_expl [[-- layout can still have explicit semicolonsf x = let {a = 1; b = 2          ;c = 3}      in x]] parse succeeds

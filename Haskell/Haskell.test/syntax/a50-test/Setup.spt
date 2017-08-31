@@ -1,0 +1,8 @@
+module Setup
+
+ language Haskell start symbol Module
+
+ test Setup [[
+ 
+import Distribution.Simple
+main = defaultMain]] parse succeeds

@@ -1,0 +1,42 @@
+module Haskell-Types
+
+imports
+  Haskell-Identifier-Sorts
+
+context-free syntax
+
+  OptSig = Seq1? 
+  Seq1.Seq = "::" Type 
+
+context-free syntax
+
+  Gtycon = Qtycon 
+  Gtycon.TArrow = "(" "->" ")" 
+
+context-free syntax
+
+  Types = {Type ","}+ 
+  Types2.Const = Type "," {Type ","}+ 
+
+context-free syntax
+
+  AType.TCon = Gtycon 
+  AType.TVar = Tyvar 
+  AType = "(" Type ")" {bracket}
+  AType.TList = "[" Type "]" 
+  AType.TProd = "(" Types2 ")" 
+  Type = AType 
+  Type.TAppBin = Type Type {left}
+  Type.TFunBin = Type "->" Type {right}
+
+context-free priorities
+
+  Type = Type Type 
+  > Type = Type "->" Type
+
+context-free syntax
+
+  Gtycon.TUnit = "(" ")" 
+  Gtycon.TList = "[" "]" 
+  Gtycon.TProduct = "(" Comma+ ")" 
+  Comma = ","

@@ -1,0 +1,43 @@
+module Haskell-Layout
+
+imports
+  Haskell-Identifiers
+
+lexical syntax
+
+  LAYOUT = WhiteChar
+  LAYOUT = Comment
+  LAYOUT = NComment
+  WhiteChar = [\ \t\n\r] 
+  AnyNoSymbol = ~[\n\r] 
+  AnyNoSymbol = Symbol {reject}
+  Dashes = "--" [\-]* 
+  Comment = Dashes (AnyNoSymbol ~[\n\r]*)? ([\r\n] | EOF) 
+  EOF =  
+  NComment = "{-" NCommentContent* "-}" 
+  NCommentContent = NCommentText 
+  NCommentContent = NComment 
+  NCommentText = L-Char+ 
+  L-Char = ~[\-\{] 
+  L-Char = Hyphen 
+  L-Char = CurlyOpen 
+  Hyphen = [\-] 
+  CurlyOpen = [\{] 
+  Newline = [\r\n] 
+  NoNewlineLayout = LAYOUT 
+  NoNewlineLayout = Newline {reject}
+  NewLineLayout = NoNewlineLayout? Newline 
+  NewLineLayout = NoNewlineLayout? Newline LAYOUT 
+
+lexical restrictions
+
+  Dashes -/- [\-]
+  Hyphen -/- [\}]
+  CurlyOpen -/- [\-]
+  EOF -/- ~[]
+  NewLineLayout -/- [\r\n\t\ ]
+  NCommentText -/- ~[\-\{] | [\-].~[\}] | [\{].~[\-]
+
+context-free restrictions
+
+  LAYOUT? -/- [\ \t\n\r] | [\{].[\-] | [\-].[\-]

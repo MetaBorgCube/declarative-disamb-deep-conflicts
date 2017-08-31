@@ -1,0 +1,15 @@
+module PreludeEnv
+
+ language Haskell start symbol Module
+
+ test PreludeEnv [[{-# LANGUAGE NoImplicitPrelude, NoMonomorphismRestriction #-}
+
+module Bamboo.Helper.PreludeEnv  (
+    module MPSUTF8
+  , module Prelude
+) where
+
+import Prelude hiding (
+  (.), (/), (^), id, span, readFile, writeFile, div, (>), (^^)
+  )
+import MPSUTF8 hiding ((<), base, date, format_time, (-))]] parse succeeds

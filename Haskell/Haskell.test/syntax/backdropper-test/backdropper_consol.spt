@@ -1,0 +1,207 @@
+module backdropper_consol
+
+ language Haskell start symbol Module
+
+ test backdropper_consol [[{-
+ - psl backdropper_consol | grep -v hs | grep -v RUSER | gawk '{print $2}' | xargs kill -9
+ -}
+-- |
+-- * backdropper_consol
+--
+-- [@Author@] Yann Golanski.
+--
+-- [@Maintainer@] Yann Golanski <yann@kierun.org>
+--
+-- [@Description@] Wallpaper/Backdrop changer. 
+--
+-- This works as follow.  A configuration file must be created (see example 
+-- "sample_wallpaper_list" file) containing one image per line with the full 
+-- path.  Once the backdropper_consol is started (and pointed to said file), 
+-- it will read all the images and pick a random one to display with qiv.  You
+-- can get qiv from http://www.klografx.net/qiv/ or change the source to use
+-- whatever viewing program you prefer.  It will display all the images in the 
+-- configuration file before re-reading it.  
+--
+-- A time (delay) between changes can be set.   Upcoming is a feature to only
+-- display images while you are at work -- based on time of day and idleness 
+-- of the user running backdropper_consol.
+--
+-- A GUI will be upcoming. 
+--
+-- The backdropper_consol takes the following options:
+--  -h, -?         --help                 Show usage info
+--  -V, -v         --version              Print version
+--  -l[Log Level]  --logging[=Log Level]  Logging level: debug, info (DEFAULT), notice, warning, error, critical, alert or emergency.
+--  -c[FILE]       --config[=FILE]        configure FILE containing list of images.
+--  -d[INT]        --delay[=INT]          Time between changes in seconds.
+--  -g             --gui                  Have a nice (?!) GUI (default is no).
+--
+-- A typical usage would be of the form:
+--  backdropper_consol --config'='/home/yann/.rotate_wallpaper_list --delay'='900
+--
+-- Things still to do are 
+--
+--  * Only rotate during work hours.
+--  * Making sure that all images are shown within a day.
+--  * Make a nice GUI.
+--
+-- (c)2008 Yann Golanski, GPLv3 or above.
+--
+--  This program is free software: you can redistribute it and/or modify
+--  it under the terms of the GNU General Public License as published by
+--  the Free Software Foundation, either version 3 of the License, or
+--  (at your option) any later version.
+--
+--  This program is distributed in the hope that it will be useful,
+--  but WITHOUT ANY WARRANTY; without even the implied warranty of
+--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+--  GNU General Public License for more details.
+--
+--  You should have received a copy of the GNU General Public License
+--  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+--
+{------------------------------------------------------------------------------}
+import Rotating_backdrop_logic
+import System.Console.GetOpt
+import Data.Maybe
+import System.Environment
+import System
+import IO
+import Control.Monad
+import System.Directory
+import System.Log.Logger
+import System.Log.Handler.Syslog
+import Logger_logic
+
+{------------------------------------------------------------------------------}
+-- | New data type to hold the command line options.
+data Options = Options
+ { optInput  :: Maybe FilePath
+  ,optLogLvl :: Maybe String
+  ,optDelay  :: Int
+  ,optGUI    :: Bool
+ } deriving Show
+
+
+{------------------------------------------------------------------------------}
+-- | Default values for the command line options.
+defaultOptions = Options
+ { optInput = Nothing
+  ,optLogLvl = Nothing
+  ,optDelay = 0
+  ,optGUI = False
+ }
+
+
+{------------------------------------------------------------------------------}
+-- | Constructor for the command line options.
+options :: [OptDescr (Options -> IO Options)]
+options = [ 
+
+  -- Prints help and exit.
+  Option ['h','?'] ["help"] 
+    (NoArg (\ opts -> exitHelp))
+    "Show usage info"
+
+  -- Print version and exit.
+  ,Option ['V','v'] ["version"]
+	  (NoArg (\_ -> do hPutStrLn stderr "Version 1.1"; exitWith ExitSuccess))
+	  "Print version"
+
+  -- Sets the configuration file containing list of images.
+  ,Option "l" ["logging"]
+    (OptArg (\arg opts -> return opts {optLogLvl = arg} ) "Log Level")
+    "Logging level: debug, info (DEFAULT), notice, warning, error, critical, alert or emergency."
+
+  -- Sets the configuration file containing list of images.
+  ,Option "c" ["config"]
+    (OptArg (\arg opts -> return opts {optInput = arg} ) "FILE")
+    "configure FILE containing list of images."
+
+  -- Set the time between calls.
+  ,Option "d" ["delay"]
+    (OptArg (\arg opts -> return opts {optDelay = 
+    case arg of
+      Nothing -> 0
+      (Just d) -> read d
+    --(read arg)
+    } ) "INT")
+    "Time between changes in seconds."
+
+  -- To use a GUI or not...
+  ,Option "g" ["gui"]
+	  (NoArg (\opt -> return opt { optGUI = True }))
+	  "Have a nice (?!) GUI (default is no)."
+
+  -- Options done.
+ ]
+
+
+{------------------------------------------------------------------------------}
+-- | Parse the command line options.
+parseCmdOpts :: IO (Options, [String])
+parseCmdOpts = do
+  (optsActions, rest, errors) <- getArgs >>= return . getOpt RequireOrder options
+  when (not (null errors)) $ do
+    mapM_ (hPutStrLn stderr) errors
+    showHelp
+    exitFailure
+  opts <- foldl (>>=) (return defaultOptions) optsActions
+  return (opts, rest)
+
+
+{------------------------------------------------------------------------------}
+-- | Shows the getOpts generated help.
+showHelp :: IO ()
+showHelp = do
+  prg <- getProgName
+  hPutStrLn stderr (usageInfo prg options)
+  hFlush stderr
+
+
+{------------------------------------------------------------------------------}
+-- | Shows the getOpts generated help then quits.
+exitHelp :: IO a
+exitHelp = do
+  showHelp
+  exitWith ExitSuccess
+
+
+{------------------------------------------------------------------------------}
+-- | Main entry point.
+main = do (opts, args) <- parseCmdOpts
+          --putStrLn $ show opts
+          --putStrLn $ "config = " ++ show (optInput opts)
+          --let d = (60 * 15) -- 15 minutes.
+          --
+          case (optLogLvl opts) of
+            Nothing -> updateGlobalLogger "backdropper" (setLevel INFO)
+            (Just p) -> case p of 
+                          "debug" -> updateGlobalLogger "backdropper" (setLevel DEBUG)
+                          "info" -> updateGlobalLogger "backdropper" (setLevel INFO)
+                          "notice" -> updateGlobalLogger "backdropper" (setLevel NOTICE)
+                          "warning" -> updateGlobalLogger "backdropper" (setLevel WARNING)
+                          "error" -> updateGlobalLogger "backdropper" (setLevel ERROR)
+                          "critical" -> updateGlobalLogger "backdropper" (setLevel CRITICAL)
+                          "alert" -> updateGlobalLogger "backdropper" (setLevel ALERT)
+                          "emergency" -> updateGlobalLogger "backdropper" (setLevel EMERGENCY)
+                          _ -> updateGlobalLogger "backdropper" (setLevel DEBUG)
+          {-
+          logger DEBUG "This is a debug."
+          logger INFO "This is an info."
+          logger NOTICE "This is a notice."
+          logger WARNING "This is a warning."
+          logger ERROR "This is an error!"
+          logger CRITICAL "This is a critical error!"
+          logger ALERT "This is an alert!"
+          logger EMERGENCY "This is an emergency!"
+          exitWith ExitSuccess
+          -}
+          logger INFO "Backdropper started..."
+          let d = (optDelay opts)
+          case (optInput opts) of
+            Nothing  -> do
+                    home <- getHomeDirectory
+                    mainLoop (home ++ "/.rotate_wallpaper_list") d
+            (Just p) -> mainLoop p d
+          exitWith ExitSuccess]] parse succeeds

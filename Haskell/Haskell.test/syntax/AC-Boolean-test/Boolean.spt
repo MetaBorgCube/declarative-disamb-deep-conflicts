@@ -1,0 +1,112 @@
+module Boolean
+
+ language Haskell start symbol Module
+
+ test Boolean [[{- |
+  Type classes (and instances) for things that are like Booleans.
+
+  The names of methods in 'Boolean' clash with the standard Prelude,
+  so you probably want to inport the Prelude hiding these three
+  names (since the class methods do the same thing, but with more
+  general type signatures).
+
+  Please note the following points:
+
+  * This module imports "Control.Monad.Instances", which brings
+    several new 'P.Monad' instances into scope.
+
+  * Among other things, a monad instance for functions is brought
+    into scope. This, combined with the 'Boolean' instance for
+    monads, causes any function that returns a 'Boolean' to become
+    a 'Boolean' itself. This allows you to write constructions such
+    as @(> 5) && (< 9)@, which has the obvious meaning.
+
+  * Another interesting consequence of the 'Boolean' instance for
+    monads is that 'P.Maybe' 'P.Bool' is a 'Boolean'. You can use
+    this to implement 3-value logic (\"true\", \"false\" and
+    \"other\"), with 'P.Nothing' implementing \"other\". Any logical
+    operations yield 'P.Nothing' unless all arguments are 'P.Just'
+    something. (This is usually the behaviour you want.)
+-}
+
+{-# LANGUAGE FlexibleInstances #-}
+
+module Data.Boolean where
+
+import qualified Prelude as P
+import qualified Control.Monad as M
+import Control.Monad.Instances -- For the Monad ((->) r) instance.
+
+{- |
+  Typeclass for things that have true and false values.
+
+  Instances:
+
+  * Normal 'P.Bool' values (obviously).
+
+  * Any function that yields a 'BoolValue' as its result.
+    (@'true' = 'P.const' 'P.True'@, @'false' = 'P.const' 'P.False'@)
+    This instance arrises due to the monad instance for functions.
+
+  * Any monadic action that yields a 'BoolValue' as its result.
+    (@'true' = 'P.return' 'P.True'@, @'false' = 'P.return' 'P.False'@)
+-}
+class BoolValue b where
+  true  :: b
+  false :: b
+
+instance BoolValue P.Bool where
+  true  = P.True
+  false = P.False
+
+instance (P.Monad m, BoolValue b) => BoolValue (m b) where
+  true  = P.return true
+  false = P.return false
+
+-- | Convert a 'P.Bool' value to the appropriate 'BoolValue'.
+lift_bool :: (BoolValue b) => P.Bool -> b
+lift_bool b = if b then true else false
+
+{- |
+  Typeclass for things that support Boolean operators.
+
+  Instances:
+
+  * Normal 'P.Bool' values (obviously).
+
+  * Any function that returns a 'Boolean'.
+    This instance arrises due to the monad instance for functions.
+
+  * Any monadic action that returns a 'Boolean'.
+    The left action is performed before the right action (which may
+    be significant, depending on the monad).
+-}
+class Boolean b where
+  -- | Logical-AND of two values.
+  (&&) :: b -> b -> b
+
+  -- | Logical-OR of two values. (Inclusive-OR.)
+  (||) :: b -> b -> b
+
+  -- | Logical-NOT of two values. (Logical inverse.)
+  not  :: b -> b
+
+  {- |
+    Exclusive-OR (XOR). There is a default implementation, but you
+    can override it for efficiency if desired.
+  -}
+  xor :: b -> b -> b
+
+  x `xor` y = (x || y) && (not (x && y))
+
+instance Boolean P.Bool where
+  (&&) = (P.&&)
+  (||) = (P.||)
+  not  = P.not
+  xor  = (P.==)
+
+instance (P.Monad m, Boolean b) => Boolean (m b) where
+  (&&) = M.liftM2 (&&)
+  (||) = M.liftM2 (||)
+  not  = M.liftM  not
+  xor  = M.liftM2 xor]] parse succeeds

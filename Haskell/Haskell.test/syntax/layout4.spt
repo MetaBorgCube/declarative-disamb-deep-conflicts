@@ -1,0 +1,7 @@
+module layout4
+
+language Haskell start symbol Module
+
+test layout4 [[f x = let a = 1; b = 2
+          c = 3
+ in x]] parse succeeds

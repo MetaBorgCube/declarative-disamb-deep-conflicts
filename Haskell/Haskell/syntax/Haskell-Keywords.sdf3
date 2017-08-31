@@ -1,0 +1,50 @@
+module Haskell-Keywords
+
+
+lexical syntax
+
+    ReservedId = "case"  | "class"   | "data"  |
+    "default"   | "deriving"  | "do"    |
+    "else"  | "if"          | "import"  |
+    "in"  | "infix"   | "infixl"  |
+    "infixr"  | "instance"  | "let"   |
+    "module"  | "newtype"   | "of"    |
+    "then"  | "type"  | "where"   |
+    "_"                 
+    
+    ReservedId0 = "as"  | "hiding"  | "qualified"   |
+    "export"  | "label"   | "dynamic"
+
+    ReservedOp = ".." | ":" | "::" | "=" | "\\" | "|" | "<-" |
+    "->" | "@" | "~" | "=>"
+
+lexical restrictions
+
+  "case"
+  "class"
+  "data"
+  "default"
+  "deriving"
+  "do"
+  "else"
+  "if"
+  "import"
+  "in"
+  "infix"
+  "infixl"
+  "infixr"
+  "instance"
+  "let"
+  "module"
+  "newtype"
+  "of"
+  "then"
+  "type"
+  "where"
+  "_"
+  "as"
+  "hiding"
+  "qualified"
+  "export"
+  "label"
+  "dynamic" -/- [a-zA-Z0-9\'\_]

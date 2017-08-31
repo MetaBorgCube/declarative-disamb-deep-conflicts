@@ -1,0 +1,11 @@
+module Haskell-Signature-Declarations
+
+imports
+  Haskell-Type-Classes
+  Haskell-Types
+  Haskell-Identifier-Sorts
+
+context-free syntax
+
+  Decl = Signdecl 
+  Signdecl.SignDecl = Vars "::" Context? Type 

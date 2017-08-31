@@ -1,0 +1,50 @@
+module Class
+
+ language Haskell start symbol Module
+
+ test Class [[{-# LANGUAGE NoImplicitPrelude #-}
+
+module Bamboo.Type.Class where
+
+import Bamboo.Helper.PreludeEnv
+import Bamboo.Type.Common
+import System.Time
+import Text.XHtml.Strict
+
+class (Show a) => Resource a where
+  resource_title :: a -> String
+  resource_type :: a -> String
+  resource_type = show > snake_case
+  
+class Markable a where
+  markup :: a -> Html
+
+class Datable a where
+  date :: a -> CalendarTime
+
+class Addressable a where
+  uri :: a -> String
+
+-- class Pluggable a where
+--   render_plugin :: a -> String
+
+class Gettable a where
+  get :: String -> IO a
+
+class Mappable a where
+  from_assoc :: Assoc -> IO a
+
+class Creatable a where
+  create :: a -> IO ()
+
+class Listable a where
+  list :: IO [a]
+  list = return []
+
+  list_for :: String -> IO [a]
+  list_for = const list
+  cheat_list :: IO [a]
+  cheat_list = list
+
+class FlatRead a where
+  flat_read :: String -> IO a]] parse succeeds

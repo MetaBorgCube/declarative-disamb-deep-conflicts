@@ -1,0 +1,74 @@
+module Manual
+
+ language Haskell start symbol Module
+
+ test Manual [[module Main (main) where
+
+import System.IO
+import System.Directory
+
+import Configure.Write (write)
+
+main = do
+  putStrLn "Manual.hs revision #01, 08 Jun 2011"
+  putStrLn ""
+
+  x1 <- doesDirectoryExist "Include"
+  if x1 then return () else createDirectory "Include"
+  x2 <- doesFileExist "Include/Platform.h"
+  if x2 then msg2 else msg1
+
+msg1 = do
+  putStrLn "This program allows you to manually specify the build platform"
+  putStrLn "values that will be returned from the System.Platform module."
+  putStrLn "Usually the configure script will auto-detect these; by specifying"
+  putStrLn "these values manually, you will disable auto-detection. Are you"
+  putStrLn "sure you want to do that?"
+  yes_no prompt_OS (putStrLn "Exit.")
+
+msg2 = do
+  putStrLn "This program allows you to manually specify the build platform"
+  putStrLn "values that will be returned from the System.Platform module."
+  putStrLn "The data in question has already been set; if you proceed, this"
+  putStrLn "data will be overwritten. Are you sure you want to do that?"
+  yes_no prompt_OS (putStrLn "Exit.")
+
+yes_no yes no = do
+  putStr   "(Y/N)? "
+  hFlush stdout
+  l <- getLine
+  case l of
+    ('y':_) -> yes
+    ('Y':_) -> yes
+    _       -> no
+
+prompt_OS = do
+  putStrLn ""
+  putStrLn "Select OS type:"
+  putStrLn "1 = Unix"
+  putStrLn "2 = Microsoft Windows"
+  putStr   "(1/2)? "
+  l <- getLine
+  case l of
+    "1" -> prompt_CName ("Unix")
+    "2" -> prompt_CName ("MS_Windows")
+    _   -> do
+      putStrLn "Invalid response."
+      prompt_OS
+
+prompt_CName os = do
+  putStrLn ""
+  putStrLn "Enter compiler name string (e.g., \"GHC\", \"JHC\", etc.)"
+  putStrLn "Your text will be used verbatim."
+  putStr   "Name> "
+  cname <- getLine
+  prompt_CVer os cname
+
+prompt_CVer os cname = do
+  putStrLn ""
+  putStrLn "Enter compiler version string (e.g., \"6.6\", \"7.0.2\", etc.)"
+  putStrLn "Your text will be used verbatim."
+  putStrLn "Version> "
+  cver <- getLine
+  putStrLn ""
+  write (os, cname, cver)]] parse succeeds

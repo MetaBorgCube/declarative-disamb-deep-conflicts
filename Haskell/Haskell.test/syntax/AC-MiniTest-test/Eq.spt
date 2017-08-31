@@ -1,0 +1,73 @@
+module Eq
+
+ language Haskell start symbol Module
+
+ test Eq [[{- |
+  Properties for testing that instances of the 'Eq' class perform
+  correctly.
+
+  'p_reflexive', 'p_symmetric' and 'p_transitive' check the basic
+  properties of an equity relation. In other words, they test the
+  '==' method. 'p_not_equal' checks for the extraordinarily unlikely
+  case of '==' and '/=' not agreeing on equity. (The default
+  implementation of '/=' automatically guarantees that this test
+  will pass, and that's what most people presumably use.)
+-}
+
+module Test.AC.Class.Eq where
+
+import Test.AC.Test
+
+-- | Check that @x == x@.
+p_reflexive :: (Show x, Eq x) => x -> Test
+p_reflexive x =
+  title "x == x" $
+  x ?= x
+
+-- | Check that if @x == y@ then @y == x@ as well.
+p_symmetric :: (Show x, Eq x) => x -> x -> Test
+p_symmetric x y =
+  title "if x == y then y == x" $
+  argument "x" x $
+  argument "y" y $
+  temporary "x == y" (x == y) $
+  (y == x) ?= (x == y)
+
+-- | Check that if @x == y@ and @y == z@ then @x == z@.
+p_transitive :: (Show x, Eq x) => x -> x -> x -> Test
+p_transitive x y z =
+  title "if x == y and y == z then x == z" $
+  argument "x" x $
+  argument "y" y $
+  argument "z" z $
+  temporary "x == y" (x == y) $
+  temporary "y == z" (y == z) $
+  if (x /= y) && (y /= z)
+    then inapplicable
+    else (x == z) ?= ((x == y) && (y == z))
+
+-- | Check that @x /= y@ is the same as @not (x == y)@.
+p_not_equal :: (Show x, Eq x) => x -> x -> Test
+p_not_equal x y =
+  title "x /= y is not(x == y)" $
+  argument "x" x $
+  argument "y" y $
+  temporary "x == y" (x == y) $
+  (x /= y) ?= not (x == y)
+
+{- |
+  Given a list of /distinct/ values, perform all applicable tests
+  on all possible combinations of inputs. (If the inputs are not
+  distinct, some redundant tests are performed.)
+-}
+p_Eq :: (Show x, Eq x) => [x] -> Test
+p_Eq xs =
+  title "p_Eq" $
+  argument "xs" xs $
+  tests
+  [
+    title "p_reflexive"  $ tests [ p_reflexive  x     | x <- xs                   ],
+    title "p_symmetric"  $ tests [ p_symmetric  x y   | x <- xs, y <- xs          ],
+    title "p_transitive" $ tests [ p_transitive x y z | x <- xs, y <- xs, z <- xs ],
+    title "p_not_equal"  $ tests [ p_not_equal  x y   | x <- xs, y <- xs          ]
+  ]]] parse succeeds

@@ -1,0 +1,15 @@
+module Extension
+
+ language Haskell start symbol Module
+
+ test Extension [[{-# LANGUAGE NoImplicitPrelude #-}
+module Bamboo.Type.Extension where
+
+import Bamboo.Helper.PreludeEnv
+
+data Extension = 
+    Comment
+  | Search
+  | Analytics
+  | Counter
+  deriving (Show, Read, Eq)]] parse succeeds

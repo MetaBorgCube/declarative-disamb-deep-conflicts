@@ -1,0 +1,39 @@
+module Haskell-Strings
+
+imports
+  Haskell-Numbers
+
+syntax
+
+  Char-CF.Char = "'" CharChar "'" 
+  String-CF.String = "\"" StringChar* "\"" 
+  CharChar = CharChar-LEX 
+  CharChar.Escape = "\\" Escape 
+  CharChar = "\\" [\&] {reject}
+  StringChar = StringChar-LEX 
+  StringChar.Escape = "\\" Escape 
+  StringChar.Gap = "\\" [\ \t\n\r]+ "\\" 
+  Escape.CharEsc = CharEsc-LEX 
+  Escape.ASCIIEsc = ASCII-LEX 
+  Escape.DecimalEsc = Decimal-LEX 
+  Escape.OctalEsc = "o" Octal-LEX 
+  Escape.HexadecimalEsc = "x" Hexadecimal-LEX 
+
+lexical syntax
+
+  CharChar = ~[\0-\31\'\\] 
+  StringChar = ~[\0-\31\"\\] 
+  CharEsc = [abfnrtv\\\"\'\&] 
+  ASCII = "^" [A-Z\@\[\]\\\^\_] 
+  ASCII = "NUL" | "SOH" | "STX" | "ETX" | "EOT" |
+    "ENQ" | "ACK" | "BEL" | "BS"  | "HT"  |
+    "LF"  | "VT"  | "FF"  | "CR"  | ASCII-SO  |
+    "SI"  | "DLE" | "DC1" | "DC2" | "DC3" |
+    "DC4" | "NAK" | "SYN" | "ETB" | "CAN" |
+    "EM"  | "SUB" | "ESC" | "FS"  | "GS"  |
+    "RS"  | "US"  | "SP"  | "DEL"           
+  ASCII-SO = "SO" 
+
+lexical restrictions
+
+  ASCII-SO -/- [H]

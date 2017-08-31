@@ -1,0 +1,159 @@
+module Attrac
+
+ language Haskell start symbol Module
+
+ test Attrac [[module Attrac where
+
+import Data.Array
+import System.Random
+
+type Value = Double
+data Pt = Pt Value Value Value   deriving Show
+data Mat = Mat Value Value Value Value Value Value Value Value Value   deriving Show
+type Coeffs = Array Int Value
+
+--cs = array (0,29) (zip [0..] (readCode whichCode))
+--   where whichCode = codes!!37
+-- 16 = tetrahedron
+-- 29 is happy face
+
+f cs (Pt x y z) = Pt
+   ((cs!0) + (cs!1)*x + (cs!2)*x*x + (cs!3)*x*y + (cs!4)*x*z + (cs!5)*y + (cs!6)*y*y + (cs!7)*y*z + (cs!8)*z + (cs!9)*z*z)
+   ((cs!10) + (cs!11)*x + (cs!12)*x*x + (cs!13)*x*y + (cs!14)*x*z + (cs!15)*y + (cs!16)*y*y + (cs!17)*y*z + (cs!18)*z + (cs!19)*z*z)
+   ((cs!20) + (cs!21)*x + (cs!22)*x*x + (cs!23)*x*y + (cs!24)*x*z + (cs!25)*y + (cs!26)*y*y + (cs!27)*y*z + (cs!28)*z + (cs!29)*z*z)
+
+fjac cs (Pt x y z) = Mat
+   ((cs!1)+2*(cs!2)*x+(cs!3)*y+(cs!4)*z)
+   ((cs!3)*x+(cs!5)+2*(cs!6)*y+(cs!7)*z)
+   ((cs!4)*x+(cs!7)*y+(cs!8)+2*(cs!9)*z)
+   ((cs!11)+2*(cs!12)*x+(cs!13)*y+(cs!14)*z)
+   ((cs!13)*x+(cs!15)+2*(cs!16)*y+(cs!17)*z)
+   ((cs!14)*x+(cs!17)*y+(cs!18)+2*(cs!19)*z)
+   ((cs!21)+2*(cs!22)*x+(cs!23)*y+(cs!24)*z)
+   ((cs!23)*x+(cs!25)+2*(cs!26)*y+(cs!27)*z)
+   ((cs!24)*x+(cs!27)*y+(cs!28)+2*(cs!29)*z)
+
+normCols (Mat a11 a12 a13 a21 a22 a23 a31 a32 a33) = Mat (a11*a) (a12*b) (a13*c) (a21*a) (a22*b) (a23*c) (a31*a) (a32*b) (a33*c)
+   where a = recip (sqrt (a11*a11 + a21*a21 + a31*a31))
+         b = recip (sqrt (a12*a12 + a22*a22 + a32*a32))
+         c = recip (sqrt (a13*a13 + a23*a23 + a33*a33))
+
+fm cs (p,m) = (f cs p,normCols $ (fjac cs p) <*> m)
+
+(<*>) :: Mat -> Mat -> Mat
+(<*>) (Mat a11 a12 a13 a21 a22 a23 a31 a32 a33) (Mat b11 b12 b13 b21 b22 b23 b31 b32 b33)
+   = Mat (a11*b11 + a12*b21 + a13*b31) (a11*b12 + a12*b22 + a13*b32) (a11*b13 + a12*b23 + a13*b33)
+         (a21*b11 + a22*b21 + a23*b31) (a21*b12 + a22*b22 + a23*b32) (a21*b13 + a22*b23 + a23*b33)
+         (a31*b11 + a32*b21 + a33*b31) (a31*b12 + a32*b22 + a33*b32) (a31*b13 + a32*b23 + a33*b33)
+
+zeroPt = Pt 0 0 0
+idMat = Mat 1 0 0 0 1 0 0 0 1
+almostZeroPt = peturb peturbationAmount zeroPt
+
+(<.>) :: Pt -> Pt -> Value
+(<.>) (Pt ax ay az) (Pt bx by bz) = ax*bx + ay*by + az*bz
+
+(<+>) :: Pt -> Pt -> Pt
+(<+>) (Pt ax ay az) (Pt bx by bz) = Pt (ax+bx) (ay+by) (az+bz)
+
+(<->) :: Pt -> Pt -> Pt
+(<->) (Pt ax ay az) (Pt bx by bz) = Pt (ax-bx) (ay-by) (az-bz)
+
+(<#>) :: Value -> Pt -> Pt
+(<#>) a (Pt x y z) = Pt (a*x) (a*y) (a*z)
+
+normalise :: Pt -> Pt
+normalise p = (recip (sqrt (p <.> p))) <#> p
+
+norm a = a <.> a
+
+data PMat = PMat
+   Value Value Value Value
+   Value Value Value Value
+   Value Value Value Value
+   Value Value Value Value  deriving Show
+
+idPMat = PMat
+  1 0 0 0
+  0 1 0 0
+  0 0 1 0
+  0 0 0 1
+
+(<*%>) :: PMat -> PMat -> PMat
+(<*%>) (PMat a11 a12 a13 a14 a21 a22 a23 a24 a31 a32 a33 a34 a41 a42 a43 a44)
+  (PMat b11 b12 b13 b14 b21 b22 b23 b24 b31 b32 b33 b34 b41 b42 b43 b44)
+   = PMat (a11*b11 + a12*b21 + a13*b31 + a14*b41)
+     (a11*b12 + a12*b22 + a13*b32 + a14*b42)
+     (a11*b13 + a12*b23 + a13*b33 + a14*b43)
+     (a11*b14 + a12*b24 + a13*b34 + a14*b44)
+     (a21*b11 + a22*b21 + a23*b31 + a24*b41)
+     (a21*b12 + a22*b22 + a23*b32 + a24*b42)
+     (a21*b13 + a22*b23 + a23*b33 + a24*b43)
+     (a21*b14 + a22*b24 + a23*b34 + a24*b44)
+     (a31*b11 + a32*b21 + a33*b31 + a34*b41)
+     (a31*b12 + a32*b22 + a33*b32 + a34*b42)
+     (a31*b13 + a32*b23 + a33*b33 + a34*b43)
+     (a31*b14 + a32*b24 + a33*b34 + a34*b44)
+     (a41*b11 + a42*b21 + a43*b31 + a44*b41)
+     (a41*b12 + a42*b22 + a43*b32 + a44*b42)
+     (a41*b13 + a42*b23 + a43*b33 + a44*b43)
+     (a41*b14 + a42*b24 + a43*b34 + a44*b44)
+
+(<*#>) :: PMat -> Pt -> Pt
+(<*#>) (PMat a11 a12 a13 a14 a21 a22 a23 a24 a31 a32 a33 a34 a41 a42 a43 a44) (Pt x y z) =
+  Pt (((x*a11)+(y*a12)+(z*a13)+a14) / s) (((x*a21)+(y*a22)+(z*a23)+a24) / s) (((x*a31)+(y*a32)+(z*a33)+a34) / s)
+  where s = ((x*a41)+(y*a42)+(z*a43)+a44)
+
+-----
+
+-- the amount to peturb orbits in the Lyapunov Exponent estimation
+peturbationAmount = 1e-12
+
+-- any point outside this radius from the origin is considered part
+-- of an unbounded orbit
+unboundedRadius = 4.5
+
+lyap :: Coeffs -> Int -> Pt -> Pt -> Maybe Value
+lyap cs t a b = (lyapHelper cs t a b) >>= (return . (/ (fromIntegral t)))
+  where
+    lyapHelper :: Coeffs -> Int -> Pt -> Pt -> Maybe Value
+    lyapHelper _  0 _ _ = Just 0
+    lyapHelper cs t a b | isBadNum na || na > unboundedRadius^2 = Nothing
+                        | otherwise = (lyapHelper cs (t-1) fa fb2) >>= (return . (s +))
+      where
+        na = norm a
+        fa = f cs a
+        fb = f cs b
+        dx2 = norm (fa <-> fb)
+        n = peturbationAmount <#> (normalise (fb <-> fa))
+        fb2 = fa <+> n
+        s = 0.5 * (logBase 2 (dx2 / (peturbationAmount^2)))
+
+isBadNum x = isNaN x || isInfinite x
+
+lyapunovAccuracy = 2048
+
+maxLyapunovExponent :: Coeffs -> Maybe Value
+maxLyapunovExponent cs = lyap cs lyapunovAccuracy p q
+  where
+    p = (iterate (f cs) almostZeroPt) !! 16
+    q = peturb peturbationAmount p
+
+numCoeffs = 30
+
+grabRandoms :: Int -> (Int,Int) -> StdGen -> ([Int],StdGen)
+grabRandoms 0 _ g = ([],g)
+grabRandoms n (x,y) g = let (r,g') = randomR (x,y) g in let (rs,g'') = grabRandoms (n-1) (x,y) g' in (r:rs,g'')
+
+minValidLyapunovExponent = 1e-9
+
+randomiseCoeffs :: StdGen -> (Coeffs,Value)
+randomiseCoeffs g = case maxLyapunovExponent cs of {Just x | x > minValidLyapunovExponent -> (cs,x); _ -> randomiseCoeffs g'}
+  where (as,g') = grabRandoms numCoeffs (-13,13) g
+        cs = listArray (0,numCoeffs-1) (map (\a -> 0.1 * (fromIntegral a)) as)
+
+peturb :: Value -> Pt -> Pt
+peturb e (Pt x y z) = Pt (x+e) y z
+
+(<:*>) :: Pt -> Pt -> Pt
+(<:*>) (Pt ax ay az) (Pt bx by bz) = Pt (ay*bz - az*by) (bx*az - ax*bz) (ax*by - ay*bx)]] parse succeeds

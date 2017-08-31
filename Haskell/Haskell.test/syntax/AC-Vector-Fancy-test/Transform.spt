@@ -1,0 +1,39 @@
+module Transform
+
+ language Haskell start symbol Module
+
+ test Transform [[{- |
+  Convinience module providing all transform functionallity in one place.
+
+  Note that the transform constructors and fields are not exported from here,
+  since the names clash. However, "Data.Vector.Transform.Fancy" provides
+  methods for constructing transforms generically, so that shouldn't be
+  an issue.
+-}
+
+module Data.Vector.Transform
+    (
+      -- * Transform classes
+      module Data.Vector.Transform.Fancy,
+
+      -- * Transformation types
+
+      -- ** 1-dimensional transforms
+      Transform1 (),
+
+      -- ** 2-dimensional transforms
+      Transform2 (),
+
+      -- ** 3-dimensional transforms
+      Transform3 (),
+
+      -- ** 4-dimensional transforms
+      Transform4 (),
+    )
+  where
+
+import Data.Vector.Transform.T1
+import Data.Vector.Transform.T2
+import Data.Vector.Transform.T3
+import Data.Vector.Transform.T4
+import Data.Vector.Transform.Fancy]] parse succeeds

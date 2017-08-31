@@ -1,0 +1,31 @@
+module Haskell-Patterns
+
+imports
+  Haskell-Identifier-Sorts
+  Haskell-Literals
+
+context-free syntax
+
+  Pat = LPat 
+  Pat.BinOpApp = Pat Qconop LPat 
+  LPat = APat 
+  LPat.Negation = "-" Literal 
+  LPat.ConstrApp = Gcon APat+ 
+  APat = Var 
+  APat.Named = Var "@" APat 
+  APat.Constr = Gcon 
+  APat.Labeled = Qcon LabeledPat 
+  LabeledPat.LabeledPats = "{" {FPat ","}* "}" {ignore-layout}
+  APat = Literal 
+  APat.Wildcard = "_" 
+  APat = "(" Pat ")" {bracket}
+  APat.Tuple = "(" Pat "," {Pat ","}+ ")" 
+  APat.List = "[" {Pat ","}+ "]" 
+  APat.Irrefutable = "~" APat 
+  FPat.PatBind = Qvar "=" Pat 
+
+lexical restrictions
+
+  "~" -/- [\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~]
+  "-" -/- [\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~]
+  "|" -/- [\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~]

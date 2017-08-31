@@ -1,0 +1,47 @@
+module Application
+
+ language Haskell start symbol Module
+
+ test Application [[{-# LANGUAGE NoMonomorphismRestriction #-}
+{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE NamedFieldPuns #-}
+
+module Bamboo.Controller.Application where
+
+import Bamboo.Controller.Env
+import Bamboo.Controller.Comment
+import Bamboo.Controller.Index
+import Bamboo.Controller.Post
+import Bamboo.Controller.Search
+import Bamboo.Controller.Static
+import Bamboo.Controller.Tag
+import qualified Bamboo.Type.ThemeInterface as I
+import Data.Maybe (catMaybes)
+
+paths_with_theme :: I.Theme -> [(String, Application)]
+paths_with_theme t = 
+  [  x "/?$"                                 I.Index               index            
+  ,  x "/?(\\?.+)?$"                         I.Index               index            
+  ,  x "/rss.xml$"                           I.IndexFeed           index_feed       
+  ,  x blog_regex                            I.Post                post             
+  ,  x "/static/."                           I.Static              static           
+  ,  x "/tag/.*/rss.xml$"                    I.TagFeed             tag_feed         
+  ,  x "/tag/."                              I.Tag                 tag
+  ,  for_extension  Search  $ x "/search"    I.Search              search           
+  ,  for_extension  Comment $ Just ("/comment/create", comment_create )
+  ]
+  .catMaybes
+  .map_fst ("^" ++)
+  
+  where
+    x a b c = Just (a, render_with_theme t (b, c))
+    blog_regex = "/" ++ static_config.url_date_matcher
+
+render_with_theme :: I.Theme -> (I.Interface, Controller) -> Application
+render_with_theme t (i, c) = run c (t i)
+
+for_extension :: Extension -> Maybe a -> Maybe a
+for_extension ext x = 
+  if has_extension ext 
+    then x 
+    else Nothing]] parse succeeds

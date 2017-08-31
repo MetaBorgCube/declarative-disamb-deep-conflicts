@@ -1,0 +1,66 @@
+module ByteString
+
+ language Haskell start symbol Module
+
+ test ByteString [[{-# LANGUAGE NoMonomorphismRestriction#-}
+{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE TypeSynonymInstances #-}
+
+module Bamboo.Helper.ByteString where
+
+import Bamboo.Helper.PreludeEnv
+import Data.Char (toLower)
+import Data.Default
+import qualified Data.ByteString as SB
+import qualified Data.ByteString.Char8 as S
+import qualified Data.ByteString.Char8 as S
+import qualified Data.ByteString.Lazy as LB
+import qualified Data.ByteString.Lazy.UTF8 as LU
+import qualified Data.ByteString.UTF8 as SU
+import qualified Prelude as P
+
+
+class SB a where
+    to_sb :: a -> SB.ByteString
+
+instance SB SB.ByteString where
+    to_sb = P.id
+
+instance SB LB.ByteString where
+    to_sb = LB.toChunks > SB.concat
+
+instance SB String where
+    to_sb = SU.fromString
+
+class LB a where
+    to_lb :: a -> LB.ByteString
+
+instance LB LB.ByteString where
+    to_lb = P.id
+
+instance LB SB.ByteString where
+    to_lb = return > LB.fromChunks
+
+instance LB String where
+    to_lb = LU.fromString
+
+class US a where
+  to_us :: a -> String
+
+instance US String where
+  to_us = P.id
+
+instance US LB.ByteString where
+  to_us = LU.toString
+
+instance US SB.ByteString where
+  to_us = SU.toString
+
+lower :: S.ByteString -> S.ByteString
+lower = S.map toLower
+
+read_bytestring :: String -> IO S.ByteString
+read_bytestring = u2b > S.readFile
+
+instance Default S.ByteString where
+  def = S.empty]] parse succeeds

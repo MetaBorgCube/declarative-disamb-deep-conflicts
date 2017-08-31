@@ -1,0 +1,14 @@
+module Haskell_4_1
+
+language Haskell start symbol Module
+
+test Haskell_4_1 [[module Main where
+
+a = do 5
+
+main = do
+  putStrLn "abc"
+  do putStrLn "def"
+     putStrLn "ghi"
+
+b = do z]] parse succeeds

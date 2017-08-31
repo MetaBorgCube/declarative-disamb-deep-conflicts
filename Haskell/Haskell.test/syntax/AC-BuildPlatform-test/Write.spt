@@ -1,0 +1,23 @@
+module Write
+
+ language Haskell start symbol Module
+
+ test Write [[module Configure.Write (write) where
+
+import System.IO
+
+write :: (String, String, String) -> IO ()
+write (os, cn, cv) = do
+  putStrLn $ "-| Final data values:"
+  putStrLn $ "---| Operating System = " ++      os
+  putStrLn $ "---| Compiler name    = " ++ show cn
+  putStrLn $ "---| Compiler version = " ++ show cv
+
+  putStrLn $ "-| Saving data..."
+  writeFile "Include/Platform.h" $ unlines $
+    [
+      "#define HS_PNAME " ++      os,
+      "#define HS_CNAME " ++ show cn,
+      "#define HS_CVERS " ++ show cv
+    ]
+  putStrLn $ "-| Done."]] parse succeeds

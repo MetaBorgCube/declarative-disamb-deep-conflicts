@@ -1,0 +1,95 @@
+module Haskell-Expressions
+
+imports
+  Haskell-Identifier-Sorts
+  Haskell-Literals
+  Haskell-Patterns
+  Haskell-Numbers
+  Haskell-Statements
+  Haskell-Type-Classes
+  Haskell-Types
+  Haskell-Value-Definitions
+  Haskell-Case-Alternatives
+
+context-free syntax
+
+  AnyExp = Exp 
+  Exp.Var = Qvar 
+  Exp.Constr = Gcon 
+  Exp.Lit = Literal 
+  Exp.Product = "(" Exps2 ")" 
+  Exp = "(" Exp ")" {bracket}
+  Exps = {Exp ","}+ 
+  Exps2.Const = Exp "," {Exp ","}+ 
+  Fargs = APat+ 
+
+context-free syntax
+
+  Infix.Infix = "infix" 
+  Infix.InfixL = "infixl" 
+  Infix.InfixR = "infixr" 
+  Prec = INTEGER? 
+  Ops = {Op ","}+ 
+  Fixdecl.FixDecl = Infix Prec Ops 
+  Decl = Fixdecl 
+  Exp.LSection = "(" Exp Qop ")" 
+  Exp.RSection = "(" QopNoNeg Exp ")" 
+  QopNoNeg = Qop 
+  QopNoNeg = "-" {reject}
+  LabelBinds.LabelBinds = "{" {Fbind ","}* "}" {ignore-layout}
+
+context-free syntax
+  
+  Exp.Named = Qvar "@" Exp
+  Exp.Labeled = Exp LabelBinds
+  Exp.AppBin = Exp Exp {left}
+  Exp.Negation = "-" Exp  
+  Exp.OpApp = Exp Qop Exp {right}
+  Exp.Typed = Exp "::" Context? Type
+  
+context-free priorities
+
+  Exp = Qvar "@" Exp >
+  Exp = Exp LabelBinds > 
+  Aexp = Exp > 
+  Exp = Exp Exp >
+  Exp = "-" Exp > 
+  Exp = Exp Qop Exp >
+  Exp = Exp "::" Context? Type
+
+context-free syntax
+
+  Exp.Abs = "\\" Fargs "->" Exp 
+  Exp.Let = "let" Declbinds "in" Exp 
+  Exp.If = "if" AnyExp "then" AnyExp "else" Exp 
+  Exp.Do = "do" StmtList
+  Exp.Case = "case" AnyExp "of" AltList 
+
+context-free priorities
+
+  Exp = Exp Exp > 
+  {
+     Exp = "\\" Fargs "->" Exp
+     Exp = "let" Declbinds "in" Exp 
+     Exp = "if" AnyExp "then" AnyExp "else" Exp
+     Exp = "case" AnyExp "of" AltList
+     Exp = "do" StmtList 
+  }
+
+context-free priorities
+
+   Exp = Exp Qop Exp <0> > 
+   {
+     Exp = "\\" Fargs "->" Exp
+     Exp = "let" Declbinds "in" Exp 
+     Exp = "if" AnyExp "then" AnyExp "else" Exp
+   }
+
+context-free priorities
+
+   Exp = Exp "::" Context? Type .> 
+   {
+     Exp = "\\" Fargs "->" Exp 
+     Exp = "let" Declbinds "in" Exp
+     Exp = "if" AnyExp "then" AnyExp "else" Exp
+    }

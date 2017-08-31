@@ -1,0 +1,45 @@
+module Haskell-Numbers
+
+lexical syntax
+
+  Digit = [0-9] 
+  Octit = [0-7] 
+  Hexit = [0-9A-Fa-f] 
+  Zero = [0] 
+  Decimal = Zero Digit* 
+  Decimal = [1-9] Digit* 
+  Octal = Octit+ 
+  Hexadecimal = Hexit+ 
+  INTEGER = Decimal 
+  INTEGER = [0] [Oo] Octal 
+  INTEGER = [0] [Xx] Hexadecimal 
+
+lexical restrictions
+
+  Decimal -/- [0-9]
+  Octal -/- [0-7]
+  Hexadecimal -/- [0-9A-Fa-f]
+  Zero -/- [OoXx]
+
+lexical syntax
+
+  FLOAT = Decimal "." Decimal 
+  RATIONAL = Decimal Exponent 
+  RATIONAL = Decimal "." Decimal Exponent 
+  Exponent = [eE] [\-\+]? Decimal 
+
+lexical restrictions
+
+  INTEGER -/- [\.].[0-9]
+  INTEGER -/- [eE].[0-9] | [eE].[\+\-]
+  FLOAT -/- [eE]
+
+lexical syntax
+
+  PRIMCHAR = [] 
+  PRIMSTRING = [] 
+  PRIMINTEGER = [] 
+  PRIMFLOAT = [] 
+  PRIMDOUBLE = [] 
+  CLITLIT = [] 
+  UNKNOWN = [] 

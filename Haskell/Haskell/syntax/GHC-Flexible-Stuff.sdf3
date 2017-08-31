@@ -1,0 +1,20 @@
+module GHC-Flexible-Stuff
+
+imports 
+  Haskell-Identifier-Sorts
+  Haskell-Types
+  Haskell-Value-Definitions  
+  
+context-free syntax
+
+  FlexibleClass.Class = <<Qtycls> ( <Type> )> 
+  FlexibleClass.Class = <<Qtycls> <Gtycon>> 
+  FlexibleClass.SimpleClass = <<Qtycls> <Tyvar>> 
+  FlexibleContext.FlexibleContext = <<FlexibleClass> =\>> 
+  FlexibleContext.FlexibleContext = <( <{FlexibleClass ","}*> ) =\>> 
+  SContext = FlexibleContext {avoid}
+  Context = FlexibleContext {avoid}
+
+context-free syntax
+
+  Topdecl.FlexibleInstance = <instance <SContext?> <Qtycls> <AType*> <MaybeWhere>> {avoid}

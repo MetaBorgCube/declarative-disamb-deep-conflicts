@@ -1,0 +1,25 @@
+module Haskell-Type-Classes
+
+imports
+  Haskell-Identifier-Sorts
+  Haskell-Value-Definitions
+  Haskell-Types
+
+context-free syntax
+
+  Topdecl.Class = "class" SContext? Tycls Tyvar MaybeWhere 
+  Topdecl.Instance = "instance" SContext? Qtycls Inst* MaybeWhere 
+  Topdecl.Instance = "instance" SContext? "(" Qtycls Inst* ")" MaybeWhere 
+  Topdecl.Default = "default" "(" {Type ","}* ")" 
+  Inst.InstCons = Gtycon 
+  Inst.InstApp = "(" Gtycon Tyvar* ")" 
+  Inst.InstTuple = "(" Tyvar "," {Tyvar ","}+ ")" 
+  Inst.InstList = "[" Tyvar "]" 
+  Inst.InstArrow = "(" Tyvar "->" Tyvar ")" 
+  Context.Context = Class "=>" 
+  Context.Context = "(" {Class ","}* ")" "=>" 
+  SContext.SContext = SimpleClass "=>" 
+  SContext.SContext = "(" {SimpleClass ","}* ")" "=>" 
+  SimpleClass.SimpleClass = Qtycls Tyvar 
+  Class = SimpleClass 
+  Class.Class = Qtycls "(" Tyvar AType+ ")" 

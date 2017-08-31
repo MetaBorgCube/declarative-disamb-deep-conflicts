@@ -1,0 +1,11 @@
+module Haskell_8_2
+
+language Haskell start symbol Module
+
+test Haskell_8_2 [[module Main where
+
+{main = do
+  {putStrLn "abc"
+  ;do {putStrLn "def"
+      ;putStrLn "ghi"
+}}}]] parse succeeds

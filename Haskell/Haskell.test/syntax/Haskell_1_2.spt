@@ -1,0 +1,8 @@
+module Haskell_1_2
+
+language Haskell start symbol Module
+
+test Haskell_1_2 [[module Main where
+{foo = 5
+;bar = 7
+}]] parse succeeds

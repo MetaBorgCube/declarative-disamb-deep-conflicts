@@ -1,0 +1,10 @@
+module Point
+
+ language Haskell start symbol Module
+
+ test Point [[
+module Rendering.Point ( Point )
+
+where 
+
+type Point = (Double, Double)]] parse succeeds

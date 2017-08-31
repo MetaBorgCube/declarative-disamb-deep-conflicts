@@ -1,0 +1,52 @@
+module GHC-Magic-Hash
+
+imports
+  Haskell-Identifiers 
+  Haskell-Numbers 
+  Haskell-Strings
+
+lexical syntax
+
+  VARID = [a-z] [A-Za-z0-9\'\_]* [\#]+ 
+  VARID = [\_] [A-Za-z0-9\'\_]+ [\#]+ 
+  CONID = [A-Z] [A-Za-z0-9\'\_]* [\#]+ 
+
+lexical restrictions
+
+  VARID -/- [\#]
+  CONID -/- [\#]
+
+lexical syntax
+
+  INTEGER-HASH = Decimal 
+  INTEGER-HASH = [0] [Oo] Octal 
+  INTEGER-HASH = [0] [Xx] Hexadecimal 
+  FLOAT-HASH = Decimal "." Decimal 
+  RATIONAL-HASH = Decimal Exponent 
+  RATIONAL-HASH = Decimal "." Decimal Exponent 
+
+syntax
+
+  Char-HASH-CF.CharHash = "'" CharChar "'" "#" 
+  String-HASH-CF.StringHash = "\"" StringChar* "\"" "#" 
+  Integer-HASH-CF.IntegerHash = INTEGER-HASH-LEX "#" 
+  Float-HASH-CF.FloatHash = FLOAT-HASH-LEX "#" 
+  Float-HASH-CF.FloatHash = RATIONAL-HASH-LEX "#" 
+
+context-free syntax
+
+  Literal = Char-HASH 
+  Literal = String-HASH 
+  Literal = Integer-HASH 
+  Literal = Float-HASH 
+
+lexical restrictions
+
+  INTEGER -/- [\#]
+  FLOAT -/- [\#]
+  RATIONAL -/- [\#]
+
+context-free restrictions
+
+  Char -/- [\#]
+  String -/- [\#]

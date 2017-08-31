@@ -1,0 +1,69 @@
+module bacteria
+
+ language Haskell start symbol Module
+
+ test bacteria [[module Main where
+
+import Control.Arrow hiding (right)
+import Data.List
+import Graphics.GD
+import Graphics.X11
+import Graphics.X11.Xinerama
+import System.Environment
+
+fullSize = maximum . map right &&& maximum . map bottom
+bottom (Rectangle { rect_y = y, rect_height = h }) = fromIntegral y + fromIntegral h
+right  (Rectangle { rect_x = x, rect_width  = w }) = fromIntegral x + fromIntegral w
+
+addImages background images rectangles = sequence_ $ zipWith (addImage background) (cycle images) rectangles
+addImage background image (Rectangle { rect_x = xr', rect_y = yr', rect_width = wr', rect_height = hr' }) = do
+    (wi, hi) <- imageSize image
+    let w  = min wi wr -- center a screen-sized block of the image, if it's too large
+        h  = min hi hr
+        xi = max 0 ((wi - w) `div` 2)
+        yi = max 0 ((hi - h) `div` 2)
+    copyRegion (xi, yi) (w, h) image
+               (xr + wr `div` 2 - w `div` 2,
+                yr + hr `div` 2 - h `div` 2)
+               background
+    where
+    [xr, yr] = map fromIntegral [xr', yr']
+    [wr, hr] = map fromIntegral [wr', hr']
+
+loadFile imageName = ($ imageName) $ case (take 4 &&& take 5) (reverse imageName) of
+    ("gpj.",_)  -> loadJpegFile
+    (_,"gpej.") -> loadJpegFile
+    ("gnp.",_)  -> loadPngFile
+    ("fig.",_)  -> loadGifFile
+    _           -> error
+
+nameForRectangles = intercalate "-" . map nameForRectangle
+nameForRectangle (Rectangle { rect_x = x, rect_y = y, rect_width = w, rect_height = h }) =
+    show w ++ 'x' : show h ++ '+' : show x ++ '+' : show y
+
+createBackground imageNames = do
+    display    <- openDisplay ""
+    rectangles <- getScreenInfo display
+    images     <- mapM loadFile imageNames
+    background <- newImage (fullSize rectangles)
+    addImages background images rectangles
+    return (background, rectangles)
+
+usage = do
+    name <- getProgName
+    putStr . unlines $ ["Usage: " ++ name ++ " inputImage [inputImage ...] outputName",
+                        "Input images may be .jpg, .jpeg, .png, or .gif files.",
+                        "The output will be written in PNG format to 'outputName-resolution.png'.",
+                        "The name of the output file will be written to stdout."
+                       ]
+
+main = do
+    args <- getArgs
+    case args of
+        []         -> usage
+        [_]        -> usage
+        _          -> do
+            (background, rectangles) <- createBackground (init args)
+            let filename = last args ++ '-' : nameForRectangles rectangles ++ ".png"
+            savePngFile filename background
+            putStrLn filename]] parse succeeds

@@ -1,0 +1,112 @@
+module Model
+
+ language Haskell start symbol Module
+
+ test Model [[module Bamboo.Plugin.Photo.Model where
+
+import Bamboo.Plugin.Photo.Config
+import Bamboo.Plugin.Photo.Util
+import Control.Monad (when)
+import Data.Default
+import Data.Maybe
+import List (sort)
+import MPSUTF8 hiding (at)
+import Prelude hiding ((.), (>), (^), (/), id)
+import System
+import System.FilePath
+
+data AlbumTypeData = Galleria | Fade | SlideViewer | Popeye deriving (Eq, Show, Read)
+
+instance Default AlbumTypeData where
+  def = Fade
+
+data Album = Album
+  { uid    :: String -- album/08-06-10
+  , prefix :: String
+  , show_description :: Bool
+  , album_type :: AlbumTypeData
+  , width :: Int
+  , pictures :: [String]
+  }
+  deriving (Show, Eq)
+
+get :: String -> Bool -> AlbumTypeData -> Int -> String -> IO Album
+get pre desc t w id = do
+  id.image_path.convert_if_missing_thumb w
+  get_pictures id ^ Album id pre desc t w
+
+get_pictures :: String -> IO [String]
+get_pictures = image_path > ls > (^ filter is_image) > (^ sort)
+
+get_picture_title :: String -> String -> String
+get_picture_title pre x 
+  | pre.empty = x
+  | otherwise = x.split pre.last.dropExtension
+
+for_post :: String -> String -> IO Album
+for_post pre id = get pre False def def (album_id / id.id_to_resource)
+
+picture_links :: Album -> [String]
+picture_links x = x.pictures .map ("/" / image_id / x.uid /)
+
+picture_thumbs :: Album -> [String]
+picture_thumbs x = 
+  x.pictures .map ("/" / image_id / x.uid / thumb_id /)
+
+picture_titles :: Album -> [String]
+picture_titles x = x.pictures .map (get_picture_title (x.prefix))
+
+data_list :: Album -> [(String, String, String)]
+data_list x = zip3 (x.picture_links) (x.picture_titles) (x.picture_thumbs)
+
+data AlbumData = 
+    Prefix
+  | Name
+  | Pictures
+  | ShowDescription
+  | AlbumType
+  | Width
+  deriving (Show)
+
+from_list :: [(String, String)] -> IO Album
+from_list xs = get prefix' show_description' t w (album_id / at Name)
+  where
+    at x              = xs.lookup (x.show_data).fromJust
+    prefix'           = at' Prefix $ picture_prefix
+    show_description' = at' ShowDescription "n" .parse_boolean
+    t                 = at' AlbumType "fade" .camel_case .read
+    w                 = at' Width "400" .read
+    at' x d = case xs.lookup (x.show_data) of
+      Just y -> if y.null then d else y
+      Nothing -> d
+
+
+
+convert_if_missing_thumb :: Int -> String -> IO ()
+convert_if_missing_thumb w dir = do
+  let thumb_path = dir / thumb_id
+  thumb_exists <- dir_exist thumb_path
+  when (not thumb_exists) $ do
+    mkdir thumb_path >> convert w dir
+
+convert :: Int -> String -> IO ()
+convert w dir = do
+  images <- ls dir ^ filter is_image
+  images.map (convert_cmd w dir).sequence >>= print
+  return ()
+  where
+
+image_extensions :: [String]
+image_extensions = ["jpg", "jpeg", "png", "gif"]
+
+is_image :: String -> Bool
+is_image x = image_extensions.any (flip ends_with (x.lower))
+
+convert_cmd :: Int -> String -> String -> IO ExitCode
+convert_cmd w dir file = do
+  sh $ ["convert -resize", w.show, i, o].join " ".trace'
+  where
+    i = quote $ dir / file
+    o = quote $ dir / thumb_id / file
+    sh = u2b > system
+    quote x = "\"" ++ x ++ "\""]] parse succeeds

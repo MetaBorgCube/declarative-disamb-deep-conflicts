@@ -1,0 +1,126 @@
+module Ord
+
+ language Haskell start symbol Module
+
+ test Ord [[{- |
+  Properties for testing that instances of the 'Ord' class perform
+  correctly.
+
+  'p_symmetric' and 'p_transitive' check the basic properties of the
+  ordering. In other words, they test the 'compare' method. 'p_equal'
+  checks that 'Ord' agrees with 'Eq' (that is, 'compare' returns 'EQ'
+  when '==' returns 'True'). The "Test.AC.Class.Eq" module already
+  checks that 'Eq' is reflexive, so if 'Ord' agrees with 'Eq' then
+  'Ord' too is reflexive, and we don't need a seperate test for that.
+  The remaining tests (i.e., 'p_compare', 'p_min' and 'p_max') check
+  for the extraordinarily unlikely case that the various 'Ord'
+  methods do not agree with each other. (Usually they are implemented
+  in terms of each other.)
+-}
+
+module Test.AC.Class.Ord where
+
+import Test.AC.Test
+
+-- | Check that 'compare' agrees with '==' on equity.
+p_equal :: (Show x, Ord x) => x -> x -> Test
+p_equal x y =
+  title "compare agrees with (==)" $
+  argument "x" x $
+  argument "y" y $
+  temporary "x == y" (x == y) $
+  temporary "compare x y" (compare x y) $
+  if x == y
+    then compare x y ?=  EQ
+    else compare x y ?/= EQ
+
+-- | Check that swapping the arguments to 'compare' works correctly.
+p_symmetric :: (Show x, Ord x) => x -> x -> Test
+p_symmetric x y =
+  title "if x < y then y > x" $
+  argument "x" x $
+  argument "y" y $
+  temporary "compare x y" (compare x y) $
+  case compare x y of
+    EQ -> compare y x ?= EQ
+    LT -> compare y x ?= GT
+    GT -> compare y x ?= LT
+
+-- | Check that if @x \< y@ and @y \< z@ then @x \< z@.
+p_transitive :: (Show x, Ord x) => x -> x -> x -> Test
+p_transitive x y z =
+  title "if x < y and y < z then x < z" $
+  argument "x" x $
+  argument "y" y $
+  argument "z" z $
+  temporary "compare x y" (compare x y) $
+  temporary "compare y z" (compare y z) $
+  case (compare x y, compare y z) of
+    (EQ, c ) -> compare x z ?= c
+    (c , EQ) -> compare x z ?= c
+    (c1, c2) -> if c1 == c2 then compare x z ?= c1 else inapplicable
+
+-- | Check that 'compare' agrees with '>', '<', etc.
+p_compare :: (Show x, Ord x) => x -> x -> Test
+p_compare x y =
+  title "compare x y agrees with (<), (>), etc." $
+  argument "x" x $
+  argument "y" y $
+  temporary "compare x y" (compare x y) $
+  let
+    (b1, b2, b3, b4) =
+      case compare x y of
+        LT -> (True , True , False, False)
+        EQ -> (False, True , False, True )
+        GT -> (False, False, True , True )
+  in
+    tests
+    [
+      title "x <  y" $ (x <  y) ?= b1,
+      title "x <= y" $ (x <= y) ?= b2,
+      title "x >  y" $ (x >  y) ?= b3,
+      title "x >= y" $ (x >= y) ?= b4
+    ]
+
+-- | Check that 'min' works correctly.
+p_min :: (Show x, Ord x) => x -> x -> Test
+p_min x y =
+  title "min x y" $
+  argument "x" x $
+  argument "y" y $
+  temporary "compare x y" (compare x y) $
+  case compare x y of
+    EQ -> tests [title "min x y == x" $ min x y ?= x, title "min x y == y" $ min x y ?= y]
+    LT -> min x y ?= x
+    GT -> min x y ?= y
+
+-- | Check that 'max' works correctly.
+p_max :: (Show x, Ord x) => x -> x -> Test
+p_max x y =
+  title "max x y" $
+  argument "x" x $
+  argument "y" y $
+  temporary "compare x y" (compare x y) $
+  case compare x y of
+    EQ -> tests [title "max x y == x" $ max x y ?= x, title "max x y == y" $ max x y ?= y]
+    LT -> max x y ?= y
+    GT -> max x y ?= x
+
+{- |
+  Given a list of /distinct/ values, perform all applicable tests
+  on all possible combinations of inputs. (If the inputs are not
+  distinct, some redundant tests are performed.)
+-}
+p_Ord :: (Show x, Ord x) => [x] -> Test
+p_Ord xs =
+  title "p_Eq" $
+  argument "xs" xs $
+  tests
+  [
+    title "p_equal"      $ tests [ p_equal      x y   | x <- xs, y <- xs          ],
+    title "p_symmetric"  $ tests [ p_symmetric  x y   | x <- xs, y <- xs          ],
+    title "p_transitive" $ tests [ p_transitive x y z | x <- xs, y <- xs, z <- xs ],
+    title "p_compare"    $ tests [ p_compare    x y   | x <- xs, y <- xs          ],
+    title "p_min"        $ tests [ p_min        x y   | x <- xs, y <- xs          ],
+    title "p_max"        $ tests [ p_max        x y   | x <- xs, y <- xs          ]
+  ]]] parse succeeds

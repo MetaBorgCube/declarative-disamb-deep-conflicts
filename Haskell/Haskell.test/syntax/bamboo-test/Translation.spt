@@ -1,0 +1,15 @@
+module Translation
+
+ language Haskell start symbol Module
+
+ test Translation [[module Bamboo.Helper.Translation where
+
+home_nav      :: String
+next_sign     :: String
+no_navigation :: String
+previous_sign :: String
+
+home_nav      = "Home"
+next_sign     = "Next Entries »"
+no_navigation = ""
+previous_sign = "« Previous Entries"]] parse succeeds

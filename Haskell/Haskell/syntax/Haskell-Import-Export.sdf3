@@ -1,0 +1,28 @@
+module Haskell-Import-Export
+
+imports 
+  Haskell-Identifier-Sorts
+  Haskell-Types
+  
+context-free syntax
+
+  Exportlist.Exportlist = {Export ","}* 
+  Exportlist = Exportlist "," 
+  Exports = "(" Exportlist ")" 
+  Export = Qvar 
+  Export = Gtycon 
+  Export = Gtycon "(" ".." ")" 
+  Export = Gtycon "(" ")" 
+  Export = Gtycon "(" {Qcname ","}+ ")" 
+  Export = "module" Modid 
+  Qcname = Qvar 
+  Qcname = Gcon 
+
+context-free syntax
+
+  Importdecl.Import = "import" Src? Qualified? Modid As? Impspec? 
+  Src.SOURCE = "{-# SOURCE" "#-}" 
+  Qualified.Qualified = "qualified" 
+  As.As = "as" Modid 
+  Impspec = "(" Exportlist ")" 
+  Impspec.Hiding = "hiding" "(" Exportlist ")" 

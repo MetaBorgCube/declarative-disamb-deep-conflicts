@@ -1,0 +1,287 @@
+module Gen
+
+ language Haskell start symbol Module
+
+ test Gen [[module Gen where
+
+import Prelude hiding (lookup)
+import Data.Map hiding (map)
+import Text.PrettyPrint
+import Data
+
+genVal :: Int -> Int -> String
+genVal i j = "__" ++ "val" ++ "_" ++ show i ++ "_" ++ show j
+
+genRes :: Int -> Int -> String
+genRes i j = "__" ++ "res" ++ "_" ++ show i ++ "_" ++ show j
+
+fname :: String -> String
+fname cs = "aurochs_" ++ cs
+
+genLabel :: String -> String
+genLabel cs = "label_" ++ cs
+
+genIfElse doc1 doc2 doc3 = genIf doc1 doc2 $$
+                           text "else{" $+$
+                           nest 4 doc3 $$ text "}"
+
+genIf doc1 doc2 = text "if(" <> doc1 <> text "){" $+$ 
+                  nest 4 doc2 $$ text "}"
+
+genIncludes :: Doc
+genIncludes = text "#include<string.h>" $$
+              text "#include<stdlib.h>" $$
+              text "#include<ctype.h>" $$
+              text "#include<stdio.h>"
+
+genInit :: Table -> Doc
+genInit table = (text ("void auinit(char *s)") $$
+                text "{") $+$
+                nest 4 (genI table) $$
+                text "}" where
+        genI table = text "int i;" $$
+                     text "int tsize;" $$
+                     text "size = strlen(s);" $$
+                     text "tsize = size + 1;" $$
+                     text "fill_table = (struct Item_fill *)malloc(sizeof(struct Item_fill) * tsize);" $$
+                     text "pos_table = (struct Item_pos *)malloc(sizeof(struct Item_pos) * tsize);" $$
+                     text "val_table = (struct Item_val *)malloc(sizeof(struct Item_val) * tsize);" $$
+                     text "for(i = 0; i <= size; i++){" $+$
+                     nest 4 (vcat (map genSetZero (toList table))) $$
+                     text "}" where
+                       genSetZero (name, _) = text ("fill_table[i]." ++ name ++ " = FALSE;")
+
+genExit :: Doc
+genExit = (text ("void auexit()") $$
+           text "{") $+$
+          nest 4 (text "free(fill_table);" $$
+                  text "free(pos_table);" $$
+                  text "free(val_table);") $$
+          text "}"
+
+genEntry :: Table -> String -> Doc
+genEntry table name = case lookup name table of
+                        Just t -> (text (t ++ " auentry(char* s)") $$
+                                   text "{") $+$
+                                  nest 4 (text "int errpos = 0;" $$
+                                          text "auinit(s);" $$
+                                          text ("struct Res_" ++ name ++ " res = " ++ fname name ++ "(0, s, &errpos);") $$
+                                          text "if(res.pos == -1){" $+$
+                                          nest 4 ((text "printf (\"Parse error at %d: unexpected '%c'.\", errpos, s[errpos]);") $$
+                                                  (text "exit(1);")) $$
+                                          text "}" $$
+                                          text "auexit();" $$
+                                          text "return res.val;") $$
+                                  text "}"
+                        Nothing -> error $ "Impossible thing happens in genEntry: no type declaration for " ++ name
+
+genGlobalDcls :: Table -> Doc
+genGlobalDcls table = text "#define TRUE 1" $$
+                      text "#define FALSE 0" $$
+                      text "int size;" $$
+                      genGD (toList table) where
+
+              genGD nts = genRes nts $$
+                          genTables nts $$
+                          genFDcls nts
+              
+              genRes nts = vcat (map genR nts)
+
+              genR (name, t) = text ("struct Res_" ++ name ++ "{") $+$
+                               nest 4 (text ("int pos;") $$
+                                       text (t ++ " " ++ "val;")) $$
+                               text "};"
+
+              genTables nts = genFillTable nts $$
+                              genPosTable nts $$
+                              genValTable nts $$
+                              text "struct Item_fill* fill_table;" $$
+                              text "struct Item_pos* pos_table;" $$
+                              text "struct Item_val* val_table;"
+
+              genFillTable nts = text ("struct Item_fill{") $+$
+                                 nest 4 (genFTable nts) $$
+                                 text "};"
+
+              genPosTable nts = text ("struct Item_pos{") $+$
+                                nest 4 (genPTable nts) $$
+                                text "};"
+
+              genValTable nts = text ("struct Item_val{") $+$
+                                nest 4 (genVTable nts) $$
+                                text "};"
+
+              genFTable nts = vcat (map genFT nts)
+
+              genFT (name, _) = text ("int" ++ " " ++ name ++ ";")
+
+              genPTable nts = vcat (map genPT nts)
+
+              genPT (name, t) = text ("int" ++ " " ++ name ++ ";")
+
+              genVTable nts = vcat (map genVT nts)
+
+              genVT (name, t) = text (t ++ " " ++ name ++ ";")
+
+              genFDcls nts = vcat (map genFD nts)
+
+              genFD (name, t) = text ("struct Res_" ++ name ++ " " ++ fname name) <> parens (text "int pos, char* s, int* errp") <> text ";"
+
+
+gen :: Table -> Generator -> Doc
+gen table g@(Generator name body) = ((text $ "struct Res_" ++ name) <+> text (fname name) <> parens (text "int pos, char* s, int *errp") $$ 
+                                      text "{") $+$ 
+                                      nest 4 (genA name body) $$ 
+                                      text "}" where
+
+    genA name body = text ("struct Res_" ++ name ++ " res;") $$
+                       genD body 0 $$
+                       genHead name $$
+                       genAux name body 0
+
+    genD body i = text "int __pos;" $$
+                  text "int __oldpos;" $$
+                  (case lookup name table of
+                     Just t -> text (t ++ " __oldval;")
+                     Nothing -> error $ "Impossible thing happens in genD: no type declaration for " ++ name) $$
+                  text "char c;" $$
+                  genDcls body i
+
+    genDcls [] i = text ""
+    genDcls ((matches, _) : dcls) i = genDcl matches i 0 $$ genDcls dcls (i + 1)
+
+    genDcl (Normal tokens) i j = genDclNormal tokens i j
+    genDcl (ChainL _ opToken token) i j = genDclChain opToken token i j
+
+    genDclNormal [] i j = text ""
+    genDclNormal (NonTerminal cs : tokens) i j = (case lookup cs table of
+                                                   Just ts -> text (ts ++ " " ++ genVal i j ++ ";")
+                                                   Nothing -> error $ "Impossible thing happens in genDclNormal: no type declaration for " ++ cs) $$
+                                                 genDclNormal tokens i (j + 1)
+    genDclNormal (Terminal _ : tokens) i j = text ("char " ++ genVal i j ++ ";") $$
+                                             genDclNormal tokens i (j + 1)
+    genDclChain (NonTerminal opCs) (NonTerminal cs) i j = (case lookup opCs table of
+                                                               Just ts -> text (ts ++ " " ++ genVal i (j + 1) ++ ";")
+                                                               Nothing -> error $ 
+                                                                            "Impossible thing happens in genDclChain: no type declaration for " ++ opCs) $$
+                                                          (case lookup cs table of
+                                                              Just ts -> text (ts ++ " " ++ genVal i j ++ ";")
+                                                              Nothing -> error $ "Impossible thing happens in genDclChain: no type declaration for " ++ cs)
+    genDclChain (Terminal _) (NonTerminal cs) i j = text ("char " ++ genVal i (j + 1) ++ ";") $$
+                                                     (case lookup cs table of
+                                                        Just ts -> text (ts ++ " " ++ genVal i j ++ ";")
+                                                        Nothing -> error $ "Impossible thing happens in genDclChain: no type declaration for " ++ cs)
+    genDclChain (NonTerminal opCs) (Terminal _) i j = (case lookup opCs table of
+                                                          Just ts -> text (ts ++ " " ++ genVal i (j + 1) ++ ";")
+                                                          Nothing -> error $ 
+                                                                       "Impossible thing happens in genDclChain: no type declaration for " ++ opCs) $$
+                                                       text ("char " ++ genVal i j ++ ";")
+    genDclChain (Terminal _) (Terminal _) i j = text ("char " ++ genVal i (j + 1) ++ ";") $$
+                                                text ("char " ++ genVal i j ++ ";")
+
+    genHead name = genIf (text $ "fill_table[pos]." ++ name ++ " == TRUE")
+                           (vcat $ map text ["res.pos = pos_table[pos]." ++ name ++ ";",
+                                             "res.val = val_table[pos]." ++ name ++ ";",
+                                             "return res;"
+                                             ])
+
+    genAux name [] i = vcat $ map text [genLabel (name ++ "_" ++ show i) ++ ":", 
+                                          "res.pos = -1;", 
+--                                          "res.value.errpos = pos;", 
+                                          "return res;"
+                                         ]
+    genAux name (branch : body) i = genB name branch i $$ genAux name body (i + 1)
+
+    genB name branch i = (text $ genLabel (name ++ "_" ++ show i) ++ ":") $$
+                           text ("__pos = pos;") $$ 
+                           genBranch name branch i
+
+    genBranch name (matches, actions) i = genMatches name matches i 0 $$ genAct name actions i where
+
+    genMatches name (Normal tokens) i j = genNormal name tokens i j
+    genMatches name (ChainL op opToken token) i j = genChainL name op opToken token i j
+
+    genNormal name [] i j = text ""
+    genNormal name (Terminal cs : tokens) i j = genTerminal name cs i j $$ genNormal name tokens i (j + 1)
+    genNormal name (NonTerminal cs : tokens) i j = genNonTerminal name cs i j $$ genNormal name tokens i (j + 1)
+
+    genNonTerminal name cs i j = genNonTerminalAux name cs i j (genNext i)
+    genTerminal name cs i j = genTerminalAux name cs i j (genNext i)
+
+    genNext i = text ("*errp = __pos;") $$
+                text ("goto " ++ genLabel (name ++ "_" ++ show (i + 1)) ++ ";")
+
+    genNonTerminalAux name cs i j doc = (vcat $ map text ["Res_" ++ cs ++ " " ++ genRes i j ++ " = " ++ fname cs ++ "(" ++ "__pos" ++ ", s, errp);",
+                                                          "__pos" ++ " = " ++ genRes i j ++ ".pos;",
+                                                          genVal i j ++ " = " ++ genRes i j ++ ".val;"
+                                                         ]) $$
+                                          genIf (text $ "__pos" ++ " == -1") doc
+
+    genTerminalAux name cs i j doc = genIf (text $ "__pos" ++ " >= size") doc $$
+                                       (text $ "c = s[" ++ "__pos" ++ "];") $$
+                                       genIf (text $ "!" ++ cs ++ "(c)") doc $$
+                                       (vcat $ map text ["__pos" ++ " = " ++ "__pos" ++ " + 1;",
+                                                         genVal i j ++ " = c;"
+                                                        ])
+
+    genChainL name op opToken token i j = genChainLAux name op (toGen opToken) (toGen token) i j
+
+    toGen (Terminal cs) = (genTerminalAux, cs)
+    toGen (NonTerminal cs) = (genNonTerminalAux, cs)
+
+    genChainLAux name op (opTokenGen, opCs) (tokenGen, cs) i j = 
+                                                   tokenGen name cs i j (text $ "goto " ++ genLabel (name ++ "_" ++ show (i + 1)) ++ ";") $$
+                                                   text "__oldpos = __pos;" $$
+                                                   text ("__oldval = " ++ genVal i j ++ ";") $$
+                                                   text "while(TRUE){" $+$
+                                                   nest 4 (opTokenGen name opCs i (j + 1)
+                                                            ((text $ "__pos = __oldpos;") $$
+                                                             (text $ genVal i j ++ " = __oldval;") $$
+                                                             (text $ "break;")) $$
+                                                           tokenGen name cs i j 
+                                                             ((text $ "__pos = __oldpos;") $$
+                                                              (text $ genVal i j ++ " = " ++ "__oldval;") $$
+                                                              (text $ "break;")) $$
+                                                           text "__oldpos = __pos;" $$
+                                                           text ("__oldval = " ++ 
+                                                                 op ++ "(__oldval, " ++ genVal i j ++ ");")) $$
+                                                          text "}"
+
+    genAct name actions i = (text $ "res.pos = " ++ "__pos" ++ ";") $$
+                              ((text $ "res.val = (") <>
+                                genActions name actions i <> text ");") $$
+                              (vcat $ map text ["fill_table[pos]." ++ name ++ " = TRUE;",
+                                                "pos_table[pos]." ++ name ++ " = " ++ "__pos;",
+                                                "val_table[pos]." ++ name ++ " = " ++ "res.val;",
+                                                "return res;"
+                                               ])
+                                             
+    genActions name [] i = text ""
+    genActions name (Match j : actions) i = genMatch name i j <> genActions name actions i
+    genActions name (Fill cs : actions) i = genFill cs <> genActions name actions i
+
+    genMatch name i j = text $ genVal i j
+
+    genFill cs = text cs
+
+genProg header table name gs extra = genIncludes $$
+                                     text header $$
+                                     genGlobalDcls table $$
+                                     genInit table $$
+                                     genExit $$
+                                     vcat (map (gen table) gs) $$
+                                     genEntry table name $$
+                                     text extra
+
+testTable = fromList [("exp", "int"), ("num", "int"), ("epsilon", "int"), ("digit", "int")]
+
+--test = genProg "" testTable "exp" [--(Generator "num" "int" [(Normal [Terminal "isdigit", NonTerminal "num"],
+                                 --                  [Fill "(int)(", Match 0, Fill "- '0')", Fill "+", Match 1, Fill "* 10"]),
+                                 --                 (Normal [],[Fill "0"])
+                                 --                ]),
+--                                (Generator "exp" [(ChainL "add" (Terminal "isaddop") (NonTerminal "num"), [Match 0])]),
+--                                (Generator "num" [(ChainL "addnum" (NonTerminal "epsilon") (NonTerminal "digit"), [Match 0])]),
+--                                (Generator "epsilon" [(Normal [], [Fill "0"])]),
+--                                (Generator "digit" [(Normal [Terminal "isdigit"], [Fill "(int)(", Match 0, Fill "-'0')"])])]
+
+-- testIfElse = genIfElse (text "a") (text "b") (text "c")]] parse succeeds

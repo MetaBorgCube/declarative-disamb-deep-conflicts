@@ -1,0 +1,238 @@
+module Private
+
+ language Haskell start symbol Module
+
+ test Private [[module Test.AC.Private
+    (
+      LogM (),
+      run, run_file,
+      log_header, log_XSL, log_element, log_element_, log_mark,
+      print_title,
+      silence_failures, stack_report, subroutine, stack_trace,
+      fail_stop,
+      log_exceptions, rawIO, force,
+    )
+  where
+
+import qualified Control.Exception as EX
+import Data.IORef
+import System.IO
+
+---------------------------------------------------------------------
+
+data State =
+  State
+  {
+    st_log_handle  :: Maybe Handle,
+    st_log_prefix  :: String,
+    st_fail_stop   :: Bool,
+    st_fail_report :: Bool,
+    st_test_prefix :: String,
+    st_test_stack  :: IORef (IO ())
+  }
+
+newtype LogM x = LogM (State -> IO x)
+
+instance Monad LogM where
+  return x = LogM $ \ _ -> return x
+
+  (LogM f1) >>= fn = LogM $ \ st -> do
+    x <- f1 st
+    let LogM f2 = fn x
+    f2 st
+
+---------------------------------------------------------------------
+
+run :: Bool -> Bool -> LogM x -> IO x
+run fail_stop fail_report (LogM f) = do
+  v <- newIORef stack_root
+  let
+    s0 =
+      State
+      {
+        st_log_handle  = Nothing,
+        st_log_prefix  = "",
+        st_fail_stop   = fail_stop,
+        st_fail_report = fail_report,
+        st_test_prefix = "",
+        st_test_stack  = v
+      }
+  f s0
+
+run_file :: FilePath -> Bool -> Bool -> LogM x -> IO x
+run_file file fail_stop fail_report (LogM f) =
+  EX.bracket
+    (do
+      putStrLn $ "Opening log file '" ++ file ++ "'..."
+      h <- openFile file WriteMode
+      hSetEncoding h utf8
+      return h
+    )
+    (\h -> do
+      putStrLn $ "Closing log file..."
+      hClose h
+    )
+    (\ h -> do
+      v <- newIORef stack_root
+      let
+        s0 =
+          State
+          {
+            st_log_handle  = Just h,
+            st_log_prefix  = "",
+            st_fail_stop   = fail_stop,
+            st_fail_report = fail_report,
+            st_test_prefix = "",
+            st_test_stack  = v
+          }
+      f s0
+    )
+
+---------------------------------------------------------------------
+
+log_write :: String -> LogM ()
+log_write txt = LogM $ \ state -> do
+  case st_log_handle state of
+    Nothing -> return ()
+    Just h  -> hPutStrLn h (st_log_prefix state ++ txt)
+
+log_indent :: LogM x -> LogM x
+log_indent (LogM f) = LogM $ \ state ->
+  let state' = state {st_log_prefix = "  " ++ st_log_prefix state}
+  in  f state'
+
+---------------------------------------------------------------------
+
+log_header :: LogM ()
+log_header = log_write "<?xml version='1.0' encoding='utf-8'?>"
+
+log_XSL :: FilePath -> LogM ()
+log_XSL f = log_write $ "<?xml-stylesheet type='text/xsl' href='" ++ f ++ "'?>"
+
+escape :: String -> String
+escape cs = do
+  c <- cs
+  case c of
+    '<' -> "&lt;"
+    '>' -> "&gt;"
+    '&' -> "&amp;"
+    _   -> [c]
+
+log_element :: String -> LogM x -> LogM x
+log_element tag t = do
+  log_write $ "<"  ++ tag ++ ">"
+  x <- log_indent t
+  log_write $ "</" ++ tag ++ ">"
+  return x
+
+log_element_ :: String -> String -> LogM ()
+log_element_ tag body = LogM $ \ state ->
+  case st_log_handle state of
+    Nothing -> return ()
+    Just  h -> do
+      hPutStr   h $ st_log_prefix state ++ "<" ++ tag ++ ">"
+      EX.catch
+        (hPutStr h (escape body))
+        (\ (EX.SomeException e) -> do
+          hPutStr h  "<exception>"
+          hPutStr h (show   e   )
+          hPutStr h "</exception>"
+        )
+      hPutStrLn h $ "</" ++ tag ++ ">"
+
+log_mark :: String -> LogM ()
+log_mark tag = log_write $ "<" ++ tag ++ "/>"
+
+---------------------------------------------------------------------
+
+print_title :: String -> LogM ()
+print_title title = LogM $ \ state ->
+  EX.catch
+    (do
+      putStr (st_test_prefix state)
+      putStr "Test '"
+      putStr title
+      putStrLn "'"
+    )
+    (\ (EX.SomeException e) ->
+      putStrLn $ "***Exception: " ++ show e ++ " (in test title)."
+    )
+
+---------------------------------------------------------------------
+
+stack_root :: IO ()
+stack_root = seperator
+
+seperator :: IO ()
+seperator = putStrLn $ replicate 79 '-'
+
+silence_failures :: LogM x -> LogM x
+silence_failures (LogM f) = LogM $ \ state -> f $ state {st_fail_report = False}
+
+stack_report :: String -> LogM ()
+stack_report txt = LogM $ \ state -> do
+  if st_fail_report state
+    then do
+      let v = st_test_stack state
+      stack0 <- readIORef v
+      writeIORef v $ do
+        stack0
+        EX.catch
+          (putStrLn txt)
+          (\ (EX.SomeException e) -> do
+            putStr "***Exception: "
+            putStr (show e)
+            putChar '\n'
+          )
+    else return ()
+
+subroutine :: LogM x -> LogM x
+subroutine (LogM f) = LogM $ \ state0 -> do
+  let state1 = state0 {st_test_prefix = "  " ++ st_test_prefix state0}
+  if st_fail_report state0
+    then do
+      let v = st_test_stack state0
+      stack0 <- readIORef v
+      writeIORef v $ stack0 >> seperator
+      x <- f state1
+      writeIORef v $ stack0
+      return x
+    else f state1
+
+stack_trace :: LogM ()
+stack_trace = LogM $ \ state -> do
+  if st_fail_report state
+    then do
+      putStrLn (replicate 79 '=')
+      putStrLn "*** Test failure ***"
+      let v = st_test_stack state
+      stack <- readIORef v
+      stack
+      putStrLn (replicate 79 '=')
+    else return ()
+
+---------------------------------------------------------------------
+
+fail_stop :: LogM Bool
+fail_stop = LogM $ \ state -> return (st_fail_stop state)
+
+---------------------------------------------------------------------
+
+log_exceptions :: LogM x -> LogM (Maybe x)
+log_exceptions (LogM act) = LogM $ \ state ->
+  EX.catch
+    (do
+      x <- act state
+      return (Just x)
+    )
+    (\ (EX.SomeException exception) -> do
+      let LogM run = log_write $ "<exception>" ++ show exception ++ "</exception>"
+      run state
+      return Nothing
+    )
+
+rawIO :: IO x -> LogM x
+rawIO act = LogM $ \ _ -> act
+
+force :: x -> LogM (Maybe x)
+force x = log_exceptions $ rawIO $ EX.evaluate x]] parse succeeds

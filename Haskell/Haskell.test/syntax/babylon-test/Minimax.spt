@@ -1,0 +1,69 @@
+module Minimax
+
+ language Haskell start symbol Module
+
+ test Minimax [[{-
+  Generic Minimax algorithm for game playing
+  Based in Bird & Wadler "Introduction to Functional Programming"
+  Pedro Vasconcelos, 2009
+-}
+module Minimax where
+import Data.Tree
+--import Data.List
+
+-- annotate something with an evaluation estimate 
+data Eval a = Eval !Int a deriving (Show)
+
+instance Eq (Eval a) where
+    (Eval x _) == (Eval y _) = x==y
+
+instance Ord (Eval a) where
+    compare (Eval x _) (Eval y _) = compare x y
+
+instance (Show a) => Num (Eval a) where
+    fromInteger n = Eval (fromIntegral n) undefined
+    (+) = undefined
+    (-) = undefined
+    (*) = undefined
+    abs = undefined
+    signum= undefined
+    negate (Eval x a) = Eval (-x) a
+
+fromEval :: Eval a -> a
+fromEval (Eval _ x) = x
+
+
+
+-- naive minimax algorithm
+-- nodes are decorated with the static evaluation scores
+minimax :: (Num a, Ord a) => Tree a -> a
+minimax (Node n []) = n
+minimax (Node n ts) = - minimum (map minimax ts)
+
+
+-- branch-and-bound minimax (alpha-beta prunning)
+-- nodes are decorated with the static evaluation scores
+bbminimax :: (Num a, Ord a) => a -> a -> Tree a -> a
+bbminimax a b (Node x []) = a `max` x `min` b
+bbminimax a b (Node x ts) = cmx a ts
+    where
+      cmx a []  = a
+      cmx a (t:ts) | a'>=b     = a'
+                   | otherwise = cmx a' ts
+                   where a' = -(bbminimax (-b) (-a) t)
+
+
+-- some generic functions follow
+-- prune a tree to a fixed depth
+prune :: Int -> Tree a -> Tree a
+prune n (Node x ts) 
+    | n>0       = Node x (map (prune (n-1)) ts)
+    | otherwise = Node x []
+
+-- breadth and depth of a tree
+breadth :: Tree a -> Int
+breadth (Node x ts) = length ts
+
+depth :: Tree a -> Int
+depth (Node x []) = 1
+depth (Node x ts) = 1 + maximum (map depth ts)]] parse succeeds

@@ -1,0 +1,124 @@
+module Double
+
+ language Haskell start symbol Module
+
+ test Double [[{- |
+  This module provides 'Colour', which stores linear RGB
+  (red, green, blue) colour values where each channel is a 'Double'.
+  It also provides arithmetic over such colours, and a few predefined
+  colours.
+-}
+
+module Data.Colour.Double where
+
+{- |
+  The main colour type. It stores three channels (red, green and
+  blue) as linear 'Double' values normally ranging from 0 to 1.
+  (0 represents minimum intensity, 1 represents maximum. Black is
+  therefore @Colour 0 0 0@ and white is @Colour 1 1 1@.)
+
+  The channel values are stored as strict, unboxed fields, so
+  operating on @Colour@s should be quite efficient in time and space.
+
+  The 'Num' and 'Fractional' instances provide arithmetic for
+  @Colour@s. Note that @(*)@ acts channel-wise; this is usually what
+  is wanted.
+-}
+data Colour = Colour {red, green, blue :: {-# UNPACK #-} !Double}
+  deriving (Eq, Ord, Show)
+
+{- |
+  Apply a function to every channel in a colour. (Mostly used
+  internally, but exposed here in case it may be useful.)
+-}
+cmap :: (Double -> Double) -> Colour -> Colour
+cmap f (Colour r g b) = Colour (f r) (f g) (f b)
+
+{- |
+  This is similar to 'Data.List.zipWith'. (Mostly used internally,
+  but exposed here in case it may be useful.)
+-}
+czip :: (Double -> Double -> Double) -> Colour -> Colour -> Colour
+czip f (Colour r1 g1 b1) (Colour r2 g2 b2) = Colour (f r1 r2) (f g1 g2) (f b1 b2)
+
+{- |
+  Use a function to collapse a @Colour@ into a @Double@. No
+  particular order of application is promised.
+-}
+cfold :: (Double -> Double -> Double) -> Colour -> Double
+cfold f (Colour r g b) = f r (f g b)
+
+{- | Turn a @Double@ into a shade of grey. -}
+grey :: Double -> Colour
+grey x = Colour x x x
+
+{- |
+  Scale a @Colour@ by a specified amount. (That is, change the
+  brightness while not affecting the shade.)
+-}
+cscale :: Double -> Colour -> Colour
+cscale x = cmap (x*)
+
+instance Num Colour where
+  (+) = czip (+)
+  (-) = czip (-)
+  (*) = czip (*)
+  negate = cmap negate
+  abs    = cmap abs
+  signum = cmap signum
+  fromInteger = grey . fromInteger
+
+instance Fractional Colour where
+  (/) = czip (/)
+  recip = cmap recip
+  fromRational = grey . fromRational
+
+{- |
+  Take a @Colour@ and clip all channels to the range 0--1
+  inclusive. Any value outside that range will be replaced
+  with the nearest endpoint (i.e., 0 for negative numbers,
+  1 for positive numbers higher than 1). Values inside
+  the range are unaffected.
+-}
+clip :: Colour -> Colour
+clip = cmap (min 1 . max 0)
+
+-- | Convert a 'Colour' into a tuple.
+unpack :: Colour -> (Double, Double, Double)
+unpack (Colour r g b) = (r, g, b)
+
+-- | Convert a tuple into a 'Colour'.
+pack :: (Double, Double, Double) -> Colour
+pack (r, g, b) = Colour r g b
+
+-- | Constant: Black.
+cBlack   :: Colour
+cBlack   = Colour 0 0 0
+
+-- | Constant: Red.
+cRed     :: Colour
+cRed     = Colour 1 0 0
+
+-- | Constant: Yellow.
+cYellow  :: Colour
+cYellow  = Colour 1 1 0
+
+-- | Constant: Green.
+cGreen   :: Colour
+cGreen   = Colour 0 1 0
+
+-- | Constant: Cyan.
+cCyan    :: Colour
+cCyan    = Colour 0 1 1
+
+-- | Constant: Blue.
+cBlue    :: Colour
+cBlue    = Colour 0 0 1
+
+-- | Constant: Magenta.
+cMagenta :: Colour
+cMagenta = Colour 1 0 1
+
+-- | Constant: White.
+cWhite   :: Colour
+cWhite   = Colour 1 1 1]] parse succeeds

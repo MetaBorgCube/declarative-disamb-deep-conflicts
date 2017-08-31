@@ -1,0 +1,20 @@
+module ThemeInterface
+
+ language Haskell start symbol Module
+
+ test ThemeInterface [[module Bamboo.Type.ThemeInterface where
+
+import Bamboo.Type.State (State)
+import Hack (Response)
+
+data Interface = 
+    Index
+  | IndexFeed
+  | Post
+  | Static
+  | Tag
+  | TagFeed
+  | Search
+  deriving (Show, Eq)
+
+type Theme = Interface -> State -> IO Response]] parse succeeds

@@ -1,0 +1,15 @@
+module Haskell-Records
+
+imports
+  Haskell-Type-Classes
+  Haskell-Identifier-Sorts
+  Haskell-Types
+
+context-free syntax
+
+  Constr.RecordConstr = Context? Con RecordFields 
+  RecordFields = "{" Fielddecls "}" {ignore-indent}
+  Fielddecls = {Fielddecl ","}+ 
+  Fielddecl = Vars "::" Stype 
+  Stype = Type 
+  Stype = "!" Type 

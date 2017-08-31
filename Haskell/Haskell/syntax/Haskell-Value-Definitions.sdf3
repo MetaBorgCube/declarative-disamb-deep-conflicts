@@ -1,0 +1,66 @@
+module Haskell-Value-Definitions
+
+imports
+  Haskell-Patterns
+  Haskell-Expressions
+  Haskell-Identifier-Sorts
+  Haskell-Modules
+
+context-free syntax
+
+  Decl = Valdef 
+  Valdef.Valdef = FunLHS "=" Exp MaybeWhere {longest-match}
+  Valdef.GdValdef = FunLHS Gdrh+ MaybeWhere {longest-match}
+  Gdrh.Guarded = "|" Exp "=" Exp 
+  FunLHS = Pat 
+  FunLHS.VarFunLHS = Var APat+ 
+  FunLHS.OpFunLHS = Pat Varop Pat 
+  FunLHS.NestedFunLHS = "(" FunLHS ")" APat+ 
+
+context-free syntax
+
+  Where.Where = "where" DeclList 
+  MaybeWhere =  {ast("Where(DeclList(Empty))")}
+  MaybeWhere = Where 
+  Declbinds = DeclList 
+
+context-free syntax
+
+  DeclList.DeclList = NoOffsideDeclBlock 
+  DeclList.DeclList = OffsideDeclListOrEmpty {longest-match}
+  OffsideDeclListOrEmpty = OffsideDeclList 
+  OffsideDeclListOrEmpty = Empty 
+  NoOffsideDeclBlock = "{" NoOffsideDeclListSemOrEmpty "}" {bracket, ignore-layout}
+  NoOffsideDeclListSemOrEmpty = NoOffsideDeclListSem 
+  NoOffsideDeclListSemOrEmpty = Empty 
+
+context-free priorities
+
+  NoOffsideDecl = Decl
+  >
+  NoOffsideDecl = NoOffsideDecl ";"
+
+context-free syntax
+
+  NoOffsideDeclList = NoOffsideDecl 
+  NoOffsideDeclList.DeclSeq = NoOffsideDecl ";" NoOffsideDeclList 
+  NoOffsideDeclListSem = NoOffsideDeclList 
+  NoOffsideDeclListSem = ";" NoOffsideDeclListSem 
+
+context-free priorities
+
+   OffsideDecl = Decl {layout(gt(col(left(1)), col(first(1))))}
+  >
+   OffsideDecl = OffsideDecl ";" {layout(gt(col(first(2)), col(first(1))))}
+  >
+   OffsideDecl = ";" OffsideDecl {layout(gt(col(first(2)), col(first(1))))}
+  >
+   OffsideDecl = OffsideDecl ";" Decl
+          {cons("DeclSeq"),
+           layout("1.first.col < 2.first.col && 1.first.col < 3.first.col && 1.first.col < 3.left.col")}
+  
+context-free syntax
+
+  OffsideDeclList = OffsideDecl 
+  OffsideDeclList.DeclSeq = OffsideDeclNEWLINE OffsideDeclList {layout(eq(col(first(1)),col(first(2))))}
+  OffsideDeclNEWLINE = OffsideDecl LAYOUT? {enforce-newline}

@@ -1,0 +1,8 @@
+module Haskell_12
+
+language Haskell start symbol Module
+
+test Haskell_12 [[main = 1 + Foo.Bar + 2
+main = 1 + Foo . Bar + 2
+main = 1 + Foo. Bar + 2
+main = 1 + Foo .Bar + 2]] parse succeeds

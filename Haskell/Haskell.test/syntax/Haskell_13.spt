@@ -1,0 +1,6 @@
+module Haskell_13
+
+language Haskell start symbol Module
+
+test Haskell_13 [[
+main = 1 Prelude.+ 2 Prelude.* 3]] parse succeeds

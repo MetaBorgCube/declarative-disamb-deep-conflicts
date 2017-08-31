@@ -1,0 +1,39 @@
+module FastFloor
+
+ language Haskell start symbol Module
+
+ test FastFloor [[{-# LANGUAGE MagicHash #-}
+
+{- |
+  This module shouldn't need to exist. It exists because
+  GHC's implementation of 'floor' is currently (6.10.3)
+  very slow. See the following tickets:
+
+  <http://hackage.haskell.org/trac/ghc/ticket/1434>
+
+  <http://hackage.haskell.org/trac/ghc/ticket/2271>
+-}
+
+module Data.Colour.FastFloor where
+
+import GHC.Prim
+import GHC.Types
+import GHC.Word
+
+{- |
+  This is a special version of the regular 'floor' function.
+  It works by directly calling the low-level internal GHC
+  primitives, and thus is as fast as you'd expect for such
+  a trivial operation.
+
+  (The standard 'floor' function does something crazy like
+  converting a @Double@ to a numerator/denominator @Integer@
+  pair and then computing the integer part of the quotient as
+  an @Integer@, then truncating that to a @Word8@. Which,
+  obviously, is ludicrously slow.)
+
+  Hopefully one day the need for this low-level hackery
+  will disappear.
+-}
+fast_floor :: Double -> Word8
+fast_floor (D# d#) = W8# (int2Word# (double2Int# d#))]] parse succeeds

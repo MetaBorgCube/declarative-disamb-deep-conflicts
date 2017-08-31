@@ -1,0 +1,19 @@
+module Haskell-Literals
+
+imports
+  Haskell-Numbers
+  Haskell-Strings
+  
+context-free syntax
+
+  Literal.Int = INTEGER 
+  Literal = Char 
+  Literal.Float = FLOAT 
+  Literal.Float = RATIONAL 
+  Literal = String 
+  Literal.PrimInt = PRIMINTEGER 
+  Literal.PrimChar = PRIMCHAR 
+  Literal.PrimString = PRIMSTRING 
+  Literal.PrimFloat = PRIMFLOAT 
+  Literal.PrimDouble = PRIMDOUBLE 
+  Literal.CLitLit = CLITLIT 

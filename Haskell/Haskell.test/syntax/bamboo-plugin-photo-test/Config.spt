@@ -1,0 +1,34 @@
+module Config
+
+ language Haskell start symbol Module
+
+ test Config [[module Bamboo.Plugin.Photo.Config where
+
+import MPS.Light ((/))
+import Prelude hiding ((/))
+
+album_id          :: String
+db_id             :: String
+db_uri            :: String
+image_id          :: String
+image_uri         :: String
+picture_prefix    :: String
+plugin_id         :: String
+plugin_type_key   :: String
+plugin_type_value :: String
+public_id         :: String
+public_uri        :: String
+thumb_id          :: String
+
+album_id          = "album"
+db_id             = "db"
+db_uri            = db_id
+image_id          = "images"
+image_uri         = public_uri / image_id
+picture_prefix    = ""
+plugin_id         = "plugin"
+plugin_type_key   = "type"
+plugin_type_value = "photo"
+public_id         = "public"
+public_uri        = db_uri / public_id
+thumb_id          = "thumb"]] parse succeeds

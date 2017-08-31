@@ -1,0 +1,13 @@
+module Bamboo
+
+ language Haskell start symbol Module
+
+ test Bamboo [[module Bamboo ( bamboo_with_theme ) where
+
+import Bamboo.Controller.Application (paths_with_theme)
+import Hack
+import Hack.Contrib.Middleware.RegexpRouter
+import Bamboo.Type.ThemeInterface (Theme)
+
+bamboo_with_theme :: Theme -> Middleware
+bamboo_with_theme x = regexp_router (paths_with_theme x)]] parse succeeds

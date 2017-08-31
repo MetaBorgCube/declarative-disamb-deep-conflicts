@@ -1,0 +1,12 @@
+module Haskell
+
+imports
+  Haskell-Syntax 
+  GHC-Flexible-Stuff	
+  GHC-Magic-Hash	
+  GHC-GeneralizedNewtypeDeriving
+  Haskell-Modules
+
+context-free start-symbols
+
+  Module

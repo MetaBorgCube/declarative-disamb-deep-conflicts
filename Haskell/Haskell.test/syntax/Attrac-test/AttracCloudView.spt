@@ -1,0 +1,347 @@
+module AttracCloudView
+
+ language Haskell start symbol Module
+
+ test AttracCloudView [[{-
+Author: Ruben Henner Zilibowitz
+Date: 20/2/10
+Compiles under GHC 6.10.4 with:
+ghc --make -O2 AttracCloudView.hs
+-}
+
+module Main where
+
+import Data.IORef  ( IORef, newIORef, readIORef, modifyIORef, writeIORef )
+import System.Exit ( exitWith, ExitCode(ExitSuccess) )
+import Graphics.Rendering.OpenGL as OpenGL
+import Graphics.UI.GLUT as GLUT
+import System.IO(hFlush,stdout)
+import Data.Array as Array
+import Data.Colour.RGBSpace.HSL
+import Data.Colour.SRGB as SRGB
+import System.Random
+import Data.Char
+
+import Attrac
+import SprottCodes
+import GLTypeConversion
+
+ffm cs (p1,Pt x y z) = let (p2,Mat tx _ _ ty _ _ tz _ _) = fm cs (p1,Mat x 1 1 y 0 0 z 0 0) in (p2,Pt tx ty tz)
+
+-----
+
+type Pt2 = (Value,Value)
+data State = State { leftMouseButton, middleMouseButton, rightMouseButton :: IORef KeyState,
+                     mouseLoc, mouseDrag :: IORef Position,
+                     curP :: IORef (Pt,Pt),
+                     coeffs :: IORef Coeffs,
+                     screen :: IORef (Int,Int),
+                     sprottCode :: IORef Int,
+                     modelViewMat :: IORef PMat,
+                     projectionMat :: IORef PMat,
+                     curBuffer :: IORef (Array (Int,Int) (Value,Integer)),
+                     framesElapsed :: IORef Integer }
+
+-- position of light source
+lightPt = Pt 10 10 (-10)
+
+{-
+-- (constant,linear,quadratic) factors
+lightAttenuationConstant, lightAttenuationLinear, lightAttenuationQuadratic :: Value
+lightAttenuationConstant = 1
+lightAttenuationLinear = 0
+lightAttenuationQuadratic = 1
+-}
+
+-- initial displacement of object
+locPt = Pt 0 0 10
+
+findOrbit :: Coeffs -> (Pt,Pt)
+findOrbit cs = (iterate (ffm cs) (almostZeroPt,Pt 1 0 0)) !! 128
+
+---
+--- make initial state
+---
+makeState :: (Int,Int) -> Coeffs -> IO State
+makeState dims@(width,height) cs = do
+   leftMouseButton_ <- newIORef Up
+   middleMouseButton_ <- newIORef Up
+   rightMouseButton_ <- newIORef Up
+   mouseLoc_ <- newIORef (Position 0 0)
+   mouseDrag_ <- newIORef (Position 0 0)
+   curP_ <- newIORef (findOrbit cs)
+   coeffs_ <- newIORef cs
+   screen_ <- newIORef dims
+   sprottCode_ <- newIORef 0
+   modelViewMat_ <- newIORef idPMat
+   projectionMat_ <- newIORef (frustumMat (-1) 1 (-1) 1 5 60)
+   curBuffer_ <- newIORef (listArray ((0,0),(width-1,height-1)) (repeat (0,0)))
+   framesElapsed_ <- newIORef 0
+   return $ State { leftMouseButton = leftMouseButton_,
+                    middleMouseButton = middleMouseButton_,
+                    rightMouseButton = rightMouseButton_,
+                    mouseLoc = mouseLoc_,
+                    mouseDrag = mouseDrag_,
+                    curP = curP_,
+                    coeffs = coeffs_,
+                    screen = screen_,
+                    sprottCode = sprottCode_,
+                    modelViewMat = modelViewMat_,
+                    projectionMat = projectionMat_,
+                    curBuffer = curBuffer_,
+                    framesElapsed = framesElapsed_ }
+
+translationMat :: Pt -> PMat
+translationMat (Pt x y z) = PMat
+  1 0 0 x
+  0 1 0 y
+  0 0 1 z
+  0 0 0 1
+
+frustumMat :: Value -> Value -> Value -> Value -> Value -> Value -> PMat
+frustumMat left right bottom top zNear zFar = PMat
+   (2*zNear/(right-left)) 0 a 0
+   0 (2*zNear/(top-bottom)) b 0
+   0 0 c d
+   0 0 (-1) 0
+  where
+    a = (right + left) / (right - left)
+    b = (top + bottom) / (top - bottom)
+    c = negate (zFar + zNear) / (zFar - zNear)
+    d = negate (2 * zFar * zNear) / (zFar - zNear)
+
+---
+--- display callback
+---
+
+iterations = 1000
+
+shade :: Pt -> Pt -> Value
+shade p@(Pt x y z) t@(Pt tx ty tz)
+  | ((lightPt <-> p) <.> ((Pt 0 0 0) <-> p) < 0) = ka
+  | gamma < 0 = error "sqrt (-1)"
+  | diffuse < 0 = error "neg diffuse"
+  | specular < 0 = error "neg specular"
+  | otherwise = ka + kd*diffuse + ks*specular
+   where
+     l = normalise (lightPt <-> p)
+     tt = t <.> t
+     ll = l <.> l
+     lt = l <.> t
+     gamma = tt^2*ll - tt*lt^2
+     rootGamma = sqrt gamma
+     alpha = negate (tt / rootGamma)
+     beta = lt / rootGamma
+     n_ = (alpha <#> l) <+> (beta <#> t)
+     n = if (l <.> n_ < 0) then (-1) <#> n_ else n_
+     r = ((2 * (l <.> n)) <#> n) <-> l
+     v = normalise ((Pt 0 0 0) <-> p)
+     diffuse = l <.> n
+     shininess = 8
+     specular = (r <.> v) ^ shininess
+     ka = 0.09
+     ks = 0.4
+     kd = 1 - ka - ks{-
+     pp = p <.> p
+     root_pp = sqrt pp
+     attenuation = 40 / (lightAttenuationConstant + lightAttenuationLinear*root_pp + lightAttenuationQuadratic*pp)-}
+
+transform :: (Int,Int) -> Pt -> (Int,Int)
+transform (width,height) (Pt x y _) = (round $ (fromIntegral width) * 0.5 + 400*x, round $ (fromIntegral height) * 0.5 + 400*y)
+
+colorSpeed = 1e-2
+
+(<*#%>) :: PMat -> Pt -> Pt
+(<*#%>) m t = normalise ((m <*#> t) <-> (m <*#> zeroPt))
+
+display :: State -> IO ()
+display state = do
+   p <- readIORef (curP state)
+   cs <- readIORef (coeffs state)
+   vm1 <- readIORef (modelViewMat state)
+   pm <- readIORef (projectionMat state)
+   let vm = (translationMat locPt) <*%> vm1
+   let pvm = pm <*%> vm
+   dims@(width,height) <- readIORef (screen state)
+   let (ps,q:_) = splitAt iterations (iterate (ffm cs) p)
+   let xs = filter (\((px,py),_) -> 0<=px&&px<width&&0<=py&&py<height)
+            [(transform dims (pvm <*#> p),shade (vm <*#> p) (vm <*#%> t)) | (p,t) <- ps, p<.>p>(-1), t<.>t>(-1)]  -- List comprehension condition is always true. Forces computation of the values. This gets around a potential stack overflow bug. Is there a better solution to this?
+   modifyIORef (curBuffer state) (flip (Array.accum (\(y,c) x -> (x+y,c+1))) xs)
+   buf <- readIORef (curBuffer state)
+   renderPrimitive Points$sequence_ [let (x,c) = buf!(px,py)
+                                     in let SRGB.RGB r g b = hsl (colorSpeed * fromIntegral c) 1 (x / (fromIntegral c))
+                                        in (color$Color4 (convertGLdouble r) (convertGLdouble g) (convertGLdouble b) 1) >>
+                                           (vertex$Vertex2 (fromIntegral px :: GLint)
+                                            (fromIntegral py :: GLint)) | ((px,py),_) <- xs]
+   writeIORef (curP state) q
+   modifyIORef (framesElapsed state) (1 +)
+   readIORef (framesElapsed state) >>= \f -> if (mod f 10 == 0) then putChar '.' >> hFlush stdout else return ()
+   
+   swapBuffers
+   postRedisplay Nothing
+
+---
+--- reshape callback
+---
+reshape :: State -> Size -> IO ()
+reshape state size@(Size w h) = do
+   viewport $= (Position 0 0, size)
+   matrixMode $= Modelview 0
+   loadIdentity
+   matrixMode $= Projection
+   loadIdentity
+   ortho2D 0 (fromIntegral w) 0 (fromIntegral h)
+   writeIORef (screen state) (fromIntegral w,fromIntegral h)
+   clearAll state
+
+---
+--- keyboard and mouse callback
+---
+
+(./) a b = (fromIntegral a) / (fromIntegral b)
+
+coeffsToSprottCode :: [Value] -> [Char]
+coeffsToSprottCode xs = 'I' : [chr (round (x*10) + ord 'M') | x <- xs]
+
+keyboardMouse :: State -> KeyboardMouseCallback
+keyboardMouse state (Char c) Down _ _ = case c of
+   'm' -> print =<< (readIORef $ modelViewMat state)
+   'p' -> print =<< (readIORef $ curP state)
+   'f' -> print =<< (readIORef $ framesElapsed state)
+   'r' -> postRedisplay Nothing
+   ' ' -> writeIORef (modelViewMat state) idPMat >> clearAll state
+   'c' -> do
+     g <- newStdGen
+     let (cs,ly) = randomiseCoeffs g
+     putStrLn $ "\nSprott code: " ++ coeffsToSprottCode (elems cs) ++ "\nLyapunov Exponent: " ++ show ly
+     writeIORef (coeffs state) cs
+     writeIORef (curP state) (findOrbit cs)
+     clearAll state
+   's' -> do
+     n <- readIORef (sprottCode state)
+     let n' = (n + 1) `mod` (length codes)
+     let cs = listArray (0,numCoeffs-1) (readCode (codes !! n'))
+     putStrLn $ "\nCode index: " ++ show n' ++ "\nSprott code: " ++ codes!!n' ++ "\nLyapunov Exponent: " ++ show (maxLyapunovExponent cs)
+     writeIORef (coeffs state) cs
+     writeIORef (curP state) (findOrbit cs)
+     writeIORef (sprottCode state) n'
+     clearAll state
+   'e' -> do
+     putStr "\nEnter Sprott code: "
+     hFlush stdout
+     code <- getLine
+     let cs = listArray (0,numCoeffs-1) ((readCode code) ++ (repeat 0))
+     case maxLyapunovExponent cs of
+       Just x | x > minValidLyapunovExponent && not (isBadNum x) -> do
+                 putStrLn $ "\nLyapunov Exponent: " ++ show x
+                 writeIORef (coeffs state) cs
+                 writeIORef (curP state) (findOrbit cs)
+                 clearAll state
+       _ -> putStrLn "Invalid code"
+   '\27' -> putStrLn "" >> exitWith ExitSuccess
+   _     -> return ()
+keyboardMouse state (MouseButton LeftButton) buttonState _ pos =
+   do writeIORef (leftMouseButton state) buttonState
+      writeIORef (mouseLoc state) pos
+      writeIORef (mouseDrag state) pos
+keyboardMouse state (MouseButton MiddleButton) buttonState _ pos =
+   do writeIORef (middleMouseButton state) buttonState
+      writeIORef (mouseLoc state) pos
+      writeIORef (mouseDrag state) pos
+keyboardMouse state (MouseButton RightButton) buttonState _ pos =
+   do writeIORef (rightMouseButton state) buttonState
+      writeIORef (mouseLoc state) pos
+      writeIORef (mouseDrag state) pos
+keyboardMouse _ _ _ _ _ = return ()
+
+clearAll state = do
+  clear [ColorBuffer]
+  (width,height) <- readIORef (screen state)
+  writeIORef (curBuffer state) (listArray ((0,0),(width-1,height-1)) (repeat (0,0)))
+
+---
+--- motion callback
+---
+motion :: State -> MotionCallback
+motion state pos@(Position newX newY) = do
+   clearAll state
+   Position oldX oldY <- readIORef (mouseDrag state)
+   writeIORef (mouseDrag state) pos
+   let dp = Position (newX-oldX) (newY-oldY)
+   loc <- readIORef (mouseLoc state)
+   lmb <- readIORef (leftMouseButton state)
+   mmb <- readIORef (middleMouseButton state)
+   rmb <- readIORef (rightMouseButton state)
+   case lmb of
+     Down -> modifyIORef (modelViewMat state) ((translateXYMat dp) <*%>)
+     Up -> return ()
+   case mmb of
+     Down -> modifyIORef (modelViewMat state) ((scaleMat dp) <*%>)
+     Up -> return ()
+   case rmb of
+     Down -> modifyIORef (modelViewMat state) ((rotateXYMat dp) <*%>)
+     Up -> return ()
+
+translateXYMat :: Position -> PMat
+translateXYMat (Position x y) = PMat
+  1 0 0 (fromIntegral x * (-0.01))
+  0 1 0 (fromIntegral y * (0.01))
+  0 0 1 0
+  0 0 0 1
+
+scaleMat :: Position  -> PMat
+scaleMat (Position x _) = PMat
+  1 0 0 0
+  0 1 0 0
+  0 0 1 0
+  0 0 0 (exp (fromIntegral x * (-0.01)))
+
+rotateXYMat :: Position -> PMat
+rotateXYMat (Position x y) = (PMat
+  1    0   0   0
+  0    cx (-sx) 0
+  0    sx  cx   0
+  0    0   0    1) <*%> (PMat
+  cy   0   sy   0
+  0    1   0    0
+ (-sy) 0   cy   0
+  0    0   0    1)
+  where cx = cos $ 0.001 * fromIntegral (y)
+        sx = sin $ 0.001 * fromIntegral (y)
+        cy = cos $ 0.001 * fromIntegral (x)
+        sy = sin $ 0.001 * fromIntegral (x)
+
+---
+--- main
+---
+
+initialWidth = 800 :: Int
+initialHeight = 800 :: Int
+
+main :: IO ()
+main = do
+   (_progName, args) <- getArgsAndInitialize
+   initialDisplayMode $= [ RGBMode ]
+   
+   initialWindowPosition $= Position 0 0
+   initialWindowSize $= Size (fromIntegral initialWidth) (fromIntegral initialHeight)
+   createWindow _progName
+   
+   let cs = listArray (0,numCoeffs-1) $ readCode (codes !! 0)
+   state <- makeState (initialWidth,initialHeight) cs
+   displayCallback $= display state
+   reshapeCallback $= Just (reshape state)
+   keyboardMouseCallback $= Just (keyboardMouse state)
+   motionCallback $= Just (motion state)
+   
+   clearColor $= backgroundColor
+   clear [ColorBuffer]
+   
+   putStrLn "Welcome. Instructions:"
+   putStr instructions
+   mainLoop
+
+backgroundColor = Color4 0 0 0.12 1
+
+instructions :: String
+instructions = "'m' -> output transform matrix\n'p' -> output current point\n'f' -> output frames elapsed\n'r' -> post redisplay\n' ' -> reset transform matrix\n'c' -> randomise coefficients\n's' -> select next Sprott code from list\n'e' -> Enter a Sprott code on the command line\nESC -> exit\n\n<left mouse button>   -> drag mouse to translate in XY plane\n<middle mouse button> -> drag mouse to scale\n<right mouse button>  -> drag mouse to rotate around X and Y axes\n"]] parse succeeds

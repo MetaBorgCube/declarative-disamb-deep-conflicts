@@ -1,0 +1,68 @@
+module CommandKeys
+
+ language Haskell start symbol Module
+
+ test CommandKeys [[
+module Interface.CommandKeys ( setupCommandKeyMode,
+                               setupCommandKeyShiftBrick,
+                               setupCommandKeyRotateBrick,
+                               setupCommandKeyPauseResumeGame                             
+                             )
+
+where
+
+import Core.Game
+import Interface.KeyEvents
+import Interface.WindowUpdate
+
+import Control.Monad.State
+import Control.Concurrent
+import Graphics.UI.Gtk
+import Graphics.UI.Gtk.Gdk.Events
+import qualified Data.Set as Set; import Data.Set (Set)
+import Data.IORef;
+
+-------------------------------------------------------------------------------------------------------------------------
+-- Setting up of keys which are:
+-- > mode selection (once forever),
+-- > shifting the brick (repeatable),
+-- > rotating the brick (once),
+-- > pausing/resuming game (once)
+
+setupCommandKeyMode :: String -> Window -> DrawingArea -> IORef (Bool) -> (DrawingArea -> Window -> IO ()) -> IO ()
+setupCommandKeyMode chrString window drawArea modeSelectedIORef mode
+  = do onKeyPress window $ \Key { eventKeyName = key } -> 
+         do when (key == chrString) $
+              do selected <- readIORef modeSelectedIORef
+                 unless (selected) $
+                   do writeIORef modeSelectedIORef True
+                      mode drawArea window
+            return False
+       return ()
+
+setupCommandKeyShiftBrick :: String -> Window -> DrawingArea -> State Game Bool -> MVar Game -> IO ()
+setupCommandKeyShiftBrick chrString window drawArea move gameMVar
+  = do onKeyPress window $ \Key { eventKeyName = key } ->
+         do when (key == chrString) $
+              do updateWindowWithPlayerAction drawArea gameMVar move
+            return False
+       return ()
+
+setupCommandKeyRotateBrick :: String -> Window -> DrawingArea -> State Game Bool -> MVar Game -> IORef (Set String) -> IO ()
+setupCommandKeyRotateBrick chrString window drawArea move gameMVar keysIORef
+  = do onKeyPress window $ onKeyDownEvent drawArea chrString keysIORef $ updateWindowWithPlayerAction drawArea gameMVar move
+       onKeyRelease window $ onKeyUpEvent drawArea chrString keysIORef
+       return ()
+
+setupCommandKeyPauseResumeGame :: String -> Window -> DrawingArea -> State Game Bool -> MVar Game -> IORef (Set String) -> IO ()
+setupCommandKeyPauseResumeGame chrString window drawArea move gameMVar keysIORef 
+  = do onKeyPress window $ onKeyDownEvent drawArea chrString keysIORef $ updateWindowWithPlayerAction drawArea gameMVar move
+       onKeyRelease window $ onKeyUpEvent drawArea chrString keysIORef
+       return ()
+
+
+
+
+
+
+]] parse succeeds

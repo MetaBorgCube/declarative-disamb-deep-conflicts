@@ -1,0 +1,52 @@
+module Binary
+
+ language Haskell start symbol Module
+
+ test Binary [[{-|
+  Generate binary PPM files (\"P6\"). These are smaller
+  on disk and faster to generate than text PPM files.
+-}
+
+module Codec.PPM.Binary where
+
+import Data.Word
+import qualified Data.ByteString.Lazy as BIN
+import System.IO
+
+{-|
+  Given the image size (X pixels, Y pixels) and a list of
+  pixel values (red, green, blue), produce a lazy ByteString
+  containing the PPM data.
+-}
+stringPPM :: (Integer,Integer) -> [(Word8,Word8,Word8)] -> BIN.ByteString
+stringPPM (sx,sy) ps =
+  BIN.pack (map (fromIntegral . fromEnum) $ "P6\n" ++ show sx ++ " " ++ show sy ++ "\n255\n") `BIN.append`
+  BIN.concat (map (\(r,g,b) -> BIN.pack [r,g,b]) ps)
+
+{-|
+  Convenience function: Generate PPM data and write it to the
+  specified 'Handle'. The handle is not closed or flushed afterwards.
+  This allows writing PPM data to network streams, etc. This function
+  does not return until all the data has been completely written.
+  (It may of course throw some kind of I/O exception instead.)
+-}
+putPPM :: Handle -> (Integer, Integer) -> [(Word8,Word8,Word8)] -> IO ()
+putPPM h sz ps = BIN.hPut h (stringPPM sz ps)
+
+{-|
+  Convenience function: Write PPM data directly to a file. If the file
+  does not exist, it is created. If it exists, it is overwritten.
+  This function does not return until the file has been completely
+  created. (It may of course throw some kind of I/O exception instead.)
+-}
+writePPM :: FilePath -> (Integer, Integer) -> [(Word8,Word8,Word8)] -> IO ()
+writePPM f sz ps = BIN.writeFile f (stringPPM sz ps)
+
+
+{-|
+  Helper function: Given a function from pixel coordinates to pixel
+  colour, produce a list of pixel data ready to feed to one of the
+  other PPM functions.
+-}
+fn_list :: ((Integer,Integer) -> (Word8,Word8,Word8)) -> (Integer, Integer) -> [(Word8,Word8,Word8)]
+fn_list fn (sx, sy) = map fn [ (x,y) | y <- [0..sy-1], x <- [0..sx-1] ]]] parse succeeds

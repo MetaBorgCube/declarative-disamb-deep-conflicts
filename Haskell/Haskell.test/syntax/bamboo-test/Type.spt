@@ -1,0 +1,15 @@
+module Type
+
+ language Haskell start symbol Module
+
+ test Type [[module Bamboo.Controller.Type where
+
+import Bamboo.Type.State (State)
+import Control.Monad.State (StateT)
+import Hack (Response)
+
+type Controller        = StateController ()
+type ETagController    = StateController String
+type Part a            = StateT State IO a
+type StateController a = StateT State IO a
+type View              = State -> IO Response]] parse succeeds

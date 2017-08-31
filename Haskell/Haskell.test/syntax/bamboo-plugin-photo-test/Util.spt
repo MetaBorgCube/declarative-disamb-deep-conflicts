@@ -1,0 +1,31 @@
+module Util
+
+ language Haskell start symbol Module
+
+ test Util [[module Bamboo.Plugin.Photo.Util where
+
+import Bamboo.Plugin.Photo.Config
+import MPSUTF8
+import Prelude hiding ((.), (>), (^), (/), id)
+import System.Directory
+
+mkdir :: String -> IO ()
+mkdir = u2b > createDirectory
+
+show_data :: (Show a) => a -> String
+show_data = show > snake_case
+
+parse_boolean :: String -> Bool
+parse_boolean = belongs_to ["true", "1", "y", "yes", "yeah"]
+
+ls_l :: String -> IO [String]
+ls_l x = ls x ^ map (x /)
+
+image_path :: String -> String
+image_path id = image_uri / id
+
+spaced_url :: String -> String
+spaced_url = gsub "/" " / "
+
+id_to_resource :: String -> String
+id_to_resource x = x.split "/" .tail.join "/"]] parse succeeds

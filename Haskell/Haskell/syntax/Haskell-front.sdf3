@@ -1,0 +1,4 @@
+module Haskell-front
+
+imports
+   Haskell

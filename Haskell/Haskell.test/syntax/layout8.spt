@@ -1,0 +1,7 @@
+module layout8
+
+language Haskell start symbol Module
+
+test layout8 [[-- declarations can be empty
+f x = let 
+      in x]] parse succeeds
