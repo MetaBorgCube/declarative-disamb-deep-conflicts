@@ -1,0 +1,6 @@
+module jasmin-Descriptors-Field-Test
+
+language Jasmin
+start symbol FieldDescriptor
+
+test int field descriptor [[I]] parse to JBCFieldDesc(Int())

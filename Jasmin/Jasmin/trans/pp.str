@@ -1,0 +1,49 @@
+module pp
+
+imports
+
+  libstratego-gpp
+  libspoofax/sdf/pp
+  libspoofax/editor/refactoring/-
+  pp/Jasmin-parenthesize
+  pp/Jasmin-pp
+
+rules
+
+  editor-format:
+    (node, _, ast, path, project-path) -> (filename, result)
+    with
+      ext      := <get-extension> path
+    ; filename := <guarantee-extension(|$[pp.[ext]])> path
+    ; result   := <pp-debug> node
+
+rules
+  
+  pp-Jasmin-string =
+    parenthesize-Jasmin
+    ; prettyprint-Jasmin-start-symbols
+    ; !V([], <id>)
+    ; box2text-string(|120)
+      
+  pp-partial-Jasmin-string =
+    parenthesize-Jasmin
+    ; prettyprint-Jasmin
+    ; !V([], <id>)
+    ; box2text-string(|120)
+    
+  pp-partial-Jasmin-string(|sort) =
+    parenthesize-Jasmin
+    ; prettyprint-Jasmin(|sort)
+    ; !V([], <id>)
+    ; box2text-string(|120)  
+      
+  pp-debug :
+    ast -> result
+    with
+       result := <pp-Jasmin-string> ast
+    <+ <bottomup(try(not(is-string); not(is-list); not(pp-Jasmin-string); debug(!"cannot pp ")))> ast
+    ;  result := ""
+
+rules
+  
+  construct-textual-change = construct-textual-change(pp-partial-Jasmin-string, parenthesize, override-reconstruction, resugar)

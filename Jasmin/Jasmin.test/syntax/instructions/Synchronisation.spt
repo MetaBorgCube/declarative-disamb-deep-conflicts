@@ -1,0 +1,7 @@
+module jasmin-Synchronisation-Test
+
+language Jasmin
+start symbol Instruction
+
+test monitorenter [[monitorenter]] parse succeeds
+test monitorexit  [[monitorexit]] parse succeeds

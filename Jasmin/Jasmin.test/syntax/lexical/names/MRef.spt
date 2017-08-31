@@ -1,0 +1,7 @@
+module jasmin-Names-MRef-Test
+
+language Jasmin
+start symbol MRef
+
+test mref [[methodreference]] parse to MRef("methodreference")
+

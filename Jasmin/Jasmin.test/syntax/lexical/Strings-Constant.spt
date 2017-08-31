@@ -1,0 +1,7 @@
+module jasmin-Strings-Test
+
+language Jasmin
+start symbol Constant
+
+test constant string [["hellogoodbye"]] parse succeeds
+test string without quotes [[test]] parse fails
