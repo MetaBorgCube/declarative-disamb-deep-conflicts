@@ -1,0 +1,7 @@
+module test
+
+language IceDust
+
+test parse [[
+
+]] parse succeeds
