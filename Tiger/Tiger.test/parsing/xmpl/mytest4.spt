@@ -1,0 +1,12 @@
+module mytest4
+
+language Tiger start symbol Module
+
+test mytest4 [[let function f(x : int, z : int) : int = 
+    let function g(y : int) : int = 
+          (x + y) - z
+     in g(x)
+    end
+ in f(4, 6)
+end
+ ]] parse succeeds

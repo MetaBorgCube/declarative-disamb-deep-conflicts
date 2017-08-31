@@ -1,0 +1,11 @@
+module let-binding
+
+language Tiger start symbol Module
+
+test let-binding [[let 
+  var x : int := 0 + z     // z not in scope
+  var y : int := x + 1
+  var z : int := x + y + 1
+ in 
+   x + y + z
+end]] parse succeeds

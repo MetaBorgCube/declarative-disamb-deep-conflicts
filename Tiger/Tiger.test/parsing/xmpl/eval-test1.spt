@@ -1,0 +1,7 @@
+module eval-test1
+
+language Tiger start symbol Module
+
+test eval-test1 [[let var x : int := 1
+ in x + 2
+end]] parse succeeds

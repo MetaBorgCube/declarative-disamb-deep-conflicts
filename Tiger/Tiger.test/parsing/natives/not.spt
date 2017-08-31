@@ -1,0 +1,5 @@
+module not
+
+language Tiger start symbol Module
+
+test not [[ord("a")]] parse succeeds

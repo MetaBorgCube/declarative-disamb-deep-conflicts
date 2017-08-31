@@ -1,0 +1,13 @@
+module test39
+
+language Tiger start symbol Module
+
+test test39 [[/* This is illegal, since there are two functions with the same name
+    in the same (consecutive) batch of mutually recursive functions.
+   See also test48 */
+let
+	function g(a:int):int = a
+	function g(a:int):int = a
+in
+	0
+end]] parse succeeds

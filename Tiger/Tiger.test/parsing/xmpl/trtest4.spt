@@ -1,0 +1,7 @@
+module trtest4
+
+language Tiger start symbol Module
+
+test trtest4 [[let var x : string := "abc"
+ in x
+end]] parse succeeds

@@ -1,0 +1,9 @@
+module renaming1
+
+language Tiger start symbol Module
+
+test renaming1 [[let var i := 1
+ in (let var i := (i + 2)
+      in i
+     end + i)
+end]] parse succeeds

@@ -1,0 +1,5 @@
+module print
+
+language Tiger start symbol Module
+
+test print [[print("abc")]] parse succeeds

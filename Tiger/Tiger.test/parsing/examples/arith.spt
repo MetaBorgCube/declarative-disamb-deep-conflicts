@@ -1,0 +1,5 @@
+module arith
+
+language Tiger start symbol Module
+
+test arith [[1]] parse succeeds

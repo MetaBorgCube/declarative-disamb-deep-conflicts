@@ -1,0 +1,520 @@
+Mod(
+  Let(
+    [ TypeDecs(TypeDec("vec", ArrayTy(Tid("int"))))
+    , TypeDecs(
+        TypeDec(
+          "vector"
+        , RecordTy(
+            [Field("dim", Tid("int")), Field("d", Tid("vec"))]
+          )
+        )
+      )
+    , TypeDecs(TypeDec("mat", ArrayTy(Tid("vector"))))
+    , TypeDecs(
+        TypeDec(
+          "matrix"
+        , RecordTy(
+            [ Field("x", Tid("int"))
+            , Field("y", Tid("int"))
+            , Field("d", Tid("mat"))
+            ]
+          )
+        )
+      )
+    , FunDecs(
+        FunDec(
+          "vectorCreate"
+        , [FArg("n", Tid("int"))]
+        , Tid("vector")
+        , Record(
+            Tid("vector")
+          , [ InitField("dim", Var("n"))
+            , InitField(
+                "d"
+              , Array(Tid("vec"), Var("n"), Int("0"))
+              )
+            ]
+          )
+        )
+      )
+    , FunDecs(
+        FunDec(
+          "vectorLiftedAdd"
+        , [FArg("X", Tid("vector")), FArg("Y", Tid("vector"))]
+        , Tid("vector")
+        , Let(
+            [ VarDec(
+                "tmp"
+              , Tid("vector")
+              , Call("vectorCreate", [FieldVar(Var("X"), "dim")])
+              )
+            ]
+          , [ For(
+                Var("i")
+              , Int("0")
+              , FieldVar(Var("X"), "dim")
+              , Assign(
+                  Subscript(FieldVar(Var("tmp"), "d"), Var("i"))
+                , Plus(
+                    Subscript(FieldVar(Var("X"), "d"), Var("i"))
+                  , Subscript(FieldVar(Var("Y"), "d"), Var("i"))
+                  )
+                )
+              )
+            , Var("tmp")
+            ]
+          )
+        )
+      )
+    , FunDecs(
+        FunDec(
+          "vectorLiftedMul"
+        , [FArg("X", Tid("vector")), FArg("Y", Tid("vector"))]
+        , Tid("vector")
+        , Let(
+            [ VarDec(
+                "tmp"
+              , Tid("vector")
+              , Call("vectorCreate", [FieldVar(Var("X"), "dim")])
+              )
+            ]
+          , [ For(
+                Var("i")
+              , Int("0")
+              , FieldVar(Var("X"), "dim")
+              , Assign(
+                  Subscript(FieldVar(Var("tmp"), "d"), Var("i"))
+                , Times(
+                    Subscript(FieldVar(Var("X"), "d"), Var("i"))
+                  , Subscript(FieldVar(Var("Y"), "d"), Var("i"))
+                  )
+                )
+              )
+            , Var("tmp")
+            ]
+          )
+        )
+      )
+    , FunDecs(
+        FunDec(
+          "vectorInProduct"
+        , [FArg("X", Tid("vector")), FArg("Y", Tid("vector"))]
+        , Tid("int")
+        , Let(
+            [VarDec("tmp", Tid("int"), Int("0"))]
+          , [ For(
+                Var("i")
+              , Int("0")
+              , FieldVar(Var("X"), "dim")
+              , Assign(
+                  Var("tmp")
+                , Plus(
+                    Var("tmp")
+                  , Times(
+                      Subscript(FieldVar(Var("X"), "d"), Var("i"))
+                    , Subscript(FieldVar(Var("Y"), "d"), Var("i"))
+                    )
+                  )
+                )
+              )
+            , Var("tmp")
+            ]
+          )
+        )
+      )
+    , FunDecs(
+        FunDec(
+          "matrixCreate"
+        , [FArg("n", Tid("int")), FArg("m", Tid("int"))]
+        , Tid("matrix")
+        , Let(
+            [ VarDecNoType(
+                "tmp"
+              , Record(
+                  Tid("matrix")
+                , [ InitField("x", Var("n"))
+                  , InitField("y", Var("m"))
+                  , InitField("d", Array(Tid("mat"), Var("n"), NilExp()))
+                  ]
+                )
+              )
+            ]
+          , [ For(
+                Var("i")
+              , Int("0")
+              , Var("n")
+              , Assign(
+                  Subscript(FieldVar(Var("tmp"), "d"), Var("i"))
+                , Call("vectorCreate", [Var("m")])
+                )
+              )
+            , Var("tmp")
+            ]
+          )
+        )
+      )
+    , FunDecs(
+        FunDec(
+          "matrixRow"
+        , [FArg("A", Tid("matrix")), FArg("i", Tid("int"))]
+        , Tid("vector")
+        , Subscript(FieldVar(Var("A"), "d"), Var("i"))
+        )
+      )
+    , FunDecs(
+        FunDec(
+          "matrixCol"
+        , [FArg("A", Tid("matrix")), FArg("j", Tid("int"))]
+        , Tid("vector")
+        , Let(
+            [VarDecNoType(
+               "tmp"
+             , Call("vectorCreate", [FieldVar(Var("A"), "y")])
+             )]
+          , [ For(
+                Var("i")
+              , Int("0")
+              , FieldVar(Var("A"), "y")
+              , Assign(
+                  Subscript(FieldVar(Var("tmp"), "d"), Var("i"))
+                , Subscript(
+                    FieldVar(
+                      Subscript(FieldVar(Var("A"), "d"), Var("i"))
+                    , "d"
+                    )
+                  , Var("j")
+                  )
+                )
+              )
+            , Var("tmp")
+            ]
+          )
+        )
+      )
+    , FunDecs(
+        FunDec(
+          "matrixTranspose"
+        , [FArg("A", Tid("matrix"))]
+        , Tid("matrix")
+        , Let(
+            [ VarDecNoType(
+                "tmp"
+              , Call(
+                  "matrixCreate"
+                , [FieldVar(Var("A"), "y"), FieldVar(Var("A"), "x")]
+                )
+              )
+            ]
+          , [ For(
+                Var("i")
+              , Int("0")
+              , FieldVar(Var("A"), "x")
+              , For(
+                  Var("j")
+                , Int("0")
+                , FieldVar(Var("A"), "y")
+                , Assign(
+                    Subscript(
+                      FieldVar(
+                        Subscript(FieldVar(Var("tmp"), "d"), Var("j"))
+                      , "d"
+                      )
+                    , Var("i")
+                    )
+                  , Subscript(
+                      FieldVar(
+                        Subscript(FieldVar(Var("A"), "d"), Var("i"))
+                      , "d"
+                      )
+                    , Var("j")
+                    )
+                  )
+                )
+              )
+            , Var("tmp")
+            ]
+          )
+        )
+      )
+    , FunDecs(
+        FunDec(
+          "matrixLiftedAdd"
+        , [FArg("A", Tid("matrix")), FArg("B", Tid("matrix"))]
+        , Tid("matrix")
+        , Let(
+            [ VarDecNoType(
+                "tmp"
+              , Call(
+                  "matrixCreate"
+                , [FieldVar(Var("A"), "x"), FieldVar(Var("A"), "y")]
+                )
+              )
+            ]
+          , [ If(
+                Or(
+                  Neq(
+                    FieldVar(Var("A"), "x")
+                  , FieldVar(Var("B"), "x")
+                  )
+                , Neq(
+                    FieldVar(Var("A"), "y")
+                  , FieldVar(Var("B"), "y")
+                  )
+                )
+              , Call("exit", [Int("1")])
+              , For(
+                  Var("i")
+                , Int("0")
+                , FieldVar(Var("A"), "x")
+                , For(
+                    Var("j")
+                  , Int("0")
+                  , FieldVar(Var("A"), "y")
+                  , Assign(
+                      Subscript(
+                        FieldVar(
+                          Subscript(FieldVar(Var("tmp"), "d"), Var("i"))
+                        , "d"
+                        )
+                      , Var("j")
+                      )
+                    , Plus(
+                        Subscript(
+                          FieldVar(
+                            Subscript(FieldVar(Var("A"), "d"), Var("i"))
+                          , "d"
+                          )
+                        , Var("j")
+                        )
+                      , Subscript(
+                          FieldVar(
+                            Subscript(FieldVar(Var("B"), "d"), Var("i"))
+                          , "d"
+                          )
+                        , Var("j")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            , Var("tmp")
+            ]
+          )
+        )
+      )
+    , FunDecs(
+        FunDec(
+          "matrixLiftedMul"
+        , [FArg("A", Tid("matrix")), FArg("B", Tid("matrix"))]
+        , Tid("matrix")
+        , Let(
+            [ VarDecNoType(
+                "tmp"
+              , Call(
+                  "matrixCreate"
+                , [FieldVar(Var("A"), "x"), FieldVar(Var("A"), "y")]
+                )
+              )
+            ]
+          , [ If(
+                Or(
+                  Neq(
+                    FieldVar(Var("A"), "x")
+                  , FieldVar(Var("B"), "x")
+                  )
+                , Neq(
+                    FieldVar(Var("A"), "y")
+                  , FieldVar(Var("B"), "y")
+                  )
+                )
+              , Call("exit", [Int("1")])
+              , For(
+                  Var("i")
+                , Int("0")
+                , FieldVar(Var("A"), "x")
+                , For(
+                    Var("j")
+                  , Int("0")
+                  , FieldVar(Var("A"), "y")
+                  , Assign(
+                      Subscript(
+                        FieldVar(
+                          Subscript(FieldVar(Var("tmp"), "d"), Var("i"))
+                        , "d"
+                        )
+                      , Var("j")
+                      )
+                    , Times(
+                        Subscript(
+                          FieldVar(
+                            Subscript(FieldVar(Var("A"), "d"), Var("i"))
+                          , "d"
+                          )
+                        , Var("j")
+                        )
+                      , Subscript(
+                          FieldVar(
+                            Subscript(FieldVar(Var("B"), "d"), Var("i"))
+                          , "d"
+                          )
+                        , Var("j")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            , Var("tmp")
+            ]
+          )
+        )
+      )
+    , FunDecs(
+        FunDec(
+          "matrixMul"
+        , [FArg("A", Tid("matrix")), FArg("B", Tid("matrix"))]
+        , Tid("matrix")
+        , Let(
+            [ VarDecNoType(
+                "tmp"
+              , Call(
+                  "matrixCreate"
+                , [FieldVar(Var("A"), "x"), FieldVar(Var("B"), "y")]
+                )
+              )
+            ]
+          , [ If(
+                Neq(
+                  FieldVar(Var("A"), "y")
+                , FieldVar(Var("B"), "x")
+                )
+              , Call("exit", [Int("1")])
+              , For(
+                  Var("i")
+                , Int("0")
+                , FieldVar(Var("A"), "x")
+                , For(
+                    Var("j")
+                  , Int("0")
+                  , FieldVar(Var("B"), "y")
+                  , Assign(
+                      Subscript(
+                        FieldVar(
+                          Subscript(FieldVar(Var("tmp"), "d"), Var("i"))
+                        , "d"
+                        )
+                      , Var("j")
+                      )
+                    , Call(
+                        "vectorInProduct"
+                      , [ Call("matrixRow", [Var("A"), Var("i")])
+                        , Call("matrixCol", [Var("B"), Var("j")])
+                        ]
+                      )
+                    )
+                  )
+                )
+              )
+            , Var("tmp")
+            ]
+          )
+        )
+      )
+    , FunDecs(
+        FunDec(
+          "createDiagMat"
+        , [FArg("X", Tid("vector"))]
+        , Tid("matrix")
+        , Let(
+            [ VarDecNoType(
+                "tmp"
+              , Call(
+                  "matrixCreate"
+                , [FieldVar(Var("X"), "dim"), FieldVar(Var("X"), "dim")]
+                )
+              )
+            ]
+          , [ For(
+                Var("i")
+              , Int("0")
+              , FieldVar(Var("X"), "dim")
+              , Assign(
+                  Subscript(
+                    FieldVar(
+                      Subscript(FieldVar(Var("tmp"), "d"), Var("i"))
+                    , "d"
+                    )
+                  , Var("i")
+                  )
+                , Subscript(FieldVar(Var("X"), "d"), Var("i"))
+                )
+              )
+            , Var("tmp")
+            ]
+          )
+        )
+      )
+    , FunDecs(
+        FunDec(
+          "matrixMulDiag"
+        , [FArg("A", Tid("matrix")), FArg("X", Tid("vector"))]
+        , Tid("matrix")
+        , Let(
+            [ VarDecNoType(
+                "tmp"
+              , Call(
+                  "matrixCreate"
+                , [FieldVar(Var("A"), "x"), FieldVar(Var("A"), "y")]
+                )
+              )
+            ]
+          , [ If(
+                Neq(
+                  FieldVar(Var("A"), "y")
+                , FieldVar(Var("X"), "dim")
+                )
+              , Call("exit", [Int("1")])
+              , For(
+                  Var("i")
+                , Int("0")
+                , FieldVar(Var("A"), "x")
+                , For(
+                    Var("j")
+                  , Int("0")
+                  , FieldVar(Var("A"), "y")
+                  , Assign(
+                      Subscript(
+                        FieldVar(
+                          Subscript(FieldVar(Var("tmp"), "d"), Var("i"))
+                        , "d"
+                        )
+                      , Var("j")
+                      )
+                    , Times(
+                        Subscript(
+                          FieldVar(
+                            Subscript(FieldVar(Var("A"), "d"), Var("i"))
+                          , "d"
+                          )
+                        , Var("j")
+                        )
+                      , Subscript(FieldVar(Var("X"), "d"), Var("j"))
+                      )
+                    )
+                  )
+                )
+              )
+            , Var("tmp")
+            ]
+          )
+        )
+      )
+    ]
+  , [ Call(
+        "matrixMul"
+      , [Var("A"), Call("createDiagMat", [Var("X")])]
+      )
+    ]
+  )
+)

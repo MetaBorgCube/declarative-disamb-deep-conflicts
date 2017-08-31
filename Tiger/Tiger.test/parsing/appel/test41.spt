@@ -1,0 +1,14 @@
+module test41
+
+language Tiger start symbol Module
+
+test test41 [[/* local types hide global */
+let
+	type a = int
+in
+	let
+		type a = string
+	in
+		0
+	end
+end]] parse succeeds

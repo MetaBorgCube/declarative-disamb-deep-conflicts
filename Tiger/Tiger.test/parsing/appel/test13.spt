@@ -1,0 +1,7 @@
+module identifiers
+
+language Tiger start symbol Module
+
+test test13 [[/* error: comparison of incompatible types */
+
+3 > "df"]] parse succeeds

@@ -1,0 +1,8 @@
+module mytest5
+
+language Tiger start symbol Module
+
+test mytest5 [[let var a := 1
+    var b := (a := 2; a)
+ in b := (a := 2; a)
+end]] parse succeeds

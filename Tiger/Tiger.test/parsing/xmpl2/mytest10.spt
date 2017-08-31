@@ -1,0 +1,7 @@
+module mytest10
+
+language Tiger start symbol Module
+
+test mytest10 [[(print("a\n");
+exit(0))
+  ]] parse succeeds

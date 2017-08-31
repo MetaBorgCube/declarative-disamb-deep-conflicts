@@ -1,0 +1,10 @@
+module test35
+
+language Tiger start symbol Module
+
+test test35 [[/* error : formals are more then actuals */
+let
+	function g (a:int , b:string):int = a
+in
+	g("one")
+end]] parse succeeds

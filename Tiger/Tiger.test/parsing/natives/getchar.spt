@@ -1,0 +1,5 @@
+module getchar
+
+language Tiger start symbol Module
+
+test getchar [[getchar()]] parse succeeds

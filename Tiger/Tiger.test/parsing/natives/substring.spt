@@ -1,0 +1,5 @@
+module substring
+
+language Tiger start symbol Module
+
+test substring [[substring("martijn", 2, 2)]] parse succeeds

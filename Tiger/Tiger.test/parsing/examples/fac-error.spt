@@ -1,0 +1,15 @@
+module fac-error
+
+language Tiger start symbol Module
+
+test fac-error [[/* factorial function; example from SPIM manual */
+
+let function fact(n : int) : int = 
+      if n < 1 then 1 else (n * fact(n - 1))
+    var x : int := 3
+    function power(x : int, x : int) : int = 
+      if x = 0 then 1 else power(x - 1, x)
+ in 
+    fact(x) // type error in function call argument
+end
+  ]] parse succeeds

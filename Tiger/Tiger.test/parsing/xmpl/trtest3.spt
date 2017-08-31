@@ -1,0 +1,9 @@
+module trtest3
+
+language Tiger start symbol Module
+
+test trtest3 [[let var x := 3
+ in while x < 10 do (
+      x := x + 1
+    )
+end]] parse succeeds

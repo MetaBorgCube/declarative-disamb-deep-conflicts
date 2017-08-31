@@ -1,0 +1,5 @@
+module operators-test02
+
+language Tiger start symbol Module
+
+test operators-test02 [[45 + 98]] parse succeeds

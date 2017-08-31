@@ -1,0 +1,5 @@
+module ord
+
+language Tiger start symbol Module
+
+test ord [[chr(97)]] parse succeeds

@@ -1,0 +1,7 @@
+module mytest16
+
+language Tiger start symbol Module
+
+test mytest16 [[let function pred(x : int) : int = 1
+ in if pred(1) then 1 else 2
+end]] parse succeeds

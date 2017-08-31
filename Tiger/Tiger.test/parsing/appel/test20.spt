@@ -1,0 +1,8 @@
+module identifiers
+
+language Tiger start symbol Module
+
+test test20 [[/* error: undeclared variable i */
+
+while 10 > 5 do (i+1;())
+]] parse succeeds

@@ -1,0 +1,5 @@
+module mytest13
+
+language Tiger start symbol Module
+
+test mytest13 [[1 < 2]] parse succeeds

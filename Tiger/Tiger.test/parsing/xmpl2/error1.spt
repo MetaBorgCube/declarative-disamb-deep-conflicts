@@ -1,0 +1,5 @@
+module error1
+
+language Tiger start symbol Module
+
+test error1 [[x]] parse succeeds

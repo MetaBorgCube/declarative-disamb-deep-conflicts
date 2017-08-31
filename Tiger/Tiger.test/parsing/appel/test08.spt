@@ -1,0 +1,9 @@
+module identifiers
+
+language Tiger start symbol Module
+
+test test08 [[
+/* correct if */
+if (10 > 20) then 30 else 40  
+
+]] parse succeeds

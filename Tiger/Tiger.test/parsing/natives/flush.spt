@@ -1,0 +1,5 @@
+module flush
+
+language Tiger start symbol Module
+
+test flush [[flush()]] parse succeeds

@@ -1,0 +1,9 @@
+---
+id: org.metaborg:Tiger.test:0.1.0-SNAPSHOT
+name: Tiger
+dependencies:
+  compile:
+  - org.metaborg:Tiger:0.1.0-SNAPSHOT
+  - org.metaborg:org.metaborg.meta.lang.spt:${metaborgVersion}
+build:
+  useBuildSystemSpec: true

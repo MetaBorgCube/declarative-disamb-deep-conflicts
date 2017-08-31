@@ -1,0 +1,5 @@
+module concat
+
+language Tiger start symbol Module
+
+test concat [[concat("a", "b")]] parse succeeds

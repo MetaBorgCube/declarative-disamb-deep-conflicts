@@ -1,0 +1,19 @@
+module mytest5
+
+language Tiger start symbol Module
+
+test mytest5 [[/* factorial function; example from SPIM manual */
+
+let 
+
+  var x := 0
+
+  function fact(n : int) : int = 
+      if n < 1 then 1 else (n * fact(n - 1))
+
+in 
+
+  for i := 1 to 3 do 
+    x := x + fact(i)
+
+end]] parse succeeds

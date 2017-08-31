@@ -1,0 +1,12 @@
+module test27
+
+language Tiger start symbol Module
+
+test test27 [[/* locals hide globals */
+let
+	var a := 0
+
+	function g(a:int):int = a 
+in
+ g(2)
+end]] parse succeeds

@@ -1,0 +1,7 @@
+module test26
+
+language Tiger start symbol Module
+
+test test26 [[/* error : integer required */
+
+3 + "var"]] parse succeeds

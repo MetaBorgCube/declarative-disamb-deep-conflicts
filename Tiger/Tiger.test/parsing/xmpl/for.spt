@@ -1,0 +1,18 @@
+module for
+
+language Tiger start symbol Module
+
+test for [[let 
+  var i := 1
+  var j := i
+
+  type vec = array of int
+
+  var v : vec := vec [5] of 0
+
+in 
+
+  for i := 0 to 4 do
+    v[i] := i
+
+end]] parse succeeds

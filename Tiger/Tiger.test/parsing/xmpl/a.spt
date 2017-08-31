@@ -1,0 +1,5 @@
+module a
+
+language Tiger start symbol Module
+
+test a [[0]] parse succeeds

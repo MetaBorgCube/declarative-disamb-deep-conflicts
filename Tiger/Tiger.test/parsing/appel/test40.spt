@@ -1,0 +1,10 @@
+module test40
+
+language Tiger start symbol Module
+
+test test40 [[/* error : procedure returns value */
+let
+	function g(a:int) = a
+in 
+	g(2)
+end]] parse succeeds

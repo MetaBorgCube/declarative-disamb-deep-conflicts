@@ -1,0 +1,7 @@
+module identifiers
+
+language Tiger start symbol Module
+
+test test15 [[/* error : if-then returns non unit */
+
+if 20 then 3]] parse succeeds

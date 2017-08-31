@@ -1,0 +1,5 @@
+module size
+
+language Tiger start symbol Module
+
+test size [[size("abc")]] parse succeeds

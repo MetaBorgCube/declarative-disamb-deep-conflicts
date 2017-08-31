@@ -1,0 +1,5 @@
+module exit
+
+language Tiger start symbol Module
+
+test exit [[exit(1)]] parse succeeds

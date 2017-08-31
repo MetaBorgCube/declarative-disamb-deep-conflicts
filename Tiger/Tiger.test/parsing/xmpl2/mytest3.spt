@@ -1,0 +1,7 @@
+module mytest3
+
+language Tiger start symbol Module
+
+test mytest3 [[let function f(a : int) : int = a + 1
+ in f()
+end]] parse succeeds
