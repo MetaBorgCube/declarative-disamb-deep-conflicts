@@ -1,0 +1,6 @@
+module Basic16
+
+language OCaml start symbol Start
+
+test Basic16 [[let x = 1 + 2 in x + 4 ;;
+(* - : int = 7 *)]] parse succeeds

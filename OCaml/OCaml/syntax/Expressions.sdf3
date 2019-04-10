@@ -21,7 +21,7 @@ context-free syntax
   Expr.DotBracket3 = Expr "." "{" Expr SemiColon? "}"
   Expr.HashMethod  = Expr "#" MethodName
   Expr.HashInfix   = Expr HashInfixSymbol Expr {left}
-  Expr.FunctionApp = Expr   Arg+ {non-assoc}
+  Expr.FunctionApp = Expr   Arg+ {longest-match, non-assoc}
 //  Expr.ConstrExp   = Constr Expr
 //  Expr.PolyVariant = "`" TagName Expr
   Expr.Lazy        = "lazy" Expr
@@ -37,7 +37,7 @@ context-free syntax
   Expr.Uneq        = Expr "!=" Expr {left}
   Expr.Infix6      = Expr InfixSymbol6 Expr {right}
   Expr.Infix7      = Expr InfixSymbol7 Expr {right}
-  Expr.Comma       = Expr "," {Expr ","}+ {non-assoc}
+  Expr.Comma       = Expr "," {Expr ","}+ {longest-match, non-assoc}
   Expr.Assign      = Expr "<-" Expr {right}
 //  Expr.Assign2     = Expr "." "(" Expr ")" "<-" Expr {right}
 //  Expr.Assign3     = Expr "." "[" Expr "]" "<-" Expr {right}
@@ -96,8 +96,8 @@ context-free syntax
   Arg.OptLabel      = OptLabel
   Arg.OptLabelColon = OptLabelColon Expr
   
-  PatternMatching.PatternMatching = OptBar Pattern "->" Expr InnerPatternMatching* {nlm}
-  PatternMatching.PatternMatchingWhen = OptBar Pattern "when" Expr "->" Expr InnerPatternMatching* {nlm}
+  PatternMatching.PatternMatching = OptBar Pattern "->" Expr InnerPatternMatching* {longest-match}
+  PatternMatching.PatternMatchingWhen = OptBar Pattern "when" Expr "->" Expr InnerPatternMatching* {longest-match}
   InnerPatternMatching.InnerPatternMatching = SemiColon? "|" Pattern "->" Expr
   InnerPatternMatching.InnerPatternMatchingWhen = SemiColon? "|" Pattern "when" Expr "->" Expr
   

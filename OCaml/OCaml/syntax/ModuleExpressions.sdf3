@@ -69,9 +69,8 @@ context-free syntax
   ModuleExpr.ModuleExprEmptyBrackets = ModuleExpr "(" ")"
   ModuleExpr.FunctorEmptyBrackets    =  "functor" "(" ")" "->" ModuleExpr
   ModuleNameTypeParam.EmptyBrackets  = "(" ")"
-  ModuleType.FunctorEmptyBrackets    = "functor" "(" ")" "->" ModuleType
 
 context-free priorities
 
   Definition.Include1 <1> .> ModuleExpr.ModExprModPath ,
-  { ModuleExpr.Functor ModuleExpr.FunctorEmptyBrackets} > ModuleExpr.ModuleExprAppl
+  { ModuleExpr.Functor ModuleExpr.FunctorEmptyBrackets} > { ModuleExpr.ModuleExprAppl ModuleExpr.ModuleExprEmptyBrackets}

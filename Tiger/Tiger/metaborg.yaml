@@ -20,7 +20,7 @@ debug:
 language:
   sdf:
     pretty-print: Tiger
-    # If set to java, set the table in editor/Syntax.esv to target/metaborg/sdf-new.tbl
+    jsglr-version: data-dependent
     sdf2table: java
     placeholder:
       prefix: "$"

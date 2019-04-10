@@ -11,7 +11,7 @@ context-free syntax
   TypeExpr.LabelName           = "?" LabelName ":" TypeExpr 
   TypeExpr.LabelName2          = LabelName ":" TypeExpr 
   TypeExpr.TypeExprConstr1     = TypeExpr TypeConstr
-  TypeExpr.Star                = TypeExpr "*" {TypeExpr "*"}+ {non-assoc}
+  TypeExpr.Star                = TypeExpr "*" {TypeExpr "*"}+ {longest-match, non-assoc}
   TypeExpr.Arrow               = TypeExpr "->" TypeExpr {right}  
   TypeExpr.TypeExprAsId        = TypeExpr "as" "'" Ident
   TypeExpr.TypeExprPrivate     = "private" TypeExpr
@@ -67,7 +67,8 @@ context-free priorities
   } >
     TypeExpr.TypeExprAttr >
     TypeExpr.TypeExprAsId >
-    TypeExpr.TypeExprPrivate
+    TypeExpr.TypeExprPrivate > 
+    TypeExpr.TypeExprHash2 
     
 context-free priorities  
 

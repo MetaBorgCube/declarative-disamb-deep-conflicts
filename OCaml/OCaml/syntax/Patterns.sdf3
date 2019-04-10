@@ -1,19 +1,17 @@
 module Patterns
 
 imports
+  Extensions
   Names
   Lexical
   TypeExpr 
-  Extensions
   
 context-free syntax
-  
-
-  
+    
   Pattern.ConstrPattern = Constr Pattern
   Pattern.TagNamePattern = "`" TagName Pattern
   Pattern.ListCons       = Pattern "::" Pattern  // TODO: Find out why {right} does not work
-  Pattern.Patterns       = Pattern "," {Pattern ","}+ {non-assoc}
+  Pattern.Patterns       = Pattern "," {Pattern ","}+ {longest-match, non-assoc}
   Pattern.PatternBar     = Pattern "|" Pattern {left}
   Pattern.PatternAs      = Pattern "as" ValueName
   Pattern.PatternValueName = ValueName
@@ -78,7 +76,7 @@ context-free priorities
   Pattern.ListCons >
   Pattern.Patterns >
   Pattern.PatternBar >
-  Pattern.PatternAs ,
+  Pattern.PatternAs  ,
   Pattern.ListCons right Pattern.ListCons
   
 context-free priorities

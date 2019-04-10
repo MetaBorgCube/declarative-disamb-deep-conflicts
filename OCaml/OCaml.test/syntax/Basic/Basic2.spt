@@ -1,0 +1,11 @@
+module Basic2
+
+language OCaml start symbol Start
+
+test Basic2 [[not true
+;;
+(* - : bool = false *)
+
+not false
+;;
+(* - : bool = true *)]] parse succeeds

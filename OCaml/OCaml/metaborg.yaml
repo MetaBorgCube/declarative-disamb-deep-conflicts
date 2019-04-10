@@ -20,8 +20,8 @@ debug:
 language:
   sdf:
     pretty-print: OCaml
-    # If set to java, set the table in editor/Syntax.esv to target/metaborg/sdf-new.tbl
     sdf2table: java
+    jsglr-version: data-dependent
     placeholder:
       prefix: "$"
   stratego:

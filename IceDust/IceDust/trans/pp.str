@@ -43,6 +43,9 @@ rules
        result := <pp-IceDust-string> ast
     <+ <bottomup(try(not(is-string); not(is-list); not(pp-IceDust-string); debug(!"cannot pp ")))> ast
     ;  result := ""
+    
+    IceDustParenthesize = fail
+    IceDustParenthesize-deep = fail
 
 rules
   

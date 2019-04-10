@@ -7,6 +7,7 @@ imports Names
         Patterns
         Classes
         TypesAndExceptions
+        ModuleTypes
 
 context-free syntax
   
@@ -67,8 +68,10 @@ context-free syntax
   
   FieldDecl.FieldDecl = Mutable? FieldName ":" PolyTypeExpr Attribute+
   
-  
-
+context-free priorities
+  { ModuleExpr.Functor ModuleExpr.FunctorEmptyBrackets} >   ModuleExpr.ModuleExprAttr,
+    ModuleType.Functor > ModuleType.ModuleTypeAttr,
+    Pattern.PatternAs > Pattern.PatternAttr
   
 context-free syntax
 

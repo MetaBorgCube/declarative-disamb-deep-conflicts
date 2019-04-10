@@ -1,0 +1,36 @@
+TopLevel(
+  ()
+, Def(
+    ModuleType(
+      ModTypeName-Plhdr()
+    , ModuleTypeWith(
+        ModuleType-Plhdr()
+      , [ ModConsType1(
+            None()
+          , TypeConstr-Plhdr()
+          , amb(
+              [ Star(
+                  TypeExpr-Plhdr()
+                , [ amb(
+                      [ [Arrow(Star(TypeExpr-Plhdr(), [TypeExpr-Plhdr()]), TypeExpr-Plhdr())]
+                      , [TypeExpr-Plhdr(), Arrow(TypeExpr-Plhdr(), TypeExpr-Plhdr())]
+                      ]
+                    )
+                  , TypeExpr-Plhdr()
+                  ]
+                )
+              , Arrow(
+                  Star(TypeExpr-Plhdr(), [TypeExpr-Plhdr(), TypeExpr-Plhdr()])
+                , Star(TypeExpr-Plhdr(), [TypeExpr-Plhdr()])
+                )
+              ]
+            )
+          )
+        ]
+      )
+    )
+  , None()
+  )
+, []
+, ()
+)

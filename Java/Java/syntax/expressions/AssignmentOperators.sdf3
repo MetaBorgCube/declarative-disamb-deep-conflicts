@@ -9,18 +9,18 @@ imports
 
 context-free syntax
   
-  Expression.Assign            = <<LHS> = <Expression>>
-  Expression.AssignMul         = <<LHS> *= <Expression>>
-  Expression.AssignDiv         = <<LHS> /= <Expression>>
-  Expression.AssignMod         = <<LHS> %= <Expression>>
-  Expression.AssignAdd         = <<LHS> += <Expression>>
-  Expression.AssignSub         = <<LHS> -= <Expression>>
-  Expression.AssignLeftShift   = [[LHS] <<= [Expression]]
-  Expression.AssignRightShift  = [[LHS] >>= [Expression]]
-  Expression.AssignURightShift = [[LHS] >>>= [Expression]]
-  Expression.AssignAnd         = <<LHS> &= <Expression>>
-  Expression.AssignXor         = <<LHS> ^= <Expression>>
-  Expression.AssignOr          = <<LHS> |= <Expression>>
+  Expression.Assign            = <<LHS> = <Expression>> {right}
+  Expression.AssignMul         = <<LHS> *= <Expression>> {right}
+  Expression.AssignDiv         = <<LHS> /= <Expression>> {right}
+  Expression.AssignMod         = <<LHS> %= <Expression>> {right}
+  Expression.AssignAdd         = <<LHS> += <Expression>> {right}
+  Expression.AssignSub         = <<LHS> -= <Expression>> {right}
+  Expression.AssignLeftShift   = [[LHS] <<= [Expression]] {right}
+  Expression.AssignRightShift  = [[LHS] >>= [Expression]] {right}
+  Expression.AssignURightShift = [[LHS] >>>= [Expression]] {right}
+  Expression.AssignAnd         = <<LHS> &= <Expression>> {right}
+  Expression.AssignXor         = <<LHS> ^= <Expression>> {right}
+  Expression.AssignOr          = <<LHS> |= <Expression>> {right}
   
   LHS = ExpressionName
   LHS = FieldAccess

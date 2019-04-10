@@ -1,0 +1,9 @@
+module Exception2
+
+language OCaml start symbol Start
+
+test Exception2 [[exception E ;;
+(* Exception E defined. *)
+
+(raise E) 1 ;;
+(* Uncaught exception: E *)]] parse succeeds

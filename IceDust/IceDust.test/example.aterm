@@ -1,0 +1,24 @@
+Module(
+  "Ex"
+, None()
+, [ ModelSection(
+      [ Entity(
+          "a"
+        , None()
+        , None()
+        , [ DerivationAttribute(
+              "x"
+            , Int()
+            , None()
+            , Addition(
+                Ref("a")
+              , Find(Int("2"), "b", Int("1"))
+              )
+            , None()
+            )
+          ]
+        )
+      ]
+    )
+  ]
+)

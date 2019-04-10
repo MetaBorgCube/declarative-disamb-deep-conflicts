@@ -20,8 +20,12 @@ context-free syntax
   
 context-free priorities
   Expression.MethodReferenceExpr > Expression = ExpressionName,
-  Expression.MethodReferenceExpr >  Expression.CastReference
-  
+  Expression.MethodReferenceExpr >  {
+                                      Expression.CastReference
+                                      Expression.CastPrimitive
+                                      Expression.Not
+                                      Expression.Complement
+                                      }
 template options
   
   tokenize : "::"  

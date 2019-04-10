@@ -1,0 +1,34 @@
+CompilationUnit(
+  None()
+, []
+, [ ClassDeclaration(
+      []
+    , Id("Foo")
+    , None()
+    , None()
+    , None()
+    , [ FieldDecl(
+          []
+        , NumericType(Int())
+        , [VariableDeclInit(VariableDecl(Id("x")), Deci("0"))]
+        )
+      , MethodDecl(
+          []
+        , MethodHeader(NumericType(Int()), Id("x"), NoParams(), [], None())
+        , Block(
+            [ ExpressionStatement(
+                AssignSub(
+                  ExpressionName(Id("y"))
+                , AssignSub(
+                    ExpressionName(AmbiguousName(Id("x")), Id("b"))
+                  , Deci("2")
+                  )
+                )
+              )
+            ]
+          )
+        )
+      ]
+    )
+  ]
+)

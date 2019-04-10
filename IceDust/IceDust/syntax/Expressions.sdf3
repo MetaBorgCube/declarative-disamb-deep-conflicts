@@ -105,6 +105,12 @@ context-free priorities
     Exp.MemberAccess
     Exp.First
     Exp.Count
+    Exp.Filter
+    Exp.ElemAt
+    Exp.IndexOf
+    Exp.FilterType
+    Exp.Count2
+    Exp.Find
   } >  
   { right:
     Exp.Not

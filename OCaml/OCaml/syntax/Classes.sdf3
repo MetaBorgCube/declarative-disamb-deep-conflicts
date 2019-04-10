@@ -7,6 +7,7 @@ imports
   Patterns
   Expressions
   ModuleExpressions
+  Extensions
   
 context-free syntax
   
@@ -91,4 +92,13 @@ context-free syntax
   
 context-free priorities
   
-  ClassType.ClassType <1> .> {TypeExpr.Star TypeExpr.Arrow}  
+  ClassType.ClassType <1> .> {TypeExpr.Star TypeExpr.Arrow},
+  ClassExpr.ClassArgs > { ClassExpr.ClassFun
+                         ClassExpr.LetClass
+                         ClassExpr.LetRecClass}
+                         
+context-free priorities
+
+  ClassExpr.ClassExprAttr > { ClassExpr.ClassFun
+                              ClassExpr.LetClass
+                              ClassExpr.LetRecClass }

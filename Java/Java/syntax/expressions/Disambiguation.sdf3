@@ -44,18 +44,19 @@ context-free priorities
   { Expression.PreIncr
     Expression.PreDecr
     Expression.Plus
-    Expression.Minus }
-  ,
-  Expression.CastReference <4> .> 
-  { Expression.Plus
-    Expression.Minus }   
-    
+    Expression.Minus }    
  
 context-free priorities
-  
-  { ArrayAccess.ArrayAccess 
-    FieldAccess.Field 
-    Expression.InvokeQExp } <0> >
+  { Expression = ArrayAccess
+    Expression = FieldAccess
+  } > {right: 
+    Expression.PostIncr 
+    Expression.PostDecr }
+  ,
+  { 
+//  ArrayAccess.ArrayAccess 
+//    FieldAccess.Field 
+    Expression.InvokeQExp } >
   {right: 
     Expression.PostIncr 
     Expression.PostDecr } >
