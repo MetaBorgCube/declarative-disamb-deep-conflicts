@@ -16,13 +16,13 @@ This repository contains the SDF3 grammars for Tiger, Jasmin, IceDust, OCaml and
 
 ## Installation
 
-Spoofax is distributed as an Eclipse plugin. We point to the [Spoofax Installation Guide](http://www.metaborg.org/en/latest/source/install.html) for further information. You may use the information in that guide, but please download Spoofax + Eclipse from one of the links below, according to your platform.
+Spoofax is distributed as an Eclipse plugin. We point to the [Spoofax Installation Guide](http://www.metaborg.org/en/latest/source/install.html) for further information. You may use the information in that guide, but please download Spoofax + Eclipse from one of the links below, according to your platform (all versions are bundled with an embedded Java Runtime Environment - JRE).
 
-- Windows 32-bits
-- Windows 64-bits
-- Linux 32-bits
-- Linux 32-bits
-- macOS
+- [Windows 32-bits](https://drive.google.com/open?id=1_DPIwgiTqGupnWlmY17Oqr0ZvHpsiOaA)
+- [Windows 64-bits](https://drive.google.com/open?id=1VqzRAsj2Dj6_BJYJ_uI6x4YH5LsDHgrN)
+- [Linux 32-bits](https://drive.google.com/open?id=1C34fBDoklbexDWZZyerdoqohblJJyZx_)
+- [Linux 64-bits](https://drive.google.com/open?id=1iNMR-imke7vpXkjE4TJhnOe2GWnTyYsX)
+- [macOS](https://drive.google.com/open?id=1B1yUrN_5XKRDPp6EK8q-s5p6CG93Kaz8)
 
 ## Using Spoofax
 
