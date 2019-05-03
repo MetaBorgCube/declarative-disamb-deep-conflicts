@@ -20,8 +20,8 @@ debug:
 language:
   sdf:
     pretty-print: OCaml
-    sdf2table: java
-    jsglr-version: data-dependent
+    sdf2table: dynamic
+    jsglr-version: v2
     placeholder:
       prefix: "$"
   stratego:

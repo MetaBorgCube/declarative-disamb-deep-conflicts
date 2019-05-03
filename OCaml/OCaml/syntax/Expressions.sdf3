@@ -21,7 +21,7 @@ context-free syntax
   Expr.DotBracket3 = Expr "." "{" Expr SemiColon? "}"
   Expr.HashMethod  = Expr "#" MethodName
   Expr.HashInfix   = Expr HashInfixSymbol Expr {left}
-  Expr.FunctionApp = Expr   Arg+ {longest-match, non-assoc}
+  Expr.FunctionApp = Expr Arg+ {longest-match, non-assoc}
 //  Expr.ConstrExp   = Constr Expr
 //  Expr.PolyVariant = "`" TagName Expr
   Expr.Lazy        = "lazy" Expr
@@ -37,7 +37,7 @@ context-free syntax
   Expr.Uneq        = Expr "!=" Expr {left}
   Expr.Infix6      = Expr InfixSymbol6 Expr {right}
   Expr.Infix7      = Expr InfixSymbol7 Expr {right}
-  Expr.Comma       = Expr "," {Expr ","}+ {longest-match, non-assoc}
+  Expr.Comma       = Expr "," Expr {right}
   Expr.Assign      = Expr "<-" Expr {right}
 //  Expr.Assign2     = Expr "." "(" Expr ")" "<-" Expr {right}
 //  Expr.Assign3     = Expr "." "[" Expr "]" "<-" Expr {right}
@@ -67,9 +67,9 @@ context-free syntax
   Expr.Brackets3   = "(" Expr ":" TypeExpr ":>" TypeExpr ")"
   Expr.Brackets4   = "{<" {AssignInstVarName ";"}+  SemiColon? ">}"
   AssignInstVarName.Assign = InstVarName "=" Expr
-  Expr.Tuple       = "[" {Expr ";"}+ SemiColon? "]"
-  Expr.Array       = "[|" {Expr ";"}+ SemiColon? "|]"
-  Expr.Record1     = "{" {FieldAssign ";"}+ SemiColon? "}"
+  Expr.Tuple       = "[" Expr SemiColon? "]"
+  Expr.Array       = "[|" Expr SemiColon? "|]"
+  Expr.Record1     = "{" FieldAssign+ SemiColon? "}"
   Expr.Record2     = "{" Expr "with" {FieldAssign ";"}+ SemiColon? "}"
   Expr.While       = "while" Expr "do" Expr SemiColon? "done"
   Expr.For         = "for" Ident "=" Expr ToDownTo Expr "do" Expr SemiColon? "done"
@@ -176,19 +176,8 @@ context-free priorities
     Expr.LetModule
    },
    
-  //tree filtering from Rascal Grammar  
-  {Expr ","}+ = {Expr ","}+ "," Expr <2> .> { Expr.Comma Expr.Sep},
-  {Expr ","}+ = Expr <0> .> { Expr.Comma Expr.Sep},
-  {Expr ","}+ = {Expr ","}+ "," Expr > Expr.Assign,
-  {Expr ","}+ = Expr > Expr.Assign,
-  {Expr ";"}+ = {Expr ";"}+ ";" Expr <2> . > { Expr.Sep},
-  {Expr ";"}+ = Expr <0>.> { Expr.Sep},
-    
-  {Expr ";"}+ = {Expr ";"}+ ";" Expr > Expr.Let,
-  {Expr ";"}+ = Expr > Expr.Let,
-  
-  Expr.FunctionApp <0>.> {Expr.Comma},
-  FieldAssign.FieldAssign <2> .> {Expr.Sep},
+  //tree filtering from Rascal Grammar  (to address inherent ambiguities)
+  FieldAssign.FieldAssign > Expr.Sep,
   Expr.Constant <0> .> Constant.Constr,
   Parameter.PatternParam  <0> .> Pattern.ConstrPattern,
   AssignInstVarName.Assign <2> .> {Expr.Sep},

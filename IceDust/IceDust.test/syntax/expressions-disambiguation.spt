@@ -32,3 +32,4 @@ test Disambiguate member access over merge [[n.in.out.name ++ n.out.in.name]] pa
 
 test Disambiguate large expression [[ 5 * 8 - 5 <+ 3 ++ 0 * 9]] parse to [[module x execute ((5*8)-5) <+ (3++(0*9))]]
 test Disambiguate large expression 2 [[ "a"+"b"+"c"+"d"+"e"]] parse to [[module x execute ((("a"+"b")+"c")+"d")+"e"]]
+test Disambiguate dangling else [[ if(1) if(2) 3 else 4]] parse to [[module x execute if(1) (if(2) 3 else 4)]] 
