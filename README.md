@@ -4,19 +4,19 @@ This repository contains the SDF3 grammars for Tiger, Jasmin, IceDust, OCaml and
 
 ## Contents
 
-- Data-Dependent Parser.
-- Parse Table Generator.
+- [SGLR parser with support for data-dependent parsing](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/org.spoofax.jsglr2).
+- [Parse Table Generator](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/org.metaborg.sdf2table).
 - Grammars:
-	 - Tiger
-	 - IceDust
-	 - Jasmin
-	 - Java
-	 - OCaml
-	 - Test
+	 - [Tiger](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/Tiger)
+	 - [IceDust](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/IceDust)
+	 - [Jasmin](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/Jasmin)
+	 - [Java](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/Java)
+	 - [OCaml](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/OCaml)
+	 - [Test](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/Test)
 
 ## Installation
 
-Spoofax is distributed as an Eclipse plugin. We point to the [Spoofax Installation Guide](http://www.metaborg.org/en/latest/source/install.html) for further information. However, please download Spoofax + Eclipse from one of the links below, according to your platform.
+Spoofax is distributed as an Eclipse plugin. We point to the [Spoofax Installation Guide](http://www.metaborg.org/en/latest/source/install.html) for further information. You may use the information in that guide, but please download Spoofax + Eclipse from one of the links below, according to your platform.
 
 - Windows 32-bits
 - Windows 64-bits
