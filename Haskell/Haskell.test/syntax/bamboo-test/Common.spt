@@ -1,8 +1,0 @@
-module Common
-
- language Haskell start symbol Module
-
- test Common [[module Bamboo.Type.Common where
-  
-type Assoc = [(String, String)]
-type SC    = String -> String]] parse succeeds

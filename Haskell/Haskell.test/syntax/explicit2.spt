@@ -1,5 +1,0 @@
-module explicit2
-
-language Haskell start symbol Module
-
-test explicit2 [[-- comment{ id x = x; f x = let{ x = y; y = 1 } in 1}]] parse succeeds

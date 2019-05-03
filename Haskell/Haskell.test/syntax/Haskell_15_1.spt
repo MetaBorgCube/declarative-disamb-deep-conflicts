@@ -1,7 +1,0 @@
-module Haskell_15_1
-
-language Haskell start symbol Module
-
-test Haskell_15_1 [[main = do
-  do { x
-}]] parse succeeds

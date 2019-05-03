@@ -1,7 +1,0 @@
-module layout8_expl
-
-language Haskell start symbol Module
-
-test layout8_expl [[-- declarations can be empty
-f x = let 
-      in x]] parse succeeds

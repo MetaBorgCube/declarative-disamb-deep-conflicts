@@ -1,0 +1,11 @@
+module foo
+
+rules
+
+  $RuleHead :- $LocalVars
+      query $QueryTarget filter $HoConstraint and $HoConstraint $QueryMin in $Term |-> $Term.
+
+  
+
+
+  

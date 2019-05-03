@@ -1,9 +1,0 @@
-module PM17
-
-language CamlLight start symbol Start
-
-test PM17 [[type ty = A | B ;;
-(* Type ty defined. *)
-
-let A = B ;;
-(* Match_failure *)]] parse succeeds

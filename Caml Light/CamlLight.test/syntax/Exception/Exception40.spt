@@ -1,6 +1,0 @@
-module Exception40
-
-language CamlLight start symbol Start
-
-test Exception40 [[7 / 0 ;;
-(* Uncaught exception: Division_by_zero *)]] parse succeeds

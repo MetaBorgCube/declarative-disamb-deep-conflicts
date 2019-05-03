@@ -1,5 +1,0 @@
-module layout3_expl
-
-language Haskell start symbol Module
-
-test layout3_expl [[-- layout can be stopped by parse errormodule M where {f x = x}]] parse succeeds

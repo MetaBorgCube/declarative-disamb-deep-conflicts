@@ -1,6 +1,0 @@
-module Advanced10
-
-language CamlLight start symbol Start
-
-test Advanced10 [[let rec (f : (string * int) -> int) = function _ -> 7 ;;
-(* f : string * int -> int = <fun> *)]] parse succeeds

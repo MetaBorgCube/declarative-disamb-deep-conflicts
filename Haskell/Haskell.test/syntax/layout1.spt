@@ -1,6 +1,0 @@
-module layout1
-
-language Haskell start symbol Module
-
-test layout1 [[-- layout can be stopped by parse error
-test = let x = 1; y = x in y]] parse succeeds

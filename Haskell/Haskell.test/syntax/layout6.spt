@@ -1,9 +1,0 @@
-module layout6
-
-language Haskell start symbol Module
-
-test layout6 [[-- layout can extend over multiple lines
-test = let x = 1; y = x 
-           z = f x
-            y
-           f x y = z in y]] parse succeeds

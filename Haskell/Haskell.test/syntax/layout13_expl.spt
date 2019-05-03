@@ -1,6 +1,0 @@
-module layout13_expl
-
-language Haskell start symbol Module
-
-test layout13_expl [[module Test where
-f = Just .let {x = id} in x]] parse succeeds

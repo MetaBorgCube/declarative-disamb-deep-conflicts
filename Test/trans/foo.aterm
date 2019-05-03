@@ -1,0 +1,19 @@
+Module(
+  "foo"
+, [ Rules(
+      [ Rule(
+          RuleHead-Plhdr()
+        , LocalVars-Plhdr()
+        , CPathSrc(
+            amb(
+              [ Ascribe(AskRelOp(RelRef-Plhdr(), CommaTerms-Plhdr(), Term-Plhdr()), SortRef-Plhdr())
+              , AskRelOp(RelRef-Plhdr(), CommaTerms-Plhdr(), Ascribe(Term-Plhdr(), SortRef-Plhdr()))
+              ]
+            )
+          , Term-Plhdr()
+          )
+        )
+      ]
+    )
+  ]
+)

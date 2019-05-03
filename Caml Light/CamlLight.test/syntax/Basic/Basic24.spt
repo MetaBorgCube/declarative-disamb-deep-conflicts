@@ -1,6 +1,0 @@
-module Basic24
-
-language CamlLight start symbol Start
-
-test Basic24 [[true = not false ;;
-(* - : bool = true *)]] parse succeeds

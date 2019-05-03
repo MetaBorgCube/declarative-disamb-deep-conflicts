@@ -1,5 +1,0 @@
-module Haskell_16_1
-
-language Haskell start symbol Module
-
-test Haskell_16_1 [[f = do x y]] parse succeeds

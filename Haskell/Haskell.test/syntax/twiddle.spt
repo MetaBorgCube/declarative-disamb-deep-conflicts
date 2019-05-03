@@ -1,8 +1,0 @@
-module twiddle
-
-language Haskell start symbol Module
-
-test twiddle [[module Twiddle where
-
-main = let foo@(~(x,y)) = (1,2)
-       in print foo]] parse succeeds

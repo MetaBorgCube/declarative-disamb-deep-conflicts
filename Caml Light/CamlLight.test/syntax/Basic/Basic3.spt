@@ -1,6 +1,0 @@
-module Basic3
-
-language CamlLight start symbol Start
-
-test Basic3 [[(`?` : char) ;;
-(* - : char = `?` *)]] parse succeeds

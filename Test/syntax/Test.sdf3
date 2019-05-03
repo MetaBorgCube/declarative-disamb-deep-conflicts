@@ -1,0 +1,21 @@
+module Test
+
+imports Common
+
+context-free start-symbols
+  
+  Start
+  
+context-free syntax
+
+  Start    = E
+  E.PreMin = "-" E
+  E.PosMin = E "-"
+  E.Sub    = E "-" E
+  E.Int    = INT
+  
+context-free priorities
+  
+  E.PosMin > 
+  E.PreMin >  
+  E.Sub

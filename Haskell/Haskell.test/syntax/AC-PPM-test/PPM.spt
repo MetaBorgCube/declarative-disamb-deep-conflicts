@@ -1,15 +1,0 @@
-module PPM
-
- language Haskell start symbol Module
-
- test PPM [[{-|
-  The two modules "Codec.PPM.Text" and "Codec.PPM.Binary" support
-  the generation of text or binary PPM files (\"P3\" or \"P6\"
-  respectively). Default is binary (since it is more efficient.)
-  Both modules have an identical API; just change the import
-  declaration to change file mode.
--}
-
-module Codec.PPM (module Codec.PPM.Binary) where
-
-import Codec.PPM.Binary]] parse succeeds

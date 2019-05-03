@@ -1,6 +1,0 @@
-module layout2
-
-language Haskell start symbol Module
-
-test layout2 [[-- layout can be stopped by parse error
-test x = (case x of 1 -> 1, 1)]] parse succeeds
