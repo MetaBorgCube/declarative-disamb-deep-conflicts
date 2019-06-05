@@ -1,0 +1,362 @@
+Module(
+  Unparameterized("normalized/completion/_PrettyPrint-completion-insertions-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/_PrettyPrint-norm"))
+      , Module(Unparameterized("normalized/completion/Common-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/Data-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/Model-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/Expressions-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/Types-completion-insertions-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeStartSymbols([Sort("MemberValue"), Sort("ID"), Sort("Value")])
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("MemberValue"), Constructor("MemberValue-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ID"), Constructor("ID-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Value"), Constructor("Value-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Lit("\"=\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\",\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeStartSymbols(
+        [Sort("EntityType"), Sort("EntityInstance"), Sort("IDSpace"), Sort("MemberValue")]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("EntityType"), Constructor("EntityType-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("EntityInstance"), Constructor("EntityInstance-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("IDSpace"), Constructor("IDSpace-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MemberValue"), Constructor("MemberValue-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Lit("\":\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"{\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"}\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeStartSymbols(
+        [ Sort("Member")
+        , Sort("ID")
+        , Sort("PrimitiveType")
+        , Sort("Multiplicity")
+        , Sort("Exp")
+        , Sort("Strategy")
+        , Sort("MyLayOut")
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Member"), Constructor("Member-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ID"), Constructor("ID-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PrimitiveType"), Constructor("PrimitiveType-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Multiplicity"), Constructor("Multiplicity-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Exp-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Strategy"), Constructor("Strategy-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MyLayOut"), Constructor("MyLayOut-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Lit("\":\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"=\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"(\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"default\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\")\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(ContextFreeStartSymbols([Sort("Exp")]))
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Exp-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Lit("\"if\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"(\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\")\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"else\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(ContextFreeStartSymbols([Sort("Exp")]))
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Exp-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Lit("\"+\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax([SdfProduction(Sort("COMPLETION-INSERTION"), Rhs([]), NoAttrs())])
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$MemberValue\""), Lit("\"$ID\""), Lit("\"$Value\""), Lit("\"$COMPLETION-INSERTION\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$EntityType\"")
+            , Lit("\"$EntityInstance\"")
+            , Lit("\"$IDSpace\"")
+            , Lit("\"$MemberValue\"")
+            , Lit("\"$COMPLETION-INSERTION\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$Member\"")
+            , Lit("\"$ID\"")
+            , Lit("\"$PrimitiveType\"")
+            , Lit("\"$Multiplicity\"")
+            , Lit("\"$Exp\"")
+            , Lit("\"$Strategy\"")
+            , Lit("\"$MyLayOut\"")
+            , Lit("\"$COMPLETION-INSERTION\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$Exp\""), Lit("\"$COMPLETION-INSERTION\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$Exp\""), Lit("\"$COMPLETION-INSERTION\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

@@ -1,0 +1,610 @@
+Module(
+  Unparameterized("normalized/Classes-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/Lexical-norm"))
+      , Module(Unparameterized("normalized/Names-norm"))
+      , Module(Unparameterized("normalized/TypeExpr-norm"))
+      , Module(Unparameterized("normalized/Patterns-norm"))
+      , Module(Unparameterized("normalized/Expressions-norm"))
+      , Module(Unparameterized("normalized/ModuleExpressions-norm"))
+      , Module(Unparameterized("normalized/Extensions-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("ClassType"), Constructor("ClassType"))
+          , Rhs(
+              [Sort("LabelNameOpt"), Sort("TypeExpr"), Lit("\"->\""), Sort("ClassType")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("LabelNameOpt"), Constructor("LabelNameQ"))
+          , Rhs([Lit("\"?\""), Sort("LabelName"), Lit("\":\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("LabelNameOpt"), Constructor("LabelName"))
+          , Rhs([Sort("LabelName"), Lit("\":\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("LabelNameOpt"), Constructor("NoLabelName"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("ClassType"), Rhs([Sort("ClassBodyType")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassBodyType"), Constructor("ClassBodyTypeObject"))
+          , Rhs(
+              [Lit("\"object\""), Sort("OptTypeExpr"), IterStar(Sort("ClassFieldSpec")), Lit("\"end\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassBodyType"), Constructor("ClassBodyType"))
+          , Rhs([Sort("OptTypeExprList"), Sort("ClassPath")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("OptTypeExpr"), Constructor("TypeExpr"))
+          , Rhs([Lit("\"(\""), Sort("TypeExpr"), Lit("\")\"")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("OptTypeExpr"), Rhs([]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("OptTypeExprList"), Constructor("TypeExprList"))
+          , Rhs(
+              [Lit("\"[\""), IterSep(Sort("TypeExpr"), Lit("\",\"")), Lit("\"]\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("OptTypeExprList"), Rhs([]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassFieldSpec"), Constructor("Inherit"))
+          , Rhs([Lit("\"inherit\""), Sort("ClassType")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassFieldSpec"), Constructor("Val"))
+          , Rhs(
+              [ Lit("\"val\"")
+              , Opt(Sort("Mutable"))
+              , Opt(Sort("Virtual"))
+              , Sort("InstVarName")
+              , Lit("\":\"")
+              , Sort("PolyTypeExpr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassFieldSpec"), Constructor("Method"))
+          , Rhs(
+              [ Lit("\"method\"")
+              , Opt(Sort("Private"))
+              , Opt(Sort("Virtual"))
+              , Sort("MethodName")
+              , Lit("\":\"")
+              , Sort("PolyTypeExpr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassFieldSpec"), Constructor("Constraint"))
+          , Rhs(
+              [Lit("\"constraint\""), Sort("TypeExpr"), Lit("\"=\""), Sort("TypeExpr")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassExpr"), Constructor("ClassPath"))
+          , Rhs([Sort("ClassPath")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassExpr"), Constructor("TEClassPath"))
+          , Rhs(
+              [ Lit("\"[\"")
+              , IterSep(Sort("TypeExpr"), Lit("\",\""))
+              , Lit("\"]\"")
+              , Sort("ClassPath")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("ClassExpr")
+          , Rhs([Lit("\"(\""), Sort("ClassExpr"), Lit("\")\"")])
+          , Attrs([Bracket()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassExpr"), Constructor("ClassExprCT"))
+          , Rhs(
+              [ Lit("\"(\"")
+              , Sort("ClassExpr")
+              , Lit("\":\"")
+              , Sort("ClassType")
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassExpr"), Constructor("ClassArgs"))
+          , Rhs([Sort("ClassExpr"), Iter(Sort("Arg"))])
+          , Attrs([Assoc(NonAssoc())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassExpr"), Constructor("ClassFun"))
+          , Rhs(
+              [Lit("\"fun\""), Iter(Sort("Parameter")), Lit("\"->\""), Sort("ClassExpr")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassExpr"), Constructor("LetClass"))
+          , Rhs(
+              [ Lit("\"let\"")
+              , Sort("LetBinding")
+              , IterStar(Sort("AndLetBinding"))
+              , Lit("\"in\"")
+              , Sort("ClassExpr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassExpr"), Constructor("LetRecClass"))
+          , Rhs(
+              [ Lit("\"let\"")
+              , Lit("\"rec\"")
+              , Sort("LetBinding")
+              , IterStar(Sort("AndLetBinding"))
+              , Lit("\"in\"")
+              , Sort("ClassExpr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassExpr"), Constructor("Object"))
+          , Rhs([Lit("\"object\""), Sort("ClassBody"), Lit("\"end\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassField"), Constructor("Inheritance"))
+          , Rhs([Sort("Inherit"), Sort("ClassExpr"), Sort("AsOption")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AsOption"), Constructor("NoAsValue"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AsOption"), Constructor("AsValue"))
+          , Rhs([Lit("\"as\""), Sort("LowerCaseIdent")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassField"), Constructor("ClassValue"))
+          , Rhs(
+              [ Sort("Val")
+              , Opt(Sort("Mutable"))
+              , Sort("InstVarName")
+              , Sort("ColonTypeExprOpt")
+              , Lit("\"=\"")
+              , Sort("Expr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ColonTypeExprOpt"), Constructor("NoValue"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ColonTypeExprOpt"), Constructor("TypeExpr"))
+          , Rhs([Lit("\":\""), Sort("TypeExpr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassField"), Constructor("VirtualValue"))
+          , Rhs(
+              [ Lit("\"val\"")
+              , Opt(Sort("Mutable"))
+              , Lit("\"virtual\"")
+              , Sort("InstVarName")
+              , Lit("\":\"")
+              , Sort("TypeExpr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassField"), Constructor("VirtualValue2"))
+          , Rhs(
+              [ Lit("\"val\"")
+              , Lit("\"virtual\"")
+              , Sort("Mutable")
+              , Sort("InstVarName")
+              , Lit("\":\"")
+              , Sort("TypeExpr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassField"), Constructor("Method1"))
+          , Rhs(
+              [ Sort("Method")
+              , Opt(Sort("Private"))
+              , Sort("MethodName")
+              , IterStar(Sort("Parameter"))
+              , Lit("\"=\"")
+              , Sort("Expr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassField"), Constructor("Method2"))
+          , Rhs(
+              [ Sort("Method")
+              , Opt(Sort("Private"))
+              , Sort("MethodName")
+              , IterStar(Sort("Parameter"))
+              , Lit("\":\"")
+              , Sort("PolyTypeExpr")
+              , Lit("\"=\"")
+              , Sort("Expr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassField"), Constructor("Method3"))
+          , Rhs(
+              [ Lit("\"method\"")
+              , Opt(Sort("Private"))
+              , Lit("\"virtual\"")
+              , Sort("MethodName")
+              , Lit("\":\"")
+              , Sort("PolyTypeExpr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassField"), Constructor("Method4"))
+          , Rhs(
+              [ Lit("\"method\"")
+              , Lit("\"virtual\"")
+              , Sort("Private")
+              , Sort("MethodName")
+              , Lit("\":\"")
+              , Sort("PolyTypeExpr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassField"), Constructor("ClassConstraint"))
+          , Rhs(
+              [Lit("\"constraint\""), Sort("TypeExpr"), Lit("\"=\""), Sort("TypeExpr")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassField"), Constructor("Initializer"))
+          , Rhs([Lit("\"initializer\""), Sort("Expr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassField"), Constructor("Method5"))
+          , Rhs(
+              [ Sort("Method")
+              , Opt(Sort("Private"))
+              , Sort("MethodName")
+              , Lit("\":\"")
+              , Lit("\"type\"")
+              , Iter(Sort("TypeConstrName"))
+              , Lit("\".\"")
+              , Sort("TypeExpr")
+              , Lit("\"=\"")
+              , Sort("Expr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Inherit"), Constructor("Inherit1"))
+          , Rhs([Lit("\"inherit\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Inherit"), Constructor("Inherit2"))
+          , Rhs([Lit("\"inherit!\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Val"), Constructor("Val1"))
+          , Rhs([Lit("\"val\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Val"), Constructor("Val2"))
+          , Rhs([Lit("\"val!\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Method"), Constructor("Method1"))
+          , Rhs([Lit("\"method\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Method"), Constructor("Method2"))
+          , Rhs([Lit("\"method!\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Private"), Constructor("Private"))
+          , Rhs([Lit("\"private\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Mutable"), Constructor("Mutable"))
+          , Rhs([Lit("\"mutable\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Virtual"), Constructor("Virtual"))
+          , Rhs([Lit("\"virtual\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassDefinition"), Constructor("ClassDefinition"))
+          , Rhs(
+              [Lit("\"class\""), IterSep(Sort("ClassBinding"), Lit("\"and\""))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassBody"), Constructor("ClassBody"))
+          , Rhs([IterStar(Sort("ClassFieldOptSemiColon"))])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassBody"), Constructor("ClassBody"))
+          , Rhs(
+              [Lit("\"(\""), Sort("Pattern"), Lit("\")\""), IterStar(Sort("ClassFieldOptSemiColon"))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassBody"), Constructor("ClassBody"))
+          , Rhs(
+              [ Lit("\"(\"")
+              , Sort("Pattern")
+              , Lit("\":\"")
+              , Sort("TypeExpr")
+              , Lit("\")\"")
+              , IterStar(Sort("ClassFieldOptSemiColon"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassFieldOptSemiColon"), Constructor("ClassField"))
+          , Rhs([Sort("ClassField"), Opt(Sort("SemiColon"))])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassBinding"), Constructor("ClassBinding"))
+          , Rhs(
+              [ Opt(Sort("Virtual"))
+              , Sort("OptTypeParameters")
+              , Sort("ClassName")
+              , IterStar(Sort("Parameter"))
+              , Sort("ColonClassTypeOpt")
+              , Lit("\"=\"")
+              , Sort("ClassExpr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ColonClassTypeOpt"), Constructor("NoClassType"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ColonClassTypeOpt"), Constructor("ClassType"))
+          , Rhs([Lit("\":\""), Sort("ClassType")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("OptTypeParameters"), Constructor("NoParam"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("OptTypeParameters"), Constructor("Params"))
+          , Rhs([Lit("\"[\""), Sort("TypeParameters"), Lit("\"]\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeParameters"), Constructor("TypeParameters"))
+          , Rhs([IterSep(Sort("QuoteIdent"), Lit("\",\""))])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("QuoteIdent"), Constructor("Ident"))
+          , Rhs([Lit("\"'\""), Sort("Ident")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassSpecification"), Constructor("ClassSpecification"))
+          , Rhs(
+              [Lit("\"class\""), IterSep(Sort("ClassSpec"), Lit("\"and\""))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassSpec"), Constructor("ClassSpec"))
+          , Rhs(
+              [ Opt(Sort("Virtual"))
+              , Sort("OptTypeParameters")
+              , Sort("ClassName")
+              , Lit("\":\"")
+              , Sort("ClassType")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassTypeDefinition"), Constructor("ClassTypeDefinition"))
+          , Rhs(
+              [Lit("\"class\""), Lit("\"type\""), IterSep(Sort("ClassTypeDef"), Lit("\"and\""))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassTypeDef"), Constructor("ClassTypeDef"))
+          , Rhs(
+              [ Opt(Sort("Virtual"))
+              , Sort("OptTypeParameters")
+              , Sort("ClassName")
+              , Lit("\"=\"")
+              , Sort("ClassBodyType")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ExternalDeclaration"), Constructor("ExternalDecl"))
+          , Rhs([Iter(Sort("StringLiteral"))])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ NonTransitive(
+                WithArguments(
+                  SimpleRefGroup(SortConsRef(Sort("ClassType"), Constructor("ClassType")))
+                , Default(["1"])
+                )
+              )
+            , ProdsRefGroup(
+                [ SortConsRef(Sort("TypeExpr"), Constructor("Star"))
+                , SortConsRef(Sort("TypeExpr"), Constructor("Arrow"))
+                ]
+              )
+            ]
+          )
+        , Chain(
+            [ SimpleRefGroup(SortConsRef(Sort("ClassExpr"), Constructor("ClassArgs")))
+            , ProdsRefGroup(
+                [ SortConsRef(Sort("ClassExpr"), Constructor("ClassFun"))
+                , SortConsRef(Sort("ClassExpr"), Constructor("LetClass"))
+                , SortConsRef(Sort("ClassExpr"), Constructor("LetRecClass"))
+                ]
+              )
+            ]
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ SimpleRefGroup(SortConsRef(Sort("ClassExpr"), Constructor("ClassExprAttr")))
+            , ProdsRefGroup(
+                [ SortConsRef(Sort("ClassExpr"), Constructor("ClassFun"))
+                , SortConsRef(Sort("ClassExpr"), Constructor("LetClass"))
+                , SortConsRef(Sort("ClassExpr"), Constructor("LetRecClass"))
+                ]
+              )
+            ]
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$LabelName\"")
+            , Lit("\"$LabelNameOpt\"")
+            , Lit("\"$OptTypeExpr\"")
+            , Lit("\"$OptTypeExprList\"")
+            , Lit("\"$ClassFieldSpec\"")
+            , Lit("\"$ClassPath\"")
+            , Lit("\"$Arg\"")
+            , Lit("\"$LetBinding\"")
+            , Lit("\"$AndLetBinding\"")
+            , Lit("\"$AsOption\"")
+            , Lit("\"$LowerCaseIdent\"")
+            , Lit("\"$ColonTypeExprOpt\"")
+            , Lit("\"$InstVarName\"")
+            , Lit("\"$PolyTypeExpr\"")
+            , Lit("\"$MethodName\"")
+            , Lit("\"$TypeConstrName\"")
+            , Lit("\"$Expr\"")
+            , Lit("\"$Inherit\"")
+            , Lit("\"$Val\"")
+            , Lit("\"$Method\"")
+            , Lit("\"$Private\"")
+            , Lit("\"$Mutable\"")
+            , Lit("\"$ClassDefinition\"")
+            , Lit("\"$ClassBody\"")
+            , Lit("\"$Pattern\"")
+            , Lit("\"$TypeExpr\"")
+            , Lit("\"$ClassFieldOptSemiColon\"")
+            , Lit("\"$ClassField\"")
+            , Lit("\"$SemiColon\"")
+            , Lit("\"$ClassBinding\"")
+            , Lit("\"$Parameter\"")
+            , Lit("\"$ClassExpr\"")
+            , Lit("\"$ColonClassTypeOpt\"")
+            , Lit("\"$TypeParameters\"")
+            , Lit("\"$QuoteIdent\"")
+            , Lit("\"$Ident\"")
+            , Lit("\"$ClassSpecification\"")
+            , Lit("\"$ClassSpec\"")
+            , Lit("\"$ClassType\"")
+            , Lit("\"$ClassTypeDefinition\"")
+            , Lit("\"$ClassTypeDef\"")
+            , Lit("\"$Virtual\"")
+            , Lit("\"$OptTypeParameters\"")
+            , Lit("\"$ClassName\"")
+            , Lit("\"$ClassBodyType\"")
+            , Lit("\"$ExternalDeclaration\"")
+            , Lit("\"$StringLiteral\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

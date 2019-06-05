@@ -14,7 +14,11 @@ This repository contains the SDF3 grammars for Tiger, Jasmin, IceDust, OCaml and
 	 - [OCaml](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/OCaml)
 	 - [Test](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/Test)
 
-## Installation
+## Running the Benchmark
+
+To run the benchmark, make sure you have maven installed (tested with Maven 3.5.4) and execute `mvn clean verify` in the root of the project.
+
+## Installing Spoofax
 
 Spoofax is distributed as an Eclipse plugin. We point to the [Spoofax Installation Guide](http://www.metaborg.org/en/latest/source/install.html) for further information. You may use the information in that guide, but please download Spoofax + Eclipse from one of the links below, according to your platform (all versions are bundled with an embedded Java Runtime Environment - JRE).
 

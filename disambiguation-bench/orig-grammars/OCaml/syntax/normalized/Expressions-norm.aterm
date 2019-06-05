@@ -1,0 +1,1132 @@
+Module(
+  Unparameterized("normalized/Expressions-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/Lexical-norm"))
+      , Module(Unparameterized("normalized/Names-norm"))
+      , Module(Unparameterized("normalized/TypeExpr-norm"))
+      , Module(Unparameterized("normalized/Patterns-norm"))
+      , Module(Unparameterized("normalized/Extensions-norm"))
+      , Module(Unparameterized("normalized/ModuleExpressions-norm"))
+      , Module(Unparameterized("normalized/Classes-norm"))
+      , Module(Unparameterized("normalized/TypesAndExceptions-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Prefix"))
+          , Rhs([Sort("PrefixSymbol"), Sort("Expr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Field"))
+          , Rhs([Sort("Expr"), Lit("\".\""), Sort("Ident")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("ValuePath1"))
+          , Rhs(
+              [ Sort("Expr")
+              , Lit("\".\"")
+              , Lit("\"(\"")
+              , Sort("OperatorCharList")
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("ValuePath2"))
+          , Rhs(
+              [ Sort("Expr")
+              , Lit("\".\"")
+              , Lit("\"(\"")
+              , Sort("Operations")
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("DotBracket1"))
+          , Rhs(
+              [ Sort("Expr")
+              , Lit("\".\"")
+              , Lit("\"(\"")
+              , Sort("Expr")
+              , Opt(Sort("SemiColon"))
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("DotBracket2"))
+          , Rhs(
+              [ Sort("Expr")
+              , Lit("\".\"")
+              , Lit("\"[\"")
+              , Sort("Expr")
+              , Opt(Sort("SemiColon"))
+              , Lit("\"]\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("DotBracket3"))
+          , Rhs(
+              [ Sort("Expr")
+              , Lit("\".\"")
+              , Lit("\"{\"")
+              , Sort("Expr")
+              , Opt(Sort("SemiColon"))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("HashMethod"))
+          , Rhs([Sort("Expr"), Lit("\"#\""), Sort("MethodName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("HashInfix"))
+          , Rhs([Sort("Expr"), Sort("HashInfixSymbol"), Sort("Expr")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("FunctionApp"))
+          , Rhs([Sort("Expr"), Iter(Sort("Arg"))])
+          , Attrs([LongestMatch(), Assoc(NonAssoc())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Lazy"))
+          , Rhs([Lit("\"lazy\""), Sort("Expr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Assert"))
+          , Rhs([Lit("\"assert\""), Sort("Expr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("UnaryMinus"))
+          , Rhs([Lit("\"-\""), Sort("Expr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("FUnaryMinus"))
+          , Rhs([Lit("\"-.\""), Sort("Expr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Infix1"))
+          , Rhs([Sort("Expr"), Sort("InfixSymbol1"), Sort("Expr")])
+          , Attrs([Assoc(Right())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Infix2"))
+          , Rhs([Sort("Expr"), Sort("InfixSymbol2"), Sort("Expr")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Infix3"))
+          , Rhs([Sort("Expr"), Sort("InfixSymbol3"), Sort("Expr")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("ColonColon"))
+          , Rhs([Sort("Expr"), Lit("\"::\""), Sort("Expr")])
+          , Attrs([Assoc(Right())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Infix4"))
+          , Rhs([Sort("Expr"), Sort("InfixSymbol4"), Sort("Expr")])
+          , Attrs([Assoc(Right())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Infix5"))
+          , Rhs([Sort("Expr"), Sort("InfixSymbol5"), Sort("Expr")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Uneq"))
+          , Rhs([Sort("Expr"), Lit("\"!=\""), Sort("Expr")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Infix6"))
+          , Rhs([Sort("Expr"), Sort("InfixSymbol6"), Sort("Expr")])
+          , Attrs([Assoc(Right())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Infix7"))
+          , Rhs([Sort("Expr"), Sort("InfixSymbol7"), Sort("Expr")])
+          , Attrs([Assoc(Right())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Comma"))
+          , Rhs([Sort("Expr"), Lit("\",\""), Sort("Expr")])
+          , Attrs([Assoc(Right())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Assign"))
+          , Rhs([Sort("Expr"), Lit("\"<-\""), Sort("Expr")])
+          , Attrs([Assoc(Right())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Infix8"))
+          , Rhs([Sort("Expr"), Sort("InfixSymbol8"), Sort("Expr")])
+          , Attrs([Assoc(Right())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("IfThenElse"))
+          , Rhs(
+              [ Lit("\"if\"")
+              , Sort("Expr")
+              , Lit("\"then\"")
+              , Sort("Expr")
+              , Opt(Sort("SemiColon"))
+              , Lit("\"else\"")
+              , Sort("Expr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("IfThen"))
+          , Rhs(
+              [Lit("\"if\""), Sort("Expr"), Lit("\"then\""), Sort("Expr")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Sep"))
+          , Rhs([Sort("Expr"), Lit("\";\""), Sort("Expr")])
+          , Attrs([Assoc(Right())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Match"))
+          , Rhs(
+              [ Lit("\"match\"")
+              , Opt(Sort("Attribute"))
+              , Sort("Expr")
+              , Opt(Sort("SemiColon"))
+              , Lit("\"with\"")
+              , Sort("PatternMatching")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Function"))
+          , Rhs(
+              [Lit("\"function\""), Opt(Sort("Attribute")), Sort("PatternMatching")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Fun"))
+          , Rhs(
+              [Lit("\"fun\""), Opt(Sort("Attribute")), Sort("MultipleMatching")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("TryBlock"))
+          , Rhs(
+              [ Lit("\"try\"")
+              , Opt(Sort("Attribute"))
+              , Sort("Expr")
+              , Opt(Sort("SemiColon"))
+              , Lit("\"with\"")
+              , Sort("PatternMatching")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Let"))
+          , Rhs(
+              [ Lit("\"let\"")
+              , Opt(Sort("Attribute"))
+              , Sort("LetBinding")
+              , Opt(Sort("SemiColon"))
+              , IterStar(Sort("AndLetBindingSemiColon"))
+              , Lit("\"in\"")
+              , Sort("Expr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("LetRec"))
+          , Rhs(
+              [ Lit("\"let\"")
+              , Lit("\"rec\"")
+              , Opt(Sort("Attribute"))
+              , Sort("LetBinding")
+              , Opt(Sort("SemiColon"))
+              , IterStar(Sort("AndLetBindingSemiColon"))
+              , Lit("\"in\"")
+              , Sort("Expr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("LetModule"))
+          , Rhs(
+              [ Lit("\"let\"")
+              , Lit("\"module\"")
+              , Opt(Sort("Attribute"))
+              , Sort("ModuleName")
+              , Lit("\"=\"")
+              , Sort("ModuleExpr")
+              , Lit("\"in\"")
+              , Sort("Expr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("Expr")
+          , Rhs([Lit("\"(\""), Sort("Expr"), Lit("\")\"")])
+          , Attrs([Bracket()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Bracket"))
+          , Rhs(
+              [Lit("\"(\""), Sort("Expr"), Lit("\";\""), Lit("\")\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("Expr")
+          , Rhs([Lit("\"begin\""), Sort("Expr"), Lit("\"end\"")])
+          , Attrs([Bracket()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Bracket2"))
+          , Rhs(
+              [Lit("\"begin\""), Sort("Expr"), Lit("\";\""), Lit("\"end\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Brackets1"))
+          , Rhs(
+              [ Lit("\"(\"")
+              , Sort("Expr")
+              , Lit("\":\"")
+              , Sort("TypeExpr")
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Brackets2"))
+          , Rhs(
+              [ Lit("\"(\"")
+              , Sort("Expr")
+              , Lit("\":>\"")
+              , Sort("TypeExpr")
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Brackets3"))
+          , Rhs(
+              [ Lit("\"(\"")
+              , Sort("Expr")
+              , Lit("\":\"")
+              , Sort("TypeExpr")
+              , Lit("\":>\"")
+              , Sort("TypeExpr")
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Brackets4"))
+          , Rhs(
+              [ Lit("\"{<\"")
+              , IterSep(Sort("AssignInstVarName"), Lit("\";\""))
+              , Opt(Sort("SemiColon"))
+              , Lit("\">}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AssignInstVarName"), Constructor("Assign"))
+          , Rhs([Sort("InstVarName"), Lit("\"=\""), Sort("Expr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Tuple"))
+          , Rhs(
+              [Lit("\"[\""), Sort("Expr"), Opt(Sort("SemiColon")), Lit("\"]\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Array"))
+          , Rhs(
+              [Lit("\"[|\""), Sort("Expr"), Opt(Sort("SemiColon")), Lit("\"|]\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Record1"))
+          , Rhs(
+              [ Lit("\"{\"")
+              , Iter(Sort("FieldAssign"))
+              , Opt(Sort("SemiColon"))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Record2"))
+          , Rhs(
+              [ Lit("\"{\"")
+              , Sort("Expr")
+              , Lit("\"with\"")
+              , IterSep(Sort("FieldAssign"), Lit("\";\""))
+              , Opt(Sort("SemiColon"))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("While"))
+          , Rhs(
+              [ Lit("\"while\"")
+              , Sort("Expr")
+              , Lit("\"do\"")
+              , Sort("Expr")
+              , Opt(Sort("SemiColon"))
+              , Lit("\"done\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("For"))
+          , Rhs(
+              [ Lit("\"for\"")
+              , Sort("Ident")
+              , Lit("\"=\"")
+              , Sort("Expr")
+              , Sort("ToDownTo")
+              , Sort("Expr")
+              , Lit("\"do\"")
+              , Sort("Expr")
+              , Opt(Sort("SemiColon"))
+              , Lit("\"done\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("New"))
+          , Rhs([Lit("\"new\""), Sort("ClassPath")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Object"))
+          , Rhs([Lit("\"object\""), Sort("ClassBody"), Lit("\"end\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("ModuleExpr"))
+          , Rhs(
+              [ Lit("\"(\"")
+              , Lit("\"module\"")
+              , Sort("ModuleExpr")
+              , Sort("ColonPackageTypeOpt")
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("Expr"), Rhs([Sort("ValueName")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Constant"))
+          , Rhs([Sort("Constant")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("Expr"), Rhs([Sort("ConstrName")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("LetOpen"))
+          , Rhs(
+              [ Lit("\"let\"")
+              , Lit("\"open\"")
+              , Sort("ModulePath")
+              , Lit("\"in\"")
+              , Sort("Expr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("LetOpen2"))
+          , Rhs(
+              [ Lit("\"let\"")
+              , Lit("\"open!\"")
+              , Sort("ModulePath")
+              , Lit("\"in\"")
+              , Sort("Expr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("LetException"))
+          , Rhs(
+              [ Lit("\"let\"")
+              , Lit("\"exception\"")
+              , Sort("ConstrDecl")
+              , Lit("\"in\"")
+              , Sort("Expr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldAssign"), Constructor("FieldAssign"))
+          , Rhs([Sort("Field"), Lit("\"=\""), Sort("Expr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldAssign"), Constructor("Field"))
+          , Rhs([Sort("Field")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("Arg"), Rhs([Sort("Expr")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("Arg"), Constructor("Label"))
+          , Rhs([Sort("Label")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Arg"), Constructor("LabelColon"))
+          , Rhs([Sort("LabelColon"), Sort("Expr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Arg"), Constructor("OptLabel"))
+          , Rhs([Sort("OptLabel")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Arg"), Constructor("OptLabelColon"))
+          , Rhs([Sort("OptLabelColon"), Sort("Expr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PatternMatching"), Constructor("PatternMatching"))
+          , Rhs(
+              [ Sort("OptBar")
+              , Sort("Pattern")
+              , Lit("\"->\"")
+              , Sort("Expr")
+              , IterStar(Sort("InnerPatternMatching"))
+              ]
+            )
+          , Attrs([LongestMatch()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PatternMatching"), Constructor("PatternMatchingWhen"))
+          , Rhs(
+              [ Sort("OptBar")
+              , Sort("Pattern")
+              , Lit("\"when\"")
+              , Sort("Expr")
+              , Lit("\"->\"")
+              , Sort("Expr")
+              , IterStar(Sort("InnerPatternMatching"))
+              ]
+            )
+          , Attrs([LongestMatch()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InnerPatternMatching"), Constructor("InnerPatternMatching"))
+          , Rhs(
+              [ Opt(Sort("SemiColon"))
+              , Lit("\"|\"")
+              , Sort("Pattern")
+              , Lit("\"->\"")
+              , Sort("Expr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InnerPatternMatching"), Constructor("InnerPatternMatchingWhen"))
+          , Rhs(
+              [ Opt(Sort("SemiColon"))
+              , Lit("\"|\"")
+              , Sort("Pattern")
+              , Lit("\"when\"")
+              , Sort("Expr")
+              , Lit("\"->\"")
+              , Sort("Expr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AndLetBindingSemiColon"), Constructor("LetBinding"))
+          , Rhs(
+              [ Lit("\"and\"")
+              , Opt(Sort("Attribute"))
+              , Sort("LetBinding")
+              , Opt(Sort("SemiColon"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("LetBinding"), Constructor("LetBinding"))
+          , Rhs([Sort("Pattern"), Lit("\"=\""), Sort("Expr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("LetBinding"), Constructor("LetBinding1"))
+          , Rhs(
+              [Sort("ValueName"), IterStar(Sort("Parameter")), Lit("\"=\""), Sort("Expr")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("LetBinding"), Constructor("LetBinding1"))
+          , Rhs(
+              [ Sort("ValueName")
+              , IterStar(Sort("Parameter"))
+              , Lit("\":\"")
+              , Sort("PolyTypeExpr")
+              , Lit("\":>\"")
+              , Sort("TypeExpr")
+              , Lit("\"=\"")
+              , Sort("Expr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("LetBinding"), Constructor("LetBinding2"))
+          , Rhs(
+              [ Sort("ValueName")
+              , IterStar(Sort("Parameter"))
+              , Lit("\":\"")
+              , Sort("PolyTypeExpr")
+              , Lit("\"=\"")
+              , Sort("Expr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("LetBinding"), Constructor("LetBinding3"))
+          , Rhs(
+              [ Sort("ValueName")
+              , IterStar(Sort("Parameter"))
+              , Lit("\":>\"")
+              , Sort("TypeExpr")
+              , Lit("\"=\"")
+              , Sort("Expr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("LetBinding"), Constructor("BindingNew"))
+          , Rhs(
+              [ Sort("ValueName")
+              , Lit("\":\"")
+              , Lit("\"type\"")
+              , IterStar(Sort("TypeConstr"))
+              , Lit("\".\"")
+              , Sort("TypeExpr")
+              , Lit("\"=\"")
+              , Sort("Expr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MultipleMatching"), Constructor("MultipleMatching"))
+          , Rhs(
+              [Iter(Sort("Parameter")), Lit("\"->\""), Sort("Expr")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MultipleMatching"), Constructor("MultipleMatching"))
+          , Rhs(
+              [ Iter(Sort("Parameter"))
+              , Lit("\"when\"")
+              , Sort("Expr")
+              , Lit("\"->\"")
+              , Sort("Expr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Parameter"), Constructor("PatternParam"))
+          , Rhs([Sort("Pattern")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Parameter"), Constructor("Param1"))
+          , Rhs([Sort("Label")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Parameter"), Constructor("Param2"))
+          , Rhs(
+              [Lit("\"~\""), Lit("\"(\""), Sort("LabelName"), Lit("\")\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Parameter"), Constructor("Param2"))
+          , Rhs(
+              [ Lit("\"~\"")
+              , Lit("\"(\"")
+              , Sort("LabelName")
+              , Lit("\":\"")
+              , Sort("TypeExpr")
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Parameter"), Constructor("Param3"))
+          , Rhs([Sort("LabelColon"), Sort("Pattern")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Parameter"), Constructor("Param4"))
+          , Rhs([Sort("OptLabel")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Parameter"), Constructor("Param5"))
+          , Rhs(
+              [ Lit("\"?\"")
+              , Lit("\"(\"")
+              , Sort("LabelName")
+              , Sort("ColonTypeExprOpt")
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Parameter"), Constructor("Param5"))
+          , Rhs(
+              [ Lit("\"?\"")
+              , Lit("\"(\"")
+              , Sort("LabelName")
+              , Sort("ColonTypeExprOpt")
+              , Lit("\"=\"")
+              , Sort("Expr")
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Parameter"), Constructor("Param6"))
+          , Rhs([Sort("OptLabelColon"), Sort("Pattern")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Parameter"), Constructor("Param7"))
+          , Rhs(
+              [ Sort("OptLabelColon")
+              , Lit("\"(\"")
+              , Sort("Pattern")
+              , Lit("\":\"")
+              , Sort("TypeExpr")
+              , Lit("\"=\"")
+              , Sort("Expr")
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Parameter"), Constructor("TypeParam"))
+          , Rhs(
+              [Lit("\"(\""), Lit("\"type\""), Sort("TypeConstrName"), Lit("\")\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("ExprAttr"))
+          , Rhs([Sort("Expr"), Sort("Attribute")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("Prefix")))
+            , ProdsRefGroup(
+                [ SortConsRef(Sort("Expr"), Constructor("Field"))
+                , SortConsRef(Sort("Expr"), Constructor("ValuePath1"))
+                , SortConsRef(Sort("Expr"), Constructor("ValuePath2"))
+                , SortConsRef(Sort("Expr"), Constructor("DotBracket1"))
+                , SortConsRef(Sort("Expr"), Constructor("DotBracket2"))
+                , SortConsRef(Sort("Expr"), Constructor("DotBracket3"))
+                ]
+              )
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("HashMethod")))
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("HashInfix")))
+            , AssocRefGroup(
+                NonAssoc()
+              , [ SortConsRef(Sort("Expr"), Constructor("FunctionApp"))
+                , SortConsRef(Sort("Expr"), Constructor("Lazy"))
+                , SortConsRef(Sort("Expr"), Constructor("Assert"))
+                ]
+              )
+            , ProdsRefGroup(
+                [ SortConsRef(Sort("Expr"), Constructor("UnaryMinus"))
+                , SortConsRef(Sort("Expr"), Constructor("FUnaryMinus"))
+                ]
+              )
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("Infix1")))
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("Infix2")))
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("Infix3")))
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("ColonColon")))
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("Infix4")))
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("Infix5")))
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("Uneq")))
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("Infix6")))
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("Infix7")))
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("Comma")))
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("Assign")))
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("Infix8")))
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("IfThenElse")))
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("IfThen")))
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("ExprAttr")))
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("Sep")))
+            , ProdsRefGroup(
+                [ SortConsRef(Sort("Expr"), Constructor("Match"))
+                , SortConsRef(Sort("Expr"), Constructor("Function"))
+                , SortConsRef(Sort("Expr"), Constructor("TryBlock"))
+                , SortConsRef(Sort("Expr"), Constructor("Fun"))
+                , SortConsRef(Sort("Expr"), Constructor("Let"))
+                , SortConsRef(Sort("Expr"), Constructor("LetRec"))
+                , SortConsRef(Sort("Expr"), Constructor("LetOpen"))
+                , SortConsRef(Sort("Expr"), Constructor("LetOpen2"))
+                , SortConsRef(Sort("Expr"), Constructor("LetException"))
+                , SortConsRef(Sort("Expr"), Constructor("LetModule"))
+                ]
+              )
+            ]
+          )
+        , Chain(
+            [ SimpleRefGroup(SortConsRef(Sort("FieldAssign"), Constructor("FieldAssign")))
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("Sep")))
+            ]
+          )
+        , Chain(
+            [ NonTransitive(
+                WithArguments(
+                  SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("Constant")))
+                , Default(["0"])
+                )
+              )
+            , SimpleRefGroup(SortConsRef(Sort("Constant"), Constructor("Constr")))
+            ]
+          )
+        , Chain(
+            [ NonTransitive(
+                WithArguments(
+                  SimpleRefGroup(SortConsRef(Sort("Parameter"), Constructor("PatternParam")))
+                , Default(["0"])
+                )
+              )
+            , SimpleRefGroup(SortConsRef(Sort("Pattern"), Constructor("ConstrPattern")))
+            ]
+          )
+        , Chain(
+            [ NonTransitive(
+                WithArguments(
+                  SimpleRefGroup(SortConsRef(Sort("AssignInstVarName"), Constructor("Assign")))
+                , Default(["2"])
+                )
+              )
+            , ProdsRefGroup([SortConsRef(Sort("Expr"), Constructor("Sep"))])
+            ]
+          )
+        , Chain(
+            [ NonTransitive(
+                WithArguments(
+                  SimpleRefGroup(SortConsRef(Sort("LetBinding"), Constructor("LetBinding")))
+                , Default(["0"])
+                )
+              )
+            , SimpleRefGroup(SortConsRef(Sort("Pattern"), Constructor("PatternValueName")))
+            ]
+          )
+        , Chain(
+            [ NonTransitive(
+                WithArguments(
+                  SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("IfThenElse")))
+                , Default(["3"])
+                )
+              )
+            , SimpleRefGroup(SortConsRef(Sort("Expr"), Constructor("Sep")))
+            ]
+          )
+        , Chain(
+            [ NonTransitive(
+                WithArguments(
+                  SimpleGroup(
+                    SdfProduction(Sort("Arg"), Rhs([Sort("Expr")]), NoAttrs())
+                  )
+                , Default(["0"])
+                )
+              )
+            , ProdsRefGroup(
+                [ SortConsRef(Sort("Expr"), Constructor("FunctionApp"))
+                , SortConsRef(Sort("Expr"), Constructor("ExprAttr"))
+                , SortConsRef(Sort("Expr"), Constructor("Lazy"))
+                , SortConsRef(Sort("Expr"), Constructor("Assert"))
+                , SortConsRef(Sort("Expr"), Constructor("UnaryMinus"))
+                , SortConsRef(Sort("Expr"), Constructor("FUnaryMinus"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix1"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix2"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix3"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix4"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix5"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix6"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix7"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix8"))
+                , SortConsRef(Sort("Expr"), Constructor("Uneq"))
+                , SortConsRef(Sort("Expr"), Constructor("Match"))
+                , SortConsRef(Sort("Expr"), Constructor("IfThenElse"))
+                , SortConsRef(Sort("Expr"), Constructor("IfThen"))
+                , SortConsRef(Sort("Expr"), Constructor("Sep"))
+                , SortConsRef(Sort("Expr"), Constructor("ColonColon"))
+                , SortConsRef(Sort("Expr"), Constructor("Comma"))
+                , SortConsRef(Sort("Expr"), Constructor("Match"))
+                , SortConsRef(Sort("Expr"), Constructor("Function"))
+                , SortConsRef(Sort("Expr"), Constructor("TryBlock"))
+                , SortConsRef(Sort("Expr"), Constructor("Fun"))
+                , SortConsRef(Sort("Expr"), Constructor("Let"))
+                , SortConsRef(Sort("Expr"), Constructor("LetRec"))
+                , SortConsRef(Sort("Expr"), Constructor("LetOpen"))
+                , SortConsRef(Sort("Expr"), Constructor("LetOpen2"))
+                , SortConsRef(Sort("Expr"), Constructor("LetException"))
+                , SortConsRef(Sort("Expr"), Constructor("LetModule"))
+                ]
+              )
+            ]
+          )
+        , Chain(
+            [ NonTransitive(
+                WithArguments(
+                  SimpleRefGroup(SortConsRef(Sort("Arg"), Constructor("LabelColon")))
+                , Default(["1"])
+                )
+              )
+            , ProdsRefGroup(
+                [ SortConsRef(Sort("Expr"), Constructor("FunctionApp"))
+                , SortConsRef(Sort("Expr"), Constructor("ExprAttr"))
+                , SortConsRef(Sort("Expr"), Constructor("Lazy"))
+                , SortConsRef(Sort("Expr"), Constructor("Assert"))
+                , SortConsRef(Sort("Expr"), Constructor("UnaryMinus"))
+                , SortConsRef(Sort("Expr"), Constructor("FUnaryMinus"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix1"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix2"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix3"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix4"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix5"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix6"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix7"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix8"))
+                , SortConsRef(Sort("Expr"), Constructor("Uneq"))
+                , SortConsRef(Sort("Expr"), Constructor("IfThenElse"))
+                , SortConsRef(Sort("Expr"), Constructor("IfThen"))
+                , SortConsRef(Sort("Expr"), Constructor("Sep"))
+                , SortConsRef(Sort("Expr"), Constructor("ColonColon"))
+                , SortConsRef(Sort("Expr"), Constructor("Comma"))
+                , SortConsRef(Sort("Expr"), Constructor("Match"))
+                , SortConsRef(Sort("Expr"), Constructor("Function"))
+                , SortConsRef(Sort("Expr"), Constructor("TryBlock"))
+                , SortConsRef(Sort("Expr"), Constructor("Fun"))
+                , SortConsRef(Sort("Expr"), Constructor("Let"))
+                , SortConsRef(Sort("Expr"), Constructor("LetRec"))
+                , SortConsRef(Sort("Expr"), Constructor("LetOpen"))
+                , SortConsRef(Sort("Expr"), Constructor("LetOpen2"))
+                , SortConsRef(Sort("Expr"), Constructor("LetException"))
+                , SortConsRef(Sort("Expr"), Constructor("LetModule"))
+                ]
+              )
+            ]
+          )
+        , Chain(
+            [ NonTransitive(
+                WithArguments(
+                  SimpleRefGroup(SortConsRef(Sort("Arg"), Constructor("OptLabelColon")))
+                , Default(["1"])
+                )
+              )
+            , ProdsRefGroup(
+                [ SortConsRef(Sort("Expr"), Constructor("FunctionApp"))
+                , SortConsRef(Sort("Expr"), Constructor("ExprAttr"))
+                , SortConsRef(Sort("Expr"), Constructor("Lazy"))
+                , SortConsRef(Sort("Expr"), Constructor("Assert"))
+                , SortConsRef(Sort("Expr"), Constructor("UnaryMinus"))
+                , SortConsRef(Sort("Expr"), Constructor("FUnaryMinus"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix1"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix2"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix3"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix4"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix5"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix6"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix7"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix8"))
+                , SortConsRef(Sort("Expr"), Constructor("Uneq"))
+                , SortConsRef(Sort("Expr"), Constructor("IfThenElse"))
+                , SortConsRef(Sort("Expr"), Constructor("IfThen"))
+                , SortConsRef(Sort("Expr"), Constructor("Sep"))
+                , SortConsRef(Sort("Expr"), Constructor("ColonColon"))
+                , SortConsRef(Sort("Expr"), Constructor("Comma"))
+                , SortConsRef(Sort("Expr"), Constructor("Infix6"))
+                , SortConsRef(Sort("Expr"), Constructor("Match"))
+                , SortConsRef(Sort("Expr"), Constructor("Function"))
+                , SortConsRef(Sort("Expr"), Constructor("TryBlock"))
+                , SortConsRef(Sort("Expr"), Constructor("Fun"))
+                , SortConsRef(Sort("Expr"), Constructor("Let"))
+                , SortConsRef(Sort("Expr"), Constructor("LetRec"))
+                , SortConsRef(Sort("Expr"), Constructor("LetOpen"))
+                , SortConsRef(Sort("Expr"), Constructor("LetOpen2"))
+                , SortConsRef(Sort("Expr"), Constructor("LetException"))
+                , SortConsRef(Sort("Expr"), Constructor("LetModule"))
+                ]
+              )
+            ]
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(Sort("UnMinus"), Rhs([Lit("\"-\"")]), NoAttrs())
+        , SdfProduction(Sort("SemiColon"), Rhs([Lit("\";\"")]), NoAttrs())
+        , SdfProduction(Sort("SemiColon2"), Rhs([Lit("\";\"")]), NoAttrs())
+        , SdfProduction(Sort("ToDownTo"), Rhs([Lit("\"to\"")]), NoAttrs())
+        , SdfProduction(Sort("ToDownTo"), Rhs([Lit("\"downto\"")]), NoAttrs())
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Sort("UnMinus")]
+          , Single(
+              CharClass(Simple(Present(Range(Numeric("\\48"), Numeric("\\57")))))
+            )
+          )
+        , Follow(
+            [Sort("SemiColon2")]
+          , Single(CharClass(Simple(Present(Numeric("\\59")))))
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$PrefixSymbol\"")
+            , Lit("\"$OperatorCharList\"")
+            , Lit("\"$Operations\"")
+            , Lit("\"$MethodName\"")
+            , Lit("\"$HashInfixSymbol\"")
+            , Lit("\"$InfixSymbol1\"")
+            , Lit("\"$InfixSymbol2\"")
+            , Lit("\"$InfixSymbol3\"")
+            , Lit("\"$InfixSymbol4\"")
+            , Lit("\"$InfixSymbol5\"")
+            , Lit("\"$InfixSymbol6\"")
+            , Lit("\"$InfixSymbol7\"")
+            , Lit("\"$InfixSymbol8\"")
+            , Lit("\"$ModuleName\"")
+            , Lit("\"$AssignInstVarName\"")
+            , Lit("\"$InstVarName\"")
+            , Lit("\"$Ident\"")
+            , Lit("\"$ToDownTo\"")
+            , Lit("\"$ClassPath\"")
+            , Lit("\"$ClassBody\"")
+            , Lit("\"$ModuleExpr\"")
+            , Lit("\"$ColonPackageTypeOpt\"")
+            , Lit("\"$Constant\"")
+            , Lit("\"$ConstrName\"")
+            , Lit("\"$ModulePath\"")
+            , Lit("\"$ConstrDecl\"")
+            , Lit("\"$FieldAssign\"")
+            , Lit("\"$Field\"")
+            , Lit("\"$Arg\"")
+            , Lit("\"$PatternMatching\"")
+            , Lit("\"$OptBar\"")
+            , Lit("\"$InnerPatternMatching\"")
+            , Lit("\"$AndLetBindingSemiColon\"")
+            , Lit("\"$SemiColon\"")
+            , Lit("\"$PolyTypeExpr\"")
+            , Lit("\"$LetBinding\"")
+            , Lit("\"$ValueName\"")
+            , Lit("\"$TypeConstr\"")
+            , Lit("\"$MultipleMatching\"")
+            , Lit("\"$Label\"")
+            , Lit("\"$LabelColon\"")
+            , Lit("\"$OptLabel\"")
+            , Lit("\"$LabelName\"")
+            , Lit("\"$ColonTypeExprOpt\"")
+            , Lit("\"$OptLabelColon\"")
+            , Lit("\"$Pattern\"")
+            , Lit("\"$TypeExpr\"")
+            , Lit("\"$Parameter\"")
+            , Lit("\"$TypeConstrName\"")
+            , Lit("\"$Expr\"")
+            , Lit("\"$Attribute\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

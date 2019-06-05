@@ -1,0 +1,551 @@
+Module(
+  Unparameterized("normalized/completion/JasminXT-Header-completion-insertions-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/JasminXT-Header-norm"))
+      , Module(Unparameterized("normalized/completion/JasminXT-Names-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/JasminXT-Numbers-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/JasminXT-Strings-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/JasminXT-Descriptors-completion-insertions-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeStartSymbols(
+        [ Sort("JasminHeader")
+        , Sort("BytecodeSpec")
+        , Sort("SourceSpec")
+        , Sort("ClassSpec")
+        , Sort("SuperSpec")
+        , Sort("ImplementsSpec")
+        , Sort("SignatureSpec")
+        , Sort("EnclosingSpec")
+        , Sort("DebugSpec")
+        , Sort("InnerClassSpec")
+        , Sort("InnerInterfaceSpec")
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("JasminHeader"), Constructor("JasminHeader-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("BytecodeSpec"), Constructor("BytecodeSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("SourceSpec"), Constructor("SourceSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassSpec"), Constructor("ClassSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("SuperSpec"), Constructor("SuperSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ImplementsSpec"), Constructor("ImplementsSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("SignatureSpec"), Constructor("SignatureSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("EnclosingSpec"), Constructor("EnclosingSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("DebugSpec"), Constructor("DebugSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InnerClassSpec"), Constructor("InnerClassSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InnerInterfaceSpec"), Constructor("InnerInterfaceSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeStartSymbols(
+        [ Sort("BytecodeSpec")
+        , Sort("MajorVersion")
+        , Sort("Int")
+        , Sort("MinorVersion")
+        , Sort("String")
+        , Sort("SourceSpec")
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("BytecodeSpec"), Constructor("BytecodeSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MajorVersion"), Constructor("MajorVersion-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Int"), Constructor("Int-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MinorVersion"), Constructor("MinorVersion-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("String"), Constructor("String-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("SourceSpec"), Constructor("SourceSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Lit("\".bytecode\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\".\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\".source\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeStartSymbols(
+        [ Sort("ClassSpec")
+        , Sort("ClassAccess")
+        , Sort("SuperSpec")
+        , Sort("ImplementsSpec")
+        , Sort("ClassName")
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("ClassSpec"), Constructor("ClassSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassAccess"), Constructor("ClassAccess-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("SuperSpec"), Constructor("SuperSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ImplementsSpec"), Constructor("ImplementsSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassName"), Constructor("ClassName-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Lit("\".class\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\".interface\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"public\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"final\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"interface\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"abstract\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"super\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\".super\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\".implements\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeStartSymbols(
+        [ Sort("SignatureSpec")
+        , Sort("MethodDescriptor")
+        , Sort("EnclosingSpec")
+        , Sort("DebugSpec")
+        , Sort("String")
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("SignatureSpec"), Constructor("SignatureSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MethodDescriptor"), Constructor("MethodDescriptor-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("EnclosingSpec"), Constructor("EnclosingSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("DebugSpec"), Constructor("DebugSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("String"), Constructor("String-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Lit("\".signature\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\".enclosing\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"method\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\".debug\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeStartSymbols(
+        [ Sort("InnerClassSpec")
+        , Sort("InnerInterfaceSpec")
+        , Sort("ClassAccess")
+        , Sort("InnerClassAccess")
+        , Sort("InnerClassName")
+        , Sort("InnerName")
+        , Sort("ClassName")
+        , Sort("OuterName")
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("InnerClassSpec"), Constructor("InnerClassSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InnerInterfaceSpec"), Constructor("InnerInterfaceSpec-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassAccess"), Constructor("ClassAccess-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InnerClassAccess"), Constructor("InnerClassAccess-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InnerClassName"), Constructor("InnerClassName-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InnerName"), Constructor("InnerName-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassName"), Constructor("ClassName-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("OuterName"), Constructor("OuterName-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Lit("\"class\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\".inner\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"interface\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"inner\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"$\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"outer\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax([SdfProduction(Sort("COMPLETION-INSERTION"), Rhs([]), NoAttrs())])
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$JasminHeader\"")
+            , Lit("\"$BytecodeSpec\"")
+            , Lit("\"$SourceSpec\"")
+            , Lit("\"$ClassSpec\"")
+            , Lit("\"$SuperSpec\"")
+            , Lit("\"$ImplementsSpec\"")
+            , Lit("\"$SignatureSpec\"")
+            , Lit("\"$EnclosingSpec\"")
+            , Lit("\"$DebugSpec\"")
+            , Lit("\"$InnerClassSpec\"")
+            , Lit("\"$InnerInterfaceSpec\"")
+            , Lit("\"$COMPLETION-INSERTION\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$BytecodeSpec\"")
+            , Lit("\"$MajorVersion\"")
+            , Lit("\"$Int\"")
+            , Lit("\"$MinorVersion\"")
+            , Lit("\"$String\"")
+            , Lit("\"$SourceSpec\"")
+            , Lit("\"$COMPLETION-INSERTION\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$ClassSpec\"")
+            , Lit("\"$ClassAccess\"")
+            , Lit("\"$SuperSpec\"")
+            , Lit("\"$ImplementsSpec\"")
+            , Lit("\"$ClassName\"")
+            , Lit("\"$COMPLETION-INSERTION\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$SignatureSpec\"")
+            , Lit("\"$MethodDescriptor\"")
+            , Lit("\"$EnclosingSpec\"")
+            , Lit("\"$DebugSpec\"")
+            , Lit("\"$String\"")
+            , Lit("\"$COMPLETION-INSERTION\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$InnerClassSpec\"")
+            , Lit("\"$InnerInterfaceSpec\"")
+            , Lit("\"$ClassAccess\"")
+            , Lit("\"$InnerClassAccess\"")
+            , Lit("\"$InnerClassName\"")
+            , Lit("\"$InnerName\"")
+            , Lit("\"$ClassName\"")
+            , Lit("\"$OuterName\"")
+            , Lit("\"$COMPLETION-INSERTION\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

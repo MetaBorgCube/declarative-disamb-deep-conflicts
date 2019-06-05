@@ -1,0 +1,227 @@
+Module(
+  Unparameterized("normalized/lexical/Comments-norm")
+, [Imports([Module(Unparameterized("normalized/lexical/LineTerminators-norm"))])]
+, [ SDFSection(LexicalStartSymbols([Sort("Comment")]))
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(Layout(), Rhs([Sort("Comment")]), NoAttrs())
+        , SdfProduction(
+            Sort("Comment")
+          , Rhs([Lit("\"//\""), Sort("EOLCommentChars"), Sort("LineTerminator")])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("EOLCommentChars")
+          , Rhs(
+              [ IterStar(
+                  CharClass(
+                    Simple(
+                      Present(
+                        Conc(
+                          Range(Numeric("\\0"), Numeric("\\9"))
+                        , Conc(
+                            Range(Numeric("\\11"), Numeric("\\12"))
+                          , Range(Numeric("\\14"), Numeric("\\255"))
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("Comment")
+          , Rhs(
+              [Lit("\"/*\""), IterStar(Sort("CommentPart")), Lit("\"*/\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("Comment")
+          , Rhs(
+              [Lit("\"/**\""), IterStar(Sort("CommentPart")), Lit("\"*/\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("Comment"), Rhs([Lit("\"/**/\"")]), NoAttrs())
+        , SdfProduction(Sort("CommentPart"), Rhs([Sort("BlockCommentChars")]), NoAttrs())
+        , SdfProduction(Sort("CommentPart"), Rhs([Sort("EscChar")]), NoAttrs())
+        , SdfProduction(Sort("CommentPart"), Rhs([Sort("EscEscChar")]), NoAttrs())
+        , SdfProduction(Sort("CommentPart"), Rhs([Sort("Asterisk")]), NoAttrs())
+        , SdfProduction(Sort("CommentPart"), Rhs([Sort("UnicodeEscape")]), NoAttrs())
+        , SdfProduction(
+            Sort("BlockCommentChars")
+          , Rhs(
+              [ Iter(
+                  CharClass(
+                    Simple(
+                      Present(
+                        Conc(
+                          Range(Numeric("\\0"), Numeric("\\41"))
+                        , Conc(
+                            Range(Numeric("\\43"), Numeric("\\91"))
+                          , Range(Numeric("\\93"), Numeric("\\255"))
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("Asterisk"), Rhs([Lit("\"*\"")]), NoAttrs())
+        , SdfProduction(Sort("EscEscChar"), Rhs([Lit("\"\\\\\\\\\"")]), NoAttrs())
+        , SdfProduction(Sort("EscChar"), Rhs([Lit("\"\\\\\"")]), NoAttrs())
+        , SdfProduction(
+            Sort("UnicodeEscape")
+          , Rhs(
+              [ Lit("\"\\\\\"")
+              , Iter(CharClass(Simple(Present(Numeric("\\117")))))
+              , CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\48"), Numeric("\\57"))
+                      , Conc(
+                          Range(Numeric("\\65"), Numeric("\\70"))
+                        , Range(Numeric("\\97"), Numeric("\\102"))
+                        )
+                      )
+                    )
+                  )
+                )
+              , CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\48"), Numeric("\\57"))
+                      , Conc(
+                          Range(Numeric("\\65"), Numeric("\\70"))
+                        , Range(Numeric("\\97"), Numeric("\\102"))
+                        )
+                      )
+                    )
+                  )
+                )
+              , CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\48"), Numeric("\\57"))
+                      , Conc(
+                          Range(Numeric("\\65"), Numeric("\\70"))
+                        , Range(Numeric("\\97"), Numeric("\\102"))
+                        )
+                      )
+                    )
+                  )
+                )
+              , CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\48"), Numeric("\\57"))
+                      , Conc(
+                          Range(Numeric("\\65"), Numeric("\\70"))
+                        , Range(Numeric("\\97"), Numeric("\\102"))
+                        )
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"/**\"")]
+          , Single(CharClass(Simple(Present(Numeric("\\47")))))
+          )
+        , Follow(
+            [Lit("\"/*\"")]
+          , Single(CharClass(Simple(Present(Numeric("\\42")))))
+          )
+        , Follow(
+            [Sort("Asterisk")]
+          , Single(CharClass(Simple(Present(Numeric("\\47")))))
+          )
+        , Follow(
+            [Sort("EscChar")]
+          , Single(
+              CharClass(Simple(Present(Conc(Numeric("\\92"), Numeric("\\117")))))
+            )
+          )
+        , Follow(
+            [Sort("BlockCommentChars")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\0"), Numeric("\\41"))
+                    , Conc(
+                        Range(Numeric("\\43"), Numeric("\\91"))
+                      , Range(Numeric("\\93"), Numeric("\\255"))
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        , Follow(
+            [Sort("EOLCommentChars")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\0"), Numeric("\\9"))
+                    , Conc(
+                        Range(Numeric("\\11"), Numeric("\\12"))
+                      , Range(Numeric("\\14"), Numeric("\\255"))
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeRestrictions(
+        [ Follow(
+            [Opt(Layout())]
+          , Single(
+              Seq(
+                Simple(Present(Numeric("\\47")))
+              , Single(CharClass(Simple(Present(Numeric("\\42")))))
+              )
+            )
+          )
+        , Follow(
+            [Opt(Layout())]
+          , Single(
+              Seq(
+                Simple(Present(Numeric("\\47")))
+              , Single(CharClass(Simple(Present(Numeric("\\47")))))
+              )
+            )
+          )
+        ]
+      )
+    )
+  ]
+)

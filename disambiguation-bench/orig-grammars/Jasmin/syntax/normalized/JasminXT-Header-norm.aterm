@@ -1,0 +1,405 @@
+Module(
+  Unparameterized("normalized/JasminXT-Header-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/JasminXT-Names-norm"))
+      , Module(Unparameterized("normalized/JasminXT-Numbers-norm"))
+      , Module(Unparameterized("normalized/JasminXT-Strings-norm"))
+      , Module(Unparameterized("normalized/JasminXT-Descriptors-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(ContextFreeStartSymbols([Sort("JasminHeader")]))
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("JasminHeader"), Constructor("JBCHeader"))
+          , Rhs(
+              [ Sort("BytecodeSpec")
+              , Sort("SourceSpec")
+              , Sort("ClassSpec")
+              , Sort("SuperSpec")
+              , IterStar(Sort("ImplementsSpec"))
+              , Sort("SignatureSpec")
+              , Sort("EnclosingSpec")
+              , IterStar(Sort("DebugSpec"))
+              , IterStar(Sort("InnerClassSpec"))
+              , IterStar(Sort("InnerInterfaceSpec"))
+              ]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("BytecodeSpec"), Constructor("JBCVersion"))
+          , Rhs([Lit("\".bytecode\""), Sort("MajorVersion"), Sort("MinorVersion")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("BytecodeSpec"), Constructor("None"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MajorVersion"), Constructor("Major"))
+          , Rhs([Sort("Int")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MinorVersion"), Constructor("Minor"))
+          , Rhs([Lit("\".\""), Sort("Int")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MinorVersion"), Constructor("None"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("SourceSpec"), Constructor("JBCSource"))
+          , Rhs([Lit("\".source\""), Sort("String")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("SourceSpec"), Constructor("None"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("ClassSpec"), Constructor("JBCClass"))
+          , Rhs(
+              [Lit("\".class\""), IterStar(Sort("ClassAccess")), Sort("ClassName")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassSpec"), Constructor("JBCInterface"))
+          , Rhs(
+              [Lit("\".interface\""), IterStar(Sort("ClassAccess")), Sort("ClassName")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassAccess"), Constructor("PUBLIC"))
+          , Rhs([Lit("\"public\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassAccess"), Constructor("FINAL"))
+          , Rhs([Lit("\"final\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassAccess"), Constructor("INTERFACE"))
+          , Rhs([Lit("\"interface\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassAccess"), Constructor("ABSTRACT"))
+          , Rhs([Lit("\"abstract\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassAccess"), Constructor("SUPER"))
+          , Rhs([Lit("\"super\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("SuperSpec"), Constructor("JBCSuper"))
+          , Rhs([Lit("\".super\""), Sort("ClassName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ImplementsSpec"), Constructor("JBCImplements"))
+          , Rhs([Lit("\".implements\""), Sort("ClassName")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("SignatureSpec"), Constructor("JBCSignature"))
+          , Rhs([Lit("\".signature\""), Sort("String")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("SignatureSpec"), Constructor("None"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("EnclosingSpec"), Constructor("JBCEnclosing"))
+          , Rhs([Lit("\".enclosing\""), Lit("\"method\""), Sort("MethodDescriptor")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("EnclosingSpec"), Constructor("None"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("DebugSpec"), Constructor("JBCDebug"))
+          , Rhs([Lit("\".debug\""), Sort("String")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("InnerClassSpec"), Constructor("JBCInnerClass"))
+          , Rhs(
+              [ Lit("\".inner\"")
+              , Lit("\"class\"")
+              , Sort("InnerClassAccess")
+              , Sort("InnerClassName")
+              , Sort("InnerName")
+              , Sort("OuterName")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InnerInterfaceSpec"), Constructor("JBCInnerInterface"))
+          , Rhs(
+              [ Lit("\".inner\"")
+              , Lit("\"interface\"")
+              , Sort("InnerClassAccess")
+              , Sort("InnerClassName")
+              , Sort("InnerName")
+              , Sort("OuterName")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("InnerClassAccess"), Rhs([Sort("ClassAccess")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("InnerClassAccess"), Constructor("None"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("InnerClassName"), Rhs([Sort("ClassName")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("InnerClassName"), Constructor("None"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InnerName"), Constructor("InnerNameSpec"))
+          , Rhs(
+              [Lit("\"inner\""), IterSep(Sort("ClassName"), Lit("\"$\""))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InnerName"), Constructor("None"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("OuterName"), Constructor("OuterNameSpec"))
+          , Rhs([Lit("\"outer\""), Sort("ClassName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("OuterName"), Constructor("None"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\".bytecode\"")
+            , Lit("\".source\"")
+            , Lit("\".class\"")
+            , Lit("\".interface\"")
+            , Lit("\"public\"")
+            , Lit("\"final\"")
+            , Lit("\"interface\"")
+            , Lit("\"abstract\"")
+            , Lit("\"super\"")
+            , Lit("\".super\"")
+            , Lit("\".implements\"")
+            , Lit("\".signature\"")
+            , Lit("\".enclosing\"")
+            , Lit("\".deprecated\"")
+            , Lit("\".inner\"")
+            , Lit("\"class\"")
+            , Lit("\"inner\"")
+            , Lit("\"outer\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\0"), Numeric("\\8"))
+                    , Conc(
+                        Range(Numeric("\\10"), Numeric("\\31"))
+                      , Range(Numeric("\\33"), Numeric("\\255"))
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$JasminHeader\"")
+            , Lit("\"$BytecodeSpec\"")
+            , Lit("\"$SourceSpec\"")
+            , Lit("\"$ClassSpec\"")
+            , Lit("\"$SuperSpec\"")
+            , Lit("\"$ImplementsSpec\"")
+            , Lit("\"$SignatureSpec\"")
+            , Lit("\"$EnclosingSpec\"")
+            , Lit("\"$DebugSpec\"")
+            , Lit("\"$InnerClassSpec\"")
+            , Lit("\"$InnerInterfaceSpec\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$BytecodeSpec\"")
+            , Lit("\"$MajorVersion\"")
+            , Lit("\"$Int\"")
+            , Lit("\"$MinorVersion\"")
+            , Lit("\"$String\"")
+            , Lit("\"$SourceSpec\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$ClassSpec\"")
+            , Lit("\"$ClassAccess\"")
+            , Lit("\"$SuperSpec\"")
+            , Lit("\"$ImplementsSpec\"")
+            , Lit("\"$ClassName\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$SignatureSpec\"")
+            , Lit("\"$MethodDescriptor\"")
+            , Lit("\"$EnclosingSpec\"")
+            , Lit("\"$DebugSpec\"")
+            , Lit("\"$String\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$InnerClassSpec\"")
+            , Lit("\"$InnerInterfaceSpec\"")
+            , Lit("\"$ClassAccess\"")
+            , Lit("\"$InnerClassAccess\"")
+            , Lit("\"$InnerClassName\"")
+            , Lit("\"$InnerName\"")
+            , Lit("\"$ClassName\"")
+            , Lit("\"$OuterName\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

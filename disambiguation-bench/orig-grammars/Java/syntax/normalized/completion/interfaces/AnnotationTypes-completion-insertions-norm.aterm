@@ -1,0 +1,194 @@
+Module(
+  Unparameterized("normalized/completion/interfaces/AnnotationTypes-completion-insertions-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/interfaces/AnnotationTypes-norm"))
+      , Module(Unparameterized("normalized/completion/interfaces/InterfaceDeclarations-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/lexical/Identifiers-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/types/ReferenceTypes-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/classes/FieldDeclarations-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/interfaces/ConstantDeclarations-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/classes/ClassDeclarations-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/interfaces/Annotations-completion-insertions-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeStartSymbols(
+        [ Sort("AnnotationTypeDeclaration")
+        , Sort("InterfaceModifier")
+        , Sort("ConstantDeclaration")
+        , Sort("ClassDeclaration")
+        , Sort("InterfaceDeclaration")
+        , Sort("AnnotationTypeMemberDeclaration")
+        , Sort("AnnotationTypeElementDeclaration")
+        , Sort("UnannType")
+        , Sort("Id")
+        , Sort("AnnotatedDimsEmpty")
+        , Sort("Annotation")
+        , Sort("AnnotationTypeElementModifier")
+        , Sort("DefaultValue")
+        , Sort("ElementValue")
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("AnnotationTypeDeclaration"), Constructor("AnnotationTypeDeclaration-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InterfaceModifier"), Constructor("InterfaceModifier-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstantDeclaration"), Constructor("ConstantDeclaration-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassDeclaration"), Constructor("ClassDeclaration-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InterfaceDeclaration"), Constructor("InterfaceDeclaration-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AnnotationTypeMemberDeclaration"), Constructor("AnnotationTypeMemberDeclaration-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AnnotationTypeElementDeclaration"), Constructor("AnnotationTypeElementDeclaration-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("UnannType"), Constructor("UnannType-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Id"), Constructor("Id-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AnnotatedDimsEmpty"), Constructor("AnnotatedDimsEmpty-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Annotation"), Constructor("Annotation-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AnnotationTypeElementModifier"), Constructor("AnnotationTypeElementModifier-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("DefaultValue"), Constructor("DefaultValue-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ElementValue"), Constructor("ElementValue-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Lit("\"@interface\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"{\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"}\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"()\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\";\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"public\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"abstract\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"default\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax([SdfProduction(Sort("COMPLETION-INSERTION"), Rhs([]), NoAttrs())])
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$AnnotationTypeDeclaration\"")
+            , Lit("\"$InterfaceModifier\"")
+            , Lit("\"$ConstantDeclaration\"")
+            , Lit("\"$ClassDeclaration\"")
+            , Lit("\"$InterfaceDeclaration\"")
+            , Lit("\"$AnnotationTypeMemberDeclaration\"")
+            , Lit("\"$AnnotationTypeElementDeclaration\"")
+            , Lit("\"$UnannType\"")
+            , Lit("\"$Id\"")
+            , Lit("\"$AnnotatedDimsEmpty\"")
+            , Lit("\"$Annotation\"")
+            , Lit("\"$AnnotationTypeElementModifier\"")
+            , Lit("\"$DefaultValue\"")
+            , Lit("\"$ElementValue\"")
+            , Lit("\"$COMPLETION-INSERTION\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

@@ -1,0 +1,53 @@
+Module(
+  Unparameterized("normalized/literals/Main-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/literals/IntegerLiterals-norm"))
+      , Module(Unparameterized("normalized/literals/FloatingPointLiterals-norm"))
+      , Module(Unparameterized("normalized/literals/BooleanLiterals-norm"))
+      , Module(Unparameterized("normalized/literals/CharacterLiterals-norm"))
+      , Module(Unparameterized("normalized/literals/StringLiterals-norm"))
+      , Module(Unparameterized("normalized/literals/NullLiteral-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProduction(Sort("Literal"), Rhs([Sort("IntLiteral")]), NoAttrs())
+        , SdfProduction(Sort("Literal"), Rhs([Sort("FloatLiteral")]), NoAttrs())
+        , SdfProduction(Sort("Literal"), Rhs([Sort("BoolLiteral")]), NoAttrs())
+        , SdfProduction(Sort("Literal"), Rhs([Sort("CharacterLiteral")]), NoAttrs())
+        , SdfProduction(Sort("Literal"), Rhs([Sort("StringLiteral")]), NoAttrs())
+        , SdfProduction(Sort("Literal"), Rhs([Sort("NullLiteral")]), NoAttrs())
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$IntLiteral\"")
+            , Lit("\"$FloatLiteral\"")
+            , Lit("\"$BoolLiteral\"")
+            , Lit("\"$CharacterLiteral\"")
+            , Lit("\"$StringLiteral\"")
+            , Lit("\"$Literal\"")
+            , Lit("\"$NullLiteral\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

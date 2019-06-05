@@ -1,0 +1,412 @@
+Module(
+  Unparameterized("normalized/completion/ModuleExpressions-completion-insertions-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/ModuleExpressions-norm"))
+      , Module(Unparameterized("normalized/completion/Lexical-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/TypesAndExceptions-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/Classes-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/Names-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/TypeExpr-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/ModuleTypes-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/Extensions-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/Expressions-completion-insertions-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeStartSymbols(
+        [ Sort("ValueName")
+        , Sort("TypeExpr")
+        , Sort("ExternalDeclaration")
+        , Sort("TypeDefinition")
+        , Sort("ExceptionDefinition")
+        , Sort("ClassDefinition")
+        , Sort("ClassSpecification")
+        , Sort("ClassTypeDefinition")
+        , Sort("ModTypeName")
+        , Sort("AndLetBinding")
+        , Sort("LetBinding")
+        , Sort("ModuleNameTypeParam")
+        , Sort("ColonModuleTypeOpt")
+        , Sort("AndModuleTypeModuleExpr")
+        , Sort("AndModuleType")
+        , Sort("ModulePath")
+        , Sort("ModuleName")
+        , Sort("ModuleType")
+        , Sort("ModuleExpr")
+        , Sort("ColonPackageTypeOpt")
+        , Sort("PackageType")
+        , Sort("ModuleItems")
+        , Sort("DoubleSemiColon")
+        , Sort("DoubleSemiColonOpt")
+        , Sort("DefinitionOrExpr")
+        , Sort("Definition")
+        , Sort("DefinitionOrExprList")
+        , Sort("Expr")
+        , Sort("SemiColon")
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("ValueName"), Constructor("ValueName-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("TypeExpr-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ExternalDeclaration"), Constructor("ExternalDeclaration-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeDefinition"), Constructor("TypeDefinition-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ExceptionDefinition"), Constructor("ExceptionDefinition-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassDefinition"), Constructor("ClassDefinition-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassSpecification"), Constructor("ClassSpecification-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassTypeDefinition"), Constructor("ClassTypeDefinition-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModTypeName"), Constructor("ModTypeName-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AndLetBinding"), Constructor("AndLetBinding-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("LetBinding"), Constructor("LetBinding-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModuleNameTypeParam"), Constructor("ModuleNameTypeParam-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ColonModuleTypeOpt"), Constructor("ColonModuleTypeOpt-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AndModuleTypeModuleExpr"), Constructor("AndModuleTypeModuleExpr-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AndModuleType"), Constructor("AndModuleType-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModulePath"), Constructor("ModulePath-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModuleName"), Constructor("ModuleName-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModuleType"), Constructor("ModuleType-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModuleExpr"), Constructor("ModuleExpr-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ColonPackageTypeOpt"), Constructor("ColonPackageTypeOpt-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PackageType"), Constructor("PackageType-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModuleItems"), Constructor("ModuleItems-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("DoubleSemiColon"), Constructor("DoubleSemiColon-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("DoubleSemiColonOpt"), Constructor("DoubleSemiColonOpt-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("DefinitionOrExpr"), Constructor("DefinitionOrExpr-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Definition"), Constructor("Definition-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("DefinitionOrExprList"), Constructor("DefinitionOrExprList-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("Expr-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("SemiColon"), Constructor("SemiColon-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Lit("\"let\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"external\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"type\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"module\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"rec\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"open\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"include\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"=\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"and\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"struct\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"end\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"functor\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"->\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"(\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"val\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\")\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\":\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\";;\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(ContextFreeStartSymbols([Sort("ModuleExpr"), Sort("ModuleNameTypeParam")]))
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("ModuleExpr"), Constructor("ModuleExpr-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModuleNameTypeParam"), Constructor("ModuleNameTypeParam-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Lit("\"functor\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"->\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"(\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\")\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax([SdfProduction(Sort("COMPLETION-INSERTION"), Rhs([]), NoAttrs())])
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$ValueName\"")
+            , Lit("\"$TypeExpr\"")
+            , Lit("\"$ExternalDeclaration\"")
+            , Lit("\"$TypeDefinition\"")
+            , Lit("\"$ExceptionDefinition\"")
+            , Lit("\"$ClassDefinition\"")
+            , Lit("\"$ClassSpecification\"")
+            , Lit("\"$ClassTypeDefinition\"")
+            , Lit("\"$ModTypeName\"")
+            , Lit("\"$AndLetBinding\"")
+            , Lit("\"$LetBinding\"")
+            , Lit("\"$ModuleNameTypeParam\"")
+            , Lit("\"$ColonModuleTypeOpt\"")
+            , Lit("\"$AndModuleTypeModuleExpr\"")
+            , Lit("\"$AndModuleType\"")
+            , Lit("\"$ModulePath\"")
+            , Lit("\"$ModuleName\"")
+            , Lit("\"$ModuleType\"")
+            , Lit("\"$ModuleExpr\"")
+            , Lit("\"$ColonPackageTypeOpt\"")
+            , Lit("\"$PackageType\"")
+            , Lit("\"$ModuleItems\"")
+            , Lit("\"$DoubleSemiColon\"")
+            , Lit("\"$DoubleSemiColonOpt\"")
+            , Lit("\"$DefinitionOrExpr\"")
+            , Lit("\"$Definition\"")
+            , Lit("\"$DefinitionOrExprList\"")
+            , Lit("\"$Expr\"")
+            , Lit("\"$SemiColon\"")
+            , Lit("\"$COMPLETION-INSERTION\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$ModuleExpr\""), Lit("\"$ModuleNameTypeParam\""), Lit("\"$COMPLETION-INSERTION\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

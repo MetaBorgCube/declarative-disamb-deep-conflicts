@@ -1,0 +1,318 @@
+Module(
+  Unparameterized("normalized/Model-norm")
+, [ Imports(
+      [Module(Unparameterized("normalized/Common-norm")), Module(Unparameterized("normalized/Expressions-norm")), Module(Unparameterized("normalized/Types-norm"))]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Model"), Constructor("Entity"))
+          , Rhs(
+              [ Lit("\"entity\"")
+              , Sort("ID")
+              , Opt(Sort("OptionalExtends"))
+              , Opt(Sort("Strategy"))
+              , Lit("\"{\"")
+              , IterStar(Sort("Member"))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Model"), Constructor("FirstClassRelation"))
+          , Rhs(
+              [ Lit("\"relation\"")
+              , Sort("ID")
+              , Opt(Sort("OptionalExtends"))
+              , Opt(Sort("Strategy"))
+              , Lit("\"{\"")
+              , IterStar(Sort("Member"))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Model"), Constructor("Trait"))
+          , Rhs(
+              [ Lit("\"trait\"")
+              , Sort("ID")
+              , Opt(Sort("OptionalExtends"))
+              , Opt(Sort("Strategy"))
+              , Lit("\"{\"")
+              , IterStar(Sort("Member"))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("OptionalExtends"), Constructor("OptionalExtends"))
+          , Rhs(
+              [Lit("\"extends\""), IterSep(Sort("Extends"), Lit("\",\""))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Extends"), Constructor("Extends"))
+          , Rhs([Sort("ID")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Model"), Constructor("ShortcutRelation"))
+          , Rhs(
+              [ Lit("\"relation\"")
+              , Sort("ID")
+              , Opt(Sort("DotID"))
+              , Opt(Sort("SpaceMultiplicity"))
+              , Lit("\"<->\"")
+              , Opt(Sort("SpaceMultiplicity"))
+              , Sort("ID")
+              , Opt(Sort("DotID"))
+              , Opt(Sort("Strategy"))
+              , Lit("\"{\"")
+              , IterStar(Sort("Member"))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Model"), Constructor("Relation"))
+          , Rhs(
+              [ Lit("\"relation\"")
+              , Sort("ID")
+              , Opt(Sort("DotID"))
+              , Opt(Sort("SpaceMultiplicity"))
+              , Lit("\"<->\"")
+              , Opt(Sort("SpaceMultiplicity"))
+              , Sort("ID")
+              , Opt(Sort("DotID"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Model"), Constructor("RelationDerived"))
+          , Rhs(
+              [ Lit("\"relation\"")
+              , Sort("ID")
+              , Opt(Sort("DotID"))
+              , Opt(Sort("SpaceMultiplicity"))
+              , Lit("\"=\"")
+              , Sort("Exp")
+              , Lit("\"<->\"")
+              , Opt(Sort("SpaceMultiplicity"))
+              , Sort("ID")
+              , Opt(Sort("DotID"))
+              , Opt(Sort("Strategy"))
+              ]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Member"), Constructor("Attribute"))
+          , Rhs(
+              [Sort("ID"), Lit("\":\""), Sort("PrimitiveType"), Opt(Sort("Multiplicity"))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Member"), Constructor("DerivationAttribute"))
+          , Rhs(
+              [ Sort("ID")
+              , Lit("\":\"")
+              , Sort("PrimitiveType")
+              , Opt(Sort("Multiplicity"))
+              , Lit("\"=\"")
+              , Sort("Exp")
+              , Opt(Sort("Strategy"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Member"), Constructor("DefaultAttribute"))
+          , Rhs(
+              [ Sort("ID")
+              , Lit("\":\"")
+              , Sort("PrimitiveType")
+              , Opt(Sort("Multiplicity"))
+              , Lit("\"=\"")
+              , Sort("Exp")
+              , Lit("\"(\"")
+              , Lit("\"default\"")
+              , Lit("\")\"")
+              , Opt(Sort("Strategy"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Member"), Constructor("Role"))
+          , Rhs(
+              [ Sort("ID")
+              , Opt(Sort("DotID"))
+              , Opt(Sort("SpaceMultiplicity"))
+              , Opt(Sort("SpaceArrowID"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Member"), Constructor("Shortcut"))
+          , Rhs(
+              [ Sort("ID")
+              , Opt(Sort("DotID"))
+              , Lit("\"<->\"")
+              , Sort("ID")
+              , Opt(Sort("DotID"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("DotID")
+          , Rhs([Lit("\".\""), Sort("ID")])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("SpaceArrowID")
+          , Rhs([Lit("\"->\""), Sort("ID")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("SpaceMultiplicity"), Rhs([Sort("MultiplicityOrdering")]), NoAttrs())
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$Model\"")
+            , Lit("\"$Strategy\"")
+            , Lit("\"$Member\"")
+            , Lit("\"$OptionalExtends\"")
+            , Lit("\"$Extends\"")
+            , Lit("\"$ID\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$Model\"")
+            , Lit("\"$SpaceMultiplicity\"")
+            , Lit("\"$ID\"")
+            , Lit("\"$DotID\"")
+            , Lit("\"$Strategy\"")
+            , Lit("\"$Member\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$Model\"")
+            , Lit("\"$Exp\"")
+            , Lit("\"$SpaceMultiplicity\"")
+            , Lit("\"$ID\"")
+            , Lit("\"$DotID\"")
+            , Lit("\"$Strategy\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$PrimitiveType\"")
+            , Lit("\"$Multiplicity\"")
+            , Lit("\"$Exp\"")
+            , Lit("\"$Strategy\"")
+            , Lit("\"$Member\"")
+            , Lit("\"$DotID\"")
+            , Lit("\"$SpaceArrowID\"")
+            , Lit("\"$ID\"")
+            , Lit("\"$SpaceMultiplicity\"")
+            , Lit("\"$MultiplicityOrdering\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

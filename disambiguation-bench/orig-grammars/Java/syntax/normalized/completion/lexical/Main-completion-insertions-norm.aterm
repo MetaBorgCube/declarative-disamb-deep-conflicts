@@ -1,0 +1,17 @@
+Module(
+  Unparameterized("normalized/completion/lexical/Main-completion-insertions-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/lexical/Main-norm"))
+      , Module(Unparameterized("normalized/completion/lexical/Comments-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/lexical/Identifiers-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/lexical/Keywords-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/lexical/LineTerminators-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/lexical/UnicodeEscapes-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/lexical/WhiteSpace-completion-insertions-norm"))
+      ]
+    )
+  ]
+, [SDFSection(
+     LexicalSyntax([SdfProduction(Sort("COMPLETION-INSERTION"), Rhs([]), NoAttrs())])
+   )]
+)

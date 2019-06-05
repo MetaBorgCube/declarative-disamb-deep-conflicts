@@ -1,0 +1,7 @@
+Module(
+  Unparameterized("normalized/completion/lexical/LineTerminators-completion-insertions-norm")
+, [Imports([Module(Unparameterized("normalized/lexical/LineTerminators-norm"))])]
+, [SDFSection(
+     LexicalSyntax([SdfProduction(Sort("COMPLETION-INSERTION"), Rhs([]), NoAttrs())])
+   )]
+)

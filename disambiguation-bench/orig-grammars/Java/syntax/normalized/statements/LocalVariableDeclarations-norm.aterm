@@ -1,0 +1,58 @@
+Module(
+  Unparameterized("normalized/statements/LocalVariableDeclarations-norm")
+, [Imports([Module(Unparameterized("normalized/classes/FieldDeclarations-norm")), Module(Unparameterized("normalized/interfaces/Annotations-norm"))])]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("LocalVariableDeclarationStatement"), Constructor("LocVarDeclStm"))
+          , Rhs([Sort("LocalVariableDeclaration"), Lit("\";\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("LocalVariableDeclaration"), Constructor("LocalVarDecl"))
+          , Rhs(
+              [ IterStar(Sort("VariableModifier"))
+              , Sort("UnannType")
+              , IterSep(Sort("VarDecl"), Lit("\",\""))
+              ]
+            )
+          , Attrs([Prefer()])
+          )
+        , SdfProduction(Sort("VariableModifier"), Rhs([Sort("Annotation")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("VariableModifier"), Constructor("Final"))
+          , Rhs([Lit("\"final\"")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$LocalVariableDeclarationStatement\"")
+            , Lit("\"$LocalVariableDeclaration\"")
+            , Lit("\"$UnannType\"")
+            , Lit("\"$VarDecl\"")
+            , Lit("\"$Annotation\"")
+            , Lit("\"$VariableModifier\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

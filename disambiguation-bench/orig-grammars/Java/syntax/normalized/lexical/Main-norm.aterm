@@ -1,0 +1,14 @@
+Module(
+  Unparameterized("normalized/lexical/Main-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/lexical/Comments-norm"))
+      , Module(Unparameterized("normalized/lexical/Identifiers-norm"))
+      , Module(Unparameterized("normalized/lexical/Keywords-norm"))
+      , Module(Unparameterized("normalized/lexical/LineTerminators-norm"))
+      , Module(Unparameterized("normalized/lexical/UnicodeEscapes-norm"))
+      , Module(Unparameterized("normalized/lexical/WhiteSpace-norm"))
+      ]
+    )
+  ]
+, []
+)

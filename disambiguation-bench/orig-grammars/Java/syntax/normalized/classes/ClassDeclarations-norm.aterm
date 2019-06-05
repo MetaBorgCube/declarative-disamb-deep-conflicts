@@ -1,0 +1,165 @@
+Module(
+  Unparameterized("normalized/classes/ClassDeclarations-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/lexical/Identifiers-norm"))
+      , Module(Unparameterized("normalized/types/ReferenceTypes-norm"))
+      , Module(Unparameterized("normalized/classes/FieldDeclarations-norm"))
+      , Module(Unparameterized("normalized/classes/MethodDeclarations-norm"))
+      , Module(Unparameterized("normalized/classes/InstanceInitializers-norm"))
+      , Module(Unparameterized("normalized/classes/StaticInitializers-norm"))
+      , Module(Unparameterized("normalized/classes/EnumDeclarations-norm"))
+      , Module(Unparameterized("normalized/classes/ConstructorDeclarations-norm"))
+      , Module(Unparameterized("normalized/interfaces/Annotations-norm"))
+      , Module(Unparameterized("normalized/interfaces/InterfaceDeclarations-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProduction(Sort("ClassDeclaration"), Rhs([Sort("NormalClassDeclaration")]), NoAttrs())
+        , SdfProduction(Sort("ClassDeclaration"), Rhs([Sort("EnumDeclaration")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("NormalClassDeclaration"), Constructor("ClassDeclaration"))
+          , Rhs(
+              [ IterStar(Sort("ClassModifier"))
+              , Lit("\"class\"")
+              , Sort("Id")
+              , Opt(Sort("TypeParameters"))
+              , Opt(Sort("SuperClass"))
+              , Opt(Sort("SuperInterfaces"))
+              , Lit("\"{\"")
+              , IterStar(Sort("ClassBodyDeclaration"))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("ClassModifier"), Rhs([Sort("Annotation")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassModifier"), Constructor("Public"))
+          , Rhs([Lit("\"public\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassModifier"), Constructor("Protected"))
+          , Rhs([Lit("\"protected\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassModifier"), Constructor("Private"))
+          , Rhs([Lit("\"private\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassModifier"), Constructor("Abstract"))
+          , Rhs([Lit("\"abstract\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassModifier"), Constructor("Static"))
+          , Rhs([Lit("\"static\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassModifier"), Constructor("Final"))
+          , Rhs([Lit("\"final\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassModifier"), Constructor("Strictfp"))
+          , Rhs([Lit("\"strictfp\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeParameters"), Constructor("TypeParameters"))
+          , Rhs(
+              [Lit("\"<\""), IterSep(Sort("TypeParameter"), Lit("\",\"")), Lit("\">\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeParameter"), Constructor("TypeParameter"))
+          , Rhs([IterStar(Sort("Annotation")), Sort("Id")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeParameter"), Constructor("TypeParameterExtendsClassType"))
+          , Rhs(
+              [ IterStar(Sort("Annotation"))
+              , Sort("Id")
+              , Lit("\"extends\"")
+              , IterSep(Sort("ClassType"), Lit("\"&\""))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("SuperClass"), Constructor("SuperClass"))
+          , Rhs([Lit("\"extends\""), Sort("ClassType")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("SuperInterfaces"), Constructor("SuperInterface"))
+          , Rhs(
+              [Lit("\"implements\""), IterSep(Sort("ClassType"), Lit("\",\""))]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("ClassBodyDeclaration"), Rhs([Sort("ClassMemberDeclaration")]), NoAttrs())
+        , SdfProduction(Sort("ClassBodyDeclaration"), Rhs([Sort("InstanceInitializer")]), NoAttrs())
+        , SdfProduction(Sort("ClassBodyDeclaration"), Rhs([Sort("StaticInitializer")]), NoAttrs())
+        , SdfProduction(Sort("ClassBodyDeclaration"), Rhs([Sort("ConstructorDeclaration")]), NoAttrs())
+        , SdfProduction(Sort("ClassMemberDeclaration"), Rhs([Sort("FieldDeclaration")]), NoAttrs())
+        , SdfProduction(Sort("ClassMemberDeclaration"), Rhs([Sort("MethodDeclaration")]), NoAttrs())
+        , SdfProduction(Sort("ClassMemberDeclaration"), Rhs([Sort("ClassDeclaration")]), NoAttrs())
+        , SdfProduction(Sort("ClassMemberDeclaration"), Rhs([Sort("InterfaceDeclaration")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassMemberDeclaration"), Constructor("SemiColon"))
+          , Rhs([Lit("\";\"")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$EnumDeclaration\"")
+            , Lit("\"$NormalClassDeclaration\"")
+            , Lit("\"$ClassModifier\"")
+            , Lit("\"$TypeParameters\"")
+            , Lit("\"$TypeParameter\"")
+            , Lit("\"$Annotation\"")
+            , Lit("\"$Id\"")
+            , Lit("\"$SuperClass\"")
+            , Lit("\"$SuperInterfaces\"")
+            , Lit("\"$ClassType\"")
+            , Lit("\"$InstanceInitializer\"")
+            , Lit("\"$StaticInitializer\"")
+            , Lit("\"$ClassBodyDeclaration\"")
+            , Lit("\"$ConstructorDeclaration\"")
+            , Lit("\"$FieldDeclaration\"")
+            , Lit("\"$MethodDeclaration\"")
+            , Lit("\"$ClassDeclaration\"")
+            , Lit("\"$InterfaceDeclaration\"")
+            , Lit("\"$ClassMemberDeclaration\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

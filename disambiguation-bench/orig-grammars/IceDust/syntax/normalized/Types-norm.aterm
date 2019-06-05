@@ -1,0 +1,124 @@
+Module(
+  Unparameterized("normalized/Types-norm")
+, [Imports([Module(Unparameterized("normalized/Common-norm"))])]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("EntityType"), Constructor("EntityType"))
+          , Rhs([Sort("ID")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PrimitiveType"), Constructor("Boolean"))
+          , Rhs([Lit("\"Boolean\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PrimitiveType"), Constructor("Float"))
+          , Rhs([Lit("\"Float\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PrimitiveType"), Constructor("Datetime"))
+          , Rhs([Lit("\"Datetime\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PrimitiveType"), Constructor("Int"))
+          , Rhs([Lit("\"Int\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PrimitiveType"), Constructor("String"))
+          , Rhs([Lit("\"String\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Multiplicity"), Constructor("One"))
+          , Rhs([Lit("\"1\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Multiplicity"), Constructor("ZeroOrOne"))
+          , Rhs([Lit("\"?\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Multiplicity"), Constructor("OneOrMore"))
+          , Rhs([Lit("\"+\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Multiplicity"), Constructor("ZeroOrMore"))
+          , Rhs([Lit("\"*\"")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("MultiplicityOrdering"), Rhs([Sort("Multiplicity")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("MultiplicityOrdering"), Constructor("ZeroOrMoreOrdered"))
+          , Rhs(
+              [Lit("\"*\""), Lit("\"(\""), Lit("\"ordered\""), Lit("\")\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MultiplicityOrdering"), Constructor("OneOrMoreOrdered"))
+          , Rhs(
+              [Lit("\"+\""), Lit("\"(\""), Lit("\"ordered\""), Lit("\")\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Strategy"), Constructor("OnDemand"))
+          , Rhs([Lit("\"(\""), Lit("\"on-demand\""), Lit("\")\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Strategy"), Constructor("Incremental"))
+          , Rhs([Lit("\"(\""), Lit("\"incremental\""), Lit("\")\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Strategy"), Constructor("Eventual"))
+          , Rhs([Lit("\"(\""), Lit("\"eventual\""), Lit("\")\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Strategy"), Constructor("OnDemandEventual"))
+          , Rhs(
+              [Lit("\"(\""), Lit("\"on-demand\""), Lit("\"eventual\""), Lit("\")\"")]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$EntityType\"")
+            , Lit("\"$ID\"")
+            , Lit("\"$PrimitiveType\"")
+            , Lit("\"$Multiplicity\"")
+            , Lit("\"$MultiplicityOrdering\"")
+            , Lit("\"$Strategy\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

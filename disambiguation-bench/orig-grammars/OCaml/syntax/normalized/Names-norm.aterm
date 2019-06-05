@@ -1,0 +1,189 @@
+Module(
+  Unparameterized("normalized/Names-norm")
+, [Imports([Module(Unparameterized("normalized/Lexical-norm"))])]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("ValuePath"), Constructor("ValuePath"))
+          , Rhs([Sort("DotModulePathOpt"), Sort("ValueName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("DotModulePathOpt"), Constructor("NoModulePath"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("DotModulePathOpt"), Constructor("ModulePath"))
+          , Rhs([Sort("ModulePath"), Lit("\".\"")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("ValueName"), Rhs([Sort("LowerCaseIdent")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("ValueName"), Constructor("OperatorChar"))
+          , Rhs([Lit("\"(\""), Sort("OperatorCharList"), Lit("\")\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ValueName"), Constructor("Operations"))
+          , Rhs([Lit("\"(\""), Sort("Operations"), Lit("\")\"")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("TagName"), Rhs([Sort("Ident")]), NoAttrs())
+        , SdfProduction(Sort("TypeConstrName"), Rhs([Sort("LowerCaseIdent")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeConstr"), Constructor("TypeConstr"))
+          , Rhs([Sort("ExtendedModulePathDotOpt"), Sort("TypeConstrName")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("ConstrName"), Rhs([Sort("CapitalizedIdent")]), NoAttrs())
+        , SdfProduction(Sort("LabelName"), Rhs([Sort("LowerCaseIdent")]), NoAttrs())
+        , SdfProduction(Sort("ModuleName"), Rhs([Sort("CapitalizedIdent")]), NoAttrs())
+        , SdfProduction(Sort("FieldName"), Rhs([Sort("LowerCaseIdent")]), NoAttrs())
+        , SdfProduction(Sort("ClassName"), Rhs([Sort("LowerCaseIdent")]), NoAttrs())
+        , SdfProduction(Sort("InstVarName"), Rhs([Sort("LowerCaseIdent")]), NoAttrs())
+        , SdfProduction(Sort("MethodName"), Rhs([Sort("LowerCaseIdent")]), NoAttrs())
+        , SdfProduction(Sort("ModTypeName"), Rhs([Sort("Ident")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("ModulePath"), Constructor("ModulePath"))
+          , Rhs([IterStar(Sort("ModuleNameDot")), Sort("ModuleName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Constr"), Constructor("Const"))
+          , Rhs([Sort("ModulePathDotOpt"), Sort("ConstrName")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("ModulePathDotOpt"), Rhs([]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("ModulePathDotOpt"), Constructor("ModulePath"))
+          , Rhs([Sort("ModulePath"), Lit("\".\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Field"), Constructor("FieldName"))
+          , Rhs([Sort("FieldName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Field"), Constructor("PathFieldName"))
+          , Rhs([Sort("ModulePath"), Lit("\".\""), Sort("FieldName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassPath"), Constructor("ClassPath"))
+          , Rhs([Sort("ModulePathDotOpt"), Sort("ClassName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModTypePath"), Constructor("ModTypePath"))
+          , Rhs([Sort("ExtendedModulePathDotOpt"), Sort("ModTypeName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ExtendedModulePathDotOpt"), Constructor("None"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ExtendedModulePathDotOpt"), Constructor("ExtendedModulePath"))
+          , Rhs([Sort("ExtendedModulePath"), Lit("\".\"")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("ModTypeName"), Rhs([Sort("Ident")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("ExtendedModulePath"), Constructor("ExtendedModulePath1"))
+          , Rhs([Sort("ExtendedModulePathDotOpt"), Sort("ModuleName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ExtendedModulePath"), Constructor("ExtendedModulePath2"))
+          , Rhs(
+              [Sort("ExtendedModulePath"), Lit("\"(\""), Sort("ExtendedModulePath"), Lit("\")\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModuleNameDot"), Constructor("ModuleName"))
+          , Rhs([Sort("ModuleName"), Lit("\".\"")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Sort("Operations")
+          , Rhs(
+              [ Alt(
+                  Lit("\"lsl\"")
+                , Alt(
+                    Lit("\"lsr\"")
+                  , Alt(
+                      Lit("\"asr\"")
+                    , Alt(
+                        Lit("\"mod\"")
+                      , Alt(Lit("\"land\""), Alt(Lit("\"lor\""), Lit("\"lxor\"")))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$ValuePath\"")
+            , Lit("\"$DotModulePathOpt\"")
+            , Lit("\"$OperatorCharList\"")
+            , Lit("\"$ValueName\"")
+            , Lit("\"$Operations\"")
+            , Lit("\"$TagName\"")
+            , Lit("\"$TypeConstr\"")
+            , Lit("\"$TypeConstrName\"")
+            , Lit("\"$LabelName\"")
+            , Lit("\"$CapitalizedIdent\"")
+            , Lit("\"$InstVarName\"")
+            , Lit("\"$MethodName\"")
+            , Lit("\"$LowerCaseIdent\"")
+            , Lit("\"$Constr\"")
+            , Lit("\"$ConstrName\"")
+            , Lit("\"$Field\"")
+            , Lit("\"$ModulePath\"")
+            , Lit("\"$FieldName\"")
+            , Lit("\"$ClassPath\"")
+            , Lit("\"$ModulePathDotOpt\"")
+            , Lit("\"$ClassName\"")
+            , Lit("\"$ModTypePath\"")
+            , Lit("\"$ModTypeName\"")
+            , Lit("\"$Ident\"")
+            , Lit("\"$ExtendedModulePathDotOpt\"")
+            , Lit("\"$ExtendedModulePath\"")
+            , Lit("\"$ModuleNameDot\"")
+            , Lit("\"$ModuleName\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

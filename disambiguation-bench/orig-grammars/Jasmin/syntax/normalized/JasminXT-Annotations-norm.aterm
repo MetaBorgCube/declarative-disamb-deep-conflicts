@@ -1,0 +1,127 @@
+Module(
+  Unparameterized("normalized/JasminXT-Annotations-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/JasminXT-Strings-norm"))
+      , Module(Unparameterized("normalized/JasminXT-Numbers-norm"))
+      , Module(Unparameterized("normalized/JasminXT-Names-norm"))
+      , Module(Unparameterized("normalized/JasminXT-Descriptors-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Annotation"), Constructor("RuntimeVisible"))
+          , Rhs(
+              [ Lit("\".annotation\"")
+              , Lit("\"visible\"")
+              , Sort("ClassName")
+              , IterStar(Sort("AnnotationField"))
+              , Lit("\".end\"")
+              , Lit("\"annotation\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Annotation"), Constructor("RuntimeInvisible"))
+          , Rhs(
+              [ Lit("\".annotation\"")
+              , Lit("\"invisible\"")
+              , Sort("ClassName")
+              , IterStar(Sort("AnnotationField"))
+              , Lit("\".end\"")
+              , Lit("\"annotation\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Annotation"), Constructor("RuntimeVisibleParam"))
+          , Rhs(
+              [ Lit("\".annotation\"")
+              , Lit("\"visibleparam\"")
+              , Sort("Int")
+              , Sort("ClassName")
+              , IterStar(Sort("AnnotationField"))
+              , Lit("\".end\"")
+              , Lit("\"annotation\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Annotation"), Constructor("RuntimeInvisibleParam"))
+          , Rhs(
+              [ Lit("\".annotation\"")
+              , Lit("\"invisibleparam\"")
+              , Sort("Int")
+              , Sort("ClassName")
+              , IterStar(Sort("AnnotationField"))
+              , Lit("\".end\"")
+              , Lit("\"annotation\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Annotation"), Constructor("AnnotationDefault"))
+          , Rhs(
+              [ Lit("\".annotation\"")
+              , Lit("\"default\"")
+              , Sort("AnnotationName")
+              , Lit("\"=\"")
+              , IterStar(Sort("Constant"))
+              , Lit("\".end\"")
+              , Lit("\"annotation\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AnnotationField"), Constructor("AnnotationField"))
+          , Rhs(
+              [Sort("AnnotationName"), Sort("AnnotationDescriptor"), Lit("\"=\""), IterStar(Sort("Constant"))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AnnotationField"), Constructor("NestedAnnotation"))
+          , Rhs(
+              [Sort("AnnotationName"), Lit("\"@\""), Lit("\"=\""), Sort("Annotation")]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$Int\"")
+            , Lit("\"$ClassName\"")
+            , Lit("\"$AnnotationDescriptor\"")
+            , Lit("\"$Constant\"")
+            , Lit("\"$AnnotationField\"")
+            , Lit("\"$AnnotationName\"")
+            , Lit("\"$Annotation\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

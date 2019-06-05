@@ -1,0 +1,277 @@
+Module(
+  Unparameterized("normalized/TypesAndExceptions-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/Lexical-norm"))
+      , Module(Unparameterized("normalized/Names-norm"))
+      , Module(Unparameterized("normalized/Classes-norm"))
+      , Module(Unparameterized("normalized/TypeExpr-norm"))
+      , Module(Unparameterized("normalized/Expressions-norm"))
+      , Module(Unparameterized("normalized/Extensions-norm"))
+      , Module(Unparameterized("normalized/ModuleExpressions-norm"))
+      , Module(Unparameterized("normalized/ModuleTypes-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("TypeDefinition"), Constructor("TypeDefinition"))
+          , Rhs(
+              [Lit("\"type\""), IterSep(Sort("TypeDef"), Lit("\"and\""))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeDefinition"), Constructor("TypeDefinitionNonRec"))
+          , Rhs(
+              [Lit("\"type\""), Lit("\"nonrec\""), IterSep(Sort("TypeDef"), Lit("\"and\""))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeDef"), Constructor("TypeDef"))
+          , Rhs(
+              [Opt(Sort("TypeParams")), Sort("TypeConstrName"), Sort("TypeInformation")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeInformation"), Constructor("TypeInformation"))
+          , Rhs(
+              [Opt(Sort("TypeEquation")), Opt(Sort("TypeRepresentation")), IterStar(Sort("TypeConstraint"))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeEquation"), Constructor("TypeEquation"))
+          , Rhs([Lit("\"=\""), Sort("TypeExpr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeRepresentation"), Constructor("ConstrDecls"))
+          , Rhs(
+              [ Lit("\"=\"")
+              , Opt(Sort("Private"))
+              , Sort("OptBar")
+              , IterSep(Sort("ConstrDecl"), Lit("\"|\""))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeRepresentation"), Constructor("FieldDecls"))
+          , Rhs(
+              [ Lit("\"=\"")
+              , Opt(Sort("Private"))
+              , Lit("\"{\"")
+              , IterSep(Sort("FieldDecl"), Lit("\";\""))
+              , Sort("OptSemiColon")
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeParams"), Constructor("SingleTypeParam"))
+          , Rhs([Sort("TypeParam")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeParams"), Constructor("TypeParamList"))
+          , Rhs(
+              [Lit("\"(\""), IterSep(Sort("TypeParam"), Lit("\",\"")), Lit("\")\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeParam"), Constructor("TypeParam1"))
+          , Rhs(
+              [Opt(Sort("Variance")), Lit("\"'\""), Sort("Ident")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeParam"), Constructor("TypeParam2"))
+          , Rhs([Opt(Sort("Variance")), Lit("\"_\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Variance"), Constructor("PosVariance"))
+          , Rhs([Lit("\"+\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Variance"), Constructor("NegVariance"))
+          , Rhs([Lit("\"-\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstrDecl"), Constructor("ConstrDecl1"))
+          , Rhs(
+              [Sort("ConstrName"), Lit("\"of\""), IterSep(Sort("TypeExpr"), Lit("\"*\""))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstrDecl"), Constructor("ConstrDecl1"))
+          , Rhs([Sort("ConstrName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstrDecl"), Constructor("ConstrDecl2"))
+          , Rhs(
+              [Lit("\"[]\""), Lit("\"of\""), IterSep(Sort("TypeExpr"), Lit("\"*\""))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstrDecl"), Constructor("ConstrDecl2"))
+          , Rhs([Lit("\"[]\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstrDecl"), Constructor("ConstrDecl3"))
+          , Rhs(
+              [Lit("\"(::)\""), Lit("\"of\""), IterSep(Sort("TypeExpr"), Lit("\"*\""))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstrDecl"), Constructor("ConstrDecl3"))
+          , Rhs([Lit("\"(::)\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstrDecl"), Constructor("ConstrDecl4"))
+          , Rhs(
+              [ Sort("ConstrName")
+              , Lit("\":\"")
+              , IterSep(Sort("TypeExpr"), Lit("\"*\""))
+              , Lit("\"->\"")
+              , Sort("TypeExpr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstrDecl"), Constructor("ConstrDecl4"))
+          , Rhs(
+              [Sort("ConstrName"), Lit("\":\""), IterSep(Sort("TypeExpr"), Lit("\"*\""))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstrDecl"), Constructor("ConstrDecl5"))
+          , Rhs(
+              [Lit("\"()\""), Lit("\"of\""), IterSep(Sort("TypeExpr"), Lit("\"*\""))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstrDecl"), Constructor("ConstrDecl5"))
+          , Rhs([Lit("\"()\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldDecl"), Constructor("FieldDecl"))
+          , Rhs(
+              [Opt(Sort("Mutable")), Sort("FieldName"), Lit("\":\""), Sort("PolyTypeExpr")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeConstraint"), Constructor("TypeConstraint"))
+          , Rhs(
+              [ Lit("\"constraint\"")
+              , Lit("\"'\"")
+              , Sort("Ident")
+              , Lit("\"=\"")
+              , Sort("TypeExpr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ExceptionDefinition"), Constructor("Exception"))
+          , Rhs(
+              [ Lit("\"exception\"")
+              , Sort("ConstrName")
+              , Lit("\"of\"")
+              , IterSep(Sort("TypeExpr"), Lit("\"*\""))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ExceptionDefinition"), Constructor("Exception"))
+          , Rhs([Lit("\"exception\""), Sort("ConstrName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ExceptionDefinition"), Constructor("Exception2"))
+          , Rhs(
+              [Lit("\"exception\""), Sort("ConstrName"), Lit("\"=\""), Sort("Constr")]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("OptSemiColon"), Rhs([Lit("\";\"")]), NoAttrs())
+        , SdfProduction(Sort("OptSemiColon"), Rhs([]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("OptBar"), Constructor("NoBar"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("OptBar"), Constructor("Bar"))
+          , Rhs([Lit("\"|\"")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$TypeDefinition\"")
+            , Lit("\"$TypeDef\"")
+            , Lit("\"$TypeConstrName\"")
+            , Lit("\"$TypeInformation\"")
+            , Lit("\"$TypeEquation\"")
+            , Lit("\"$TypeRepresentation\"")
+            , Lit("\"$Private\"")
+            , Lit("\"$TypeParams\"")
+            , Lit("\"$TypeParam\"")
+            , Lit("\"$Variance\"")
+            , Lit("\"$ConstrDecl\"")
+            , Lit("\"$FieldDecl\"")
+            , Lit("\"$Mutable\"")
+            , Lit("\"$FieldName\"")
+            , Lit("\"$PolyTypeExpr\"")
+            , Lit("\"$TypeConstraint\"")
+            , Lit("\"$Ident\"")
+            , Lit("\"$TypeExpr\"")
+            , Lit("\"$ExceptionDefinition\"")
+            , Lit("\"$ConstrName\"")
+            , Lit("\"$Constr\"")
+            , Lit("\"$OptSemiColon\"")
+            , Lit("\"$OptBar\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

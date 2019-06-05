@@ -1,0 +1,163 @@
+Module(
+  Unparameterized("normalized/completion/classes/EnumDeclarations-completion-insertions-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/classes/EnumDeclarations-norm"))
+      , Module(Unparameterized("normalized/completion/lexical/Identifiers-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/classes/ClassDeclarations-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/interfaces/Annotations-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/expressions/Main-completion-insertions-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeStartSymbols(
+        [ Sort("EnumDeclaration")
+        , Sort("ClassModifier")
+        , Sort("SuperInterfaces")
+        , Sort("EnumConstant")
+        , Sort("Annotation")
+        , Sort("Id")
+        , Sort("EnumConstantArgs")
+        , Sort("Expression")
+        , Sort("EnumBodyDeclarations")
+        , Sort("ClassBodyDeclaration")
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("EnumDeclaration"), Constructor("EnumDeclaration-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassModifier"), Constructor("ClassModifier-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("SuperInterfaces"), Constructor("SuperInterfaces-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("EnumConstant"), Constructor("EnumConstant-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Annotation"), Constructor("Annotation-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Id"), Constructor("Id-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("EnumConstantArgs"), Constructor("EnumConstantArgs-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("Expression-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("EnumBodyDeclarations"), Constructor("EnumBodyDeclarations-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassBodyDeclaration"), Constructor("ClassBodyDeclaration-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Lit("\",\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"enum\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"{\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"}\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\"(\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\",\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\")\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\";\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax([SdfProduction(Sort("COMPLETION-INSERTION"), Rhs([]), NoAttrs())])
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$EnumDeclaration\"")
+            , Lit("\"$ClassModifier\"")
+            , Lit("\"$SuperInterfaces\"")
+            , Lit("\"$EnumConstant\"")
+            , Lit("\"$Annotation\"")
+            , Lit("\"$Id\"")
+            , Lit("\"$EnumConstantArgs\"")
+            , Lit("\"$Expression\"")
+            , Lit("\"$EnumBodyDeclarations\"")
+            , Lit("\"$ClassBodyDeclaration\"")
+            , Lit("\"$COMPLETION-INSERTION\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

@@ -1,0 +1,49 @@
+Module(
+  Unparameterized("normalized/arrays/ArrayInitializers-norm")
+, [Imports([Module(Unparameterized("normalized/classes/FieldDeclarations-norm"))])]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("ArrayInitializer"), Constructor("ArrayInit"))
+          , Rhs(
+              [Lit("\"{\""), IterStarSep(Sort("VariableInitializer"), Lit("\",\"")), Lit("\"}\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ArrayInitializer"), Constructor("ArrayInitComma"))
+          , Rhs(
+              [ Lit("\"{\"")
+              , IterStarSep(Sort("VariableInitializer"), Lit("\",\""))
+              , Lit("\",\"")
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$ArrayInitializer\""), Lit("\"$VariableInitializer\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

@@ -1,0 +1,111 @@
+Module(
+  Unparameterized("normalized/classes/EnumDeclarations-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/lexical/Identifiers-norm"))
+      , Module(Unparameterized("normalized/classes/ClassDeclarations-norm"))
+      , Module(Unparameterized("normalized/interfaces/Annotations-norm"))
+      , Module(Unparameterized("normalized/expressions/Main-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("EnumDeclaration"), Constructor("EnumDeclComma"))
+          , Rhs(
+              [ IterStar(Sort("ClassModifier"))
+              , Lit("\"enum\"")
+              , Sort("Id")
+              , Opt(Sort("SuperInterfaces"))
+              , Lit("\"{\"")
+              , IterStarSep(Sort("EnumConstant"), Lit("\",\""))
+              , Lit("\",\"")
+              , Opt(Sort("EnumBodyDeclarations"))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("EnumDeclaration"), Constructor("EnumDecl"))
+          , Rhs(
+              [ IterStar(Sort("ClassModifier"))
+              , Lit("\"enum\"")
+              , Sort("Id")
+              , Opt(Sort("SuperInterfaces"))
+              , Lit("\"{\"")
+              , IterStarSep(Sort("EnumConstant"), Lit("\",\""))
+              , Opt(Sort("EnumBodyDeclarations"))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("EnumConstant"), Constructor("EnumConst"))
+          , Rhs(
+              [ IterStar(Sort("Annotation"))
+              , Sort("Id")
+              , Opt(Sort("EnumConstantArgs"))
+              , Lit("\"{\"")
+              , IterStar(Sort("ClassBodyDeclaration"))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("EnumConstant"), Constructor("EnumConstNoBody"))
+          , Rhs(
+              [IterStar(Sort("Annotation")), Sort("Id"), Opt(Sort("EnumConstantArgs"))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("EnumConstantArgs"), Constructor("EnumConstArgs"))
+          , Rhs(
+              [Lit("\"(\""), IterStarSep(Sort("Expression"), Lit("\",\"")), Lit("\")\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("EnumBodyDeclarations"), Constructor("EnumBodyDecs"))
+          , Rhs([Lit("\";\""), IterStar(Sort("ClassBodyDeclaration"))])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$EnumDeclaration\"")
+            , Lit("\"$ClassModifier\"")
+            , Lit("\"$SuperInterfaces\"")
+            , Lit("\"$EnumConstant\"")
+            , Lit("\"$Annotation\"")
+            , Lit("\"$Id\"")
+            , Lit("\"$EnumConstantArgs\"")
+            , Lit("\"$Expression\"")
+            , Lit("\"$EnumBodyDeclarations\"")
+            , Lit("\"$ClassBodyDeclaration\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

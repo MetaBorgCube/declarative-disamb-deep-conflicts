@@ -1,0 +1,69 @@
+Module(
+  Unparameterized("normalized/interfaces/InterfaceMethodDeclarations-norm")
+, [Imports([Module(Unparameterized("normalized/classes/MethodDeclarations-norm")), Module(Unparameterized("normalized/interfaces/Annotations-norm"))])]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("InterfaceMethodDeclaration"), Constructor("AbstractMethodDec"))
+          , Rhs(
+              [IterStar(Sort("InterfaceMethodModifier")), Sort("MethodHeader"), Sort("MethodBody")]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("InterfaceMethodModifier"), Rhs([Sort("Annotation")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("InterfaceMethodModifier"), Constructor("Public"))
+          , Rhs([Lit("\"public\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InterfaceMethodModifier"), Constructor("Abstract"))
+          , Rhs([Lit("\"abstract\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InterfaceMethodModifier"), Constructor("Default"))
+          , Rhs([Lit("\"default\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InterfaceMethodModifier"), Constructor("Static"))
+          , Rhs([Lit("\"static\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InterfaceMethodModifier"), Constructor("Strictfp"))
+          , Rhs([Lit("\"strictfp\"")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$InterfaceMethodDeclaration\"")
+            , Lit("\"$MethodHeader\"")
+            , Lit("\"$MethodBody\"")
+            , Lit("\"$Annotation\"")
+            , Lit("\"$InterfaceMethodModifier\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

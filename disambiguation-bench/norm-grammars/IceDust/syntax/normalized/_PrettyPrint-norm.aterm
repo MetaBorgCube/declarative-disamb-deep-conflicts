@@ -1,0 +1,604 @@
+Module(
+  Unparameterized("normalized/_PrettyPrint-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/Common-norm"))
+      , Module(Unparameterized("normalized/Data-norm"))
+      , Module(Unparameterized("normalized/Model-norm"))
+      , Module(Unparameterized("normalized/Expressions-norm"))
+      , Module(Unparameterized("normalized/Types-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      Kernel(
+        [ SdfProduction(
+            Lit("\",\"")
+          , Rhs([CharClass(Simple(Present(Numeric("\\44"))))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Lit("\"{\"")
+          , Rhs([CharClass(Simple(Present(Numeric("\\123"))))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Lit("\"}\"")
+          , Rhs([CharClass(Simple(Present(Numeric("\\125"))))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Lit("\":\"")
+          , Rhs([CharClass(Simple(Present(Numeric("\\58"))))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Lit("\"=\"")
+          , Rhs([CharClass(Simple(Present(Numeric("\\61"))))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Lit("\"default\"")
+          , Rhs(
+              [ CharClass(Simple(Present(Numeric("\\100"))))
+              , CharClass(Simple(Present(Numeric("\\101"))))
+              , CharClass(Simple(Present(Numeric("\\102"))))
+              , CharClass(Simple(Present(Numeric("\\97"))))
+              , CharClass(Simple(Present(Numeric("\\117"))))
+              , CharClass(Simple(Present(Numeric("\\108"))))
+              , CharClass(Simple(Present(Numeric("\\116"))))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Lit("\"if\"")
+          , Rhs(
+              [ CharClass(Simple(Present(Numeric("\\105"))))
+              , CharClass(Simple(Present(Numeric("\\102"))))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Lit("\"(\"")
+          , Rhs([CharClass(Simple(Present(Numeric("\\40"))))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Lit("\")\"")
+          , Rhs([CharClass(Simple(Present(Numeric("\\41"))))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Lit("\"else\"")
+          , Rhs(
+              [ CharClass(Simple(Present(Numeric("\\101"))))
+              , CharClass(Simple(Present(Numeric("\\108"))))
+              , CharClass(Simple(Present(Numeric("\\115"))))
+              , CharClass(Simple(Present(Numeric("\\101"))))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Lit("\"+\"")
+          , Rhs([CharClass(Simple(Present(Numeric("\\43"))))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Cf(Opt(Sort("Strategy")))
+          , Rhs([Cf(Sort("Strategy"))])
+          , NoAttrs()
+          )
+        , SdfProduction(Cf(Opt(Sort("Strategy"))), Rhs([]), NoAttrs())
+        , SdfProduction(
+            Cf(Opt(Sort("Multiplicity")))
+          , Rhs([Cf(Sort("Multiplicity"))])
+          , NoAttrs()
+          )
+        , SdfProduction(Cf(Opt(Sort("Multiplicity"))), Rhs([]), NoAttrs())
+        , SdfProduction(
+            Cf(Iter(Sort("MemberValue")))
+          , Rhs([Cf(Sort("MemberValue"))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Cf(Iter(Sort("MemberValue")))
+          , Rhs(
+              [ Cf(Iter(Sort("MemberValue")))
+              , Cf(Opt(Layout()))
+              , Cf(Sort("MemberValue"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Cf(IterStar(Sort("MemberValue"))), Rhs([]), NoAttrs())
+        , SdfProduction(
+            Cf(IterStar(Sort("MemberValue")))
+          , Rhs([Cf(Iter(Sort("MemberValue")))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Cf(Opt(Sort("IDSpace")))
+          , Rhs([Cf(Sort("IDSpace"))])
+          , NoAttrs()
+          )
+        , SdfProduction(Cf(Opt(Sort("IDSpace"))), Rhs([]), NoAttrs())
+        , SdfProduction(
+            Cf(Opt(Layout()))
+          , Rhs([Cf(Layout())])
+          , NoAttrs()
+          )
+        , SdfProduction(Cf(Opt(Layout())), Rhs([]), NoAttrs())
+        , SdfProduction(
+            Cf(IterSep(Sort("Value"), Lit("\",\"")))
+          , Rhs([Cf(Sort("Value"))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Cf(IterSep(Sort("Value"), Lit("\",\"")))
+          , Rhs(
+              [ Cf(IterSep(Sort("Value"), Lit("\",\"")))
+              , Cf(Opt(Layout()))
+              , Lit("\",\"")
+              , Cf(Opt(Layout()))
+              , Cf(Sort("Value"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Cf(IterStarSep(Sort("Value"), Lit("\",\"")))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Cf(IterStarSep(Sort("Value"), Lit("\",\"")))
+          , Rhs([Cf(IterSep(Sort("Value"), Lit("\",\"")))])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Cf(Sort("MemberValue")), Constructor("MemberValuePP"))
+          , Rhs(
+              [ Cf(Sort("ID"))
+              , Cf(Opt(Layout()))
+              , Lit("\"=\"")
+              , Cf(Opt(Layout()))
+              , Cf(IterSep(Sort("Value"), Lit("\",\"")))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Cf(Sort("EntityInstance")), Constructor("EntityInstancePP"))
+          , Rhs(
+              [ Cf(Opt(Sort("IDSpace")))
+              , Cf(Opt(Layout()))
+              , Lit("\":\"")
+              , Cf(Opt(Layout()))
+              , Cf(Sort("EntityType"))
+              , Cf(Opt(Layout()))
+              , Lit("\"{\"")
+              , Cf(Opt(Layout()))
+              , Cf(IterStar(Sort("MemberValue")))
+              , Cf(Opt(Layout()))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Cf(Sort("EntityInstance")), Constructor("EntityInstanceNoTypePP"))
+          , Rhs(
+              [ Cf(Opt(Sort("IDSpace")))
+              , Cf(Opt(Layout()))
+              , Lit("\"{\"")
+              , Cf(Opt(Layout()))
+              , Cf(IterStar(Sort("MemberValue")))
+              , Cf(Opt(Layout()))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Cf(Sort("Member")), Constructor("AttributePP"))
+          , Rhs(
+              [ Cf(Sort("ID"))
+              , Cf(Opt(Layout()))
+              , Cf(Sort("MyLayOut"))
+              , Cf(Opt(Layout()))
+              , Lit("\":\"")
+              , Cf(Opt(Layout()))
+              , Cf(Sort("PrimitiveType"))
+              , Cf(Opt(Layout()))
+              , Cf(Opt(Sort("Multiplicity")))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Cf(Sort("Member")), Constructor("DerivationAttributePP"))
+          , Rhs(
+              [ Cf(Sort("ID"))
+              , Cf(Opt(Layout()))
+              , Cf(Sort("MyLayOut"))
+              , Cf(Opt(Layout()))
+              , Lit("\":\"")
+              , Cf(Opt(Layout()))
+              , Cf(Sort("PrimitiveType"))
+              , Cf(Opt(Layout()))
+              , Cf(Opt(Sort("Multiplicity")))
+              , Cf(Opt(Layout()))
+              , Cf(Sort("MyLayOut"))
+              , Cf(Opt(Layout()))
+              , Lit("\"=\"")
+              , Cf(Opt(Layout()))
+              , Cf(Sort("Exp"))
+              , Cf(Opt(Layout()))
+              , Cf(Opt(Sort("Strategy")))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Cf(Sort("Member")), Constructor("DerivationAttributePPMultiLine"))
+          , Rhs(
+              [ Cf(Sort("ID"))
+              , Cf(Opt(Layout()))
+              , Cf(Sort("MyLayOut"))
+              , Cf(Opt(Layout()))
+              , Lit("\":\"")
+              , Cf(Opt(Layout()))
+              , Cf(Sort("PrimitiveType"))
+              , Cf(Opt(Layout()))
+              , Cf(Opt(Sort("Multiplicity")))
+              , Cf(Opt(Layout()))
+              , Cf(Sort("MyLayOut"))
+              , Cf(Opt(Layout()))
+              , Lit("\"=\"")
+              , Cf(Opt(Layout()))
+              , Cf(Sort("Exp"))
+              , Cf(Opt(Layout()))
+              , Cf(Opt(Sort("Strategy")))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Cf(Sort("Member")), Constructor("DefaultAttributePP"))
+          , Rhs(
+              [ Cf(Sort("ID"))
+              , Cf(Opt(Layout()))
+              , Cf(Sort("MyLayOut"))
+              , Cf(Opt(Layout()))
+              , Lit("\":\"")
+              , Cf(Opt(Layout()))
+              , Cf(Sort("PrimitiveType"))
+              , Cf(Opt(Layout()))
+              , Cf(Opt(Sort("Multiplicity")))
+              , Cf(Opt(Layout()))
+              , Cf(Sort("MyLayOut"))
+              , Cf(Opt(Layout()))
+              , Lit("\"=\"")
+              , Cf(Opt(Layout()))
+              , Cf(Sort("Exp"))
+              , Cf(Opt(Layout()))
+              , Lit("\"(\"")
+              , Cf(Opt(Layout()))
+              , Lit("\"default\"")
+              , Cf(Opt(Layout()))
+              , Lit("\")\"")
+              , Cf(Opt(Layout()))
+              , Cf(Opt(Sort("Strategy")))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Cf(Sort("Member")), Constructor("DefaultAttributePPMultiLine"))
+          , Rhs(
+              [ Cf(Sort("ID"))
+              , Cf(Opt(Layout()))
+              , Cf(Sort("MyLayOut"))
+              , Cf(Opt(Layout()))
+              , Lit("\":\"")
+              , Cf(Opt(Layout()))
+              , Cf(Sort("PrimitiveType"))
+              , Cf(Opt(Layout()))
+              , Cf(Opt(Sort("Multiplicity")))
+              , Cf(Opt(Layout()))
+              , Cf(Sort("MyLayOut"))
+              , Cf(Opt(Layout()))
+              , Lit("\"=\"")
+              , Cf(Opt(Layout()))
+              , Cf(Sort("Exp"))
+              , Cf(Opt(Layout()))
+              , Lit("\"(\"")
+              , Cf(Opt(Layout()))
+              , Lit("\"default\"")
+              , Cf(Opt(Layout()))
+              , Lit("\")\"")
+              , Cf(Opt(Layout()))
+              , Cf(Opt(Sort("Strategy")))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Cf(Sort("MyLayOut")), Rhs([]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Cf(Sort("Exp")), Constructor("IfPP"))
+          , Rhs(
+              [ Lit("\"if\"")
+              , Cf(Opt(Layout()))
+              , Lit("\"(\"")
+              , Cf(Opt(Layout()))
+              , Cf(Sort("Exp"))
+              , Cf(Opt(Layout()))
+              , Lit("\")\"")
+              , Cf(Opt(Layout()))
+              , Cf(Sort("Exp"))
+              , Cf(Opt(Layout()))
+              , Lit("\"else\"")
+              , Cf(Opt(Layout()))
+              , Cf(Sort("Exp"))
+              ]
+            )
+          , Attrs([Assoc(Right())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Cf(Sort("Exp")), Constructor("AdditionPP"))
+          , Rhs(
+              [ Cf(Sort("Exp"))
+              , Cf(Opt(Layout()))
+              , Lit("\"+\"")
+              , Cf(Opt(Layout()))
+              , Cf(Sort("Exp"))
+              ]
+            )
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProduction(
+            Cf(Layout())
+          , Rhs([Cf(Layout()), Cf(Layout())])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProduction(
+            FileStart()
+          , Rhs([Start(), CharClass(Simple(Present(Numeric("\\256"))))])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      Restrictions(
+        [ Follow(
+            [Lit("\"$Value\"")]
+          , List(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        , Follow(
+            [Lit("\"$EntityType\"")]
+          , List(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        , Follow(
+            [Lit("\"$EntityInstance\"")]
+          , List(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        , Follow(
+            [Lit("\"$IDSpace\"")]
+          , List(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        , Follow(
+            [Lit("\"$MemberValue\"")]
+          , List(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        , Follow(
+            [Lit("\"$Member\"")]
+          , List(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        , Follow(
+            [Lit("\"$ID\"")]
+          , List(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        , Follow(
+            [Lit("\"$PrimitiveType\"")]
+          , List(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        , Follow(
+            [Lit("\"$Multiplicity\"")]
+          , List(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        , Follow(
+            [Lit("\"$Strategy\"")]
+          , List(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        , Follow(
+            [Lit("\"$MyLayOut\"")]
+          , List(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        , Follow(
+            [Lit("\"$Exp\"")]
+          , List(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      Priorities(
+        [ Assoc(
+            SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("IfPP")))
+          , Right()
+          , SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("IfPP")))
+          )
+        , Assoc(
+            SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("AdditionPP")))
+          , Left()
+          , SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("AdditionPP")))
+          )
+        , Assoc(
+            SimpleGroup(
+              SdfProduction(
+                Cf(Layout())
+              , Rhs([Cf(Layout()), Cf(Layout())])
+              , NoAttrs()
+              )
+            )
+          , Left()
+          , SimpleGroup(
+              SdfProduction(
+                Cf(Layout())
+              , Rhs([Cf(Layout()), Cf(Layout())])
+              , NoAttrs()
+              )
+            )
+          )
+        ]
+      )
+    )
+  ]
+)

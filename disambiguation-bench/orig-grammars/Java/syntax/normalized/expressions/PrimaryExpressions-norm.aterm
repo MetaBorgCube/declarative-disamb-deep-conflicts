@@ -1,0 +1,89 @@
+Module(
+  Unparameterized("normalized/expressions/PrimaryExpressions-norm")
+, [ Imports(
+      [Module(Unparameterized("normalized/literals/Main-norm")), Module(Unparameterized("normalized/names/Names-norm")), Module(Unparameterized("normalized/types/PrimitiveTypes-norm"))]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProduction(Sort("Expression"), Rhs([Sort("Literal")]), NoAttrs())
+        , SdfProduction(Sort("Expression"), Rhs([Sort("ClassLiteral")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("This"))
+          , Rhs([Lit("\"this\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("QThis"))
+          , Rhs([Sort("TypeName"), Lit("\".\""), Lit("\"this\"")])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("Expression")
+          , Rhs([Lit("\"(\""), Sort("Expression"), Lit("\")\"")])
+          , Attrs([Bracket()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassLiteral"), Constructor("TypeNameClassLiteral"))
+          , Rhs(
+              [Sort("TypeName"), IterStar(Sort("Dims")), Lit("\".\""), Lit("\"class\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassLiteral"), Constructor("NumericTypeClassLiteral"))
+          , Rhs(
+              [Sort("NumericType"), IterStar(Sort("Dims")), Lit("\".\""), Lit("\"class\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassLiteral"), Constructor("BooleanClassLiteral"))
+          , Rhs(
+              [Lit("\"boolean\""), IterStar(Sort("Dims")), Lit("\".\""), Lit("\"class\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassLiteral"), Constructor("VoidClassLiteral"))
+          , Rhs([Lit("\"void\""), Lit("\".\""), Lit("\"class\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Dims"), Constructor("Dimension"))
+          , Rhs([Lit("\"[\""), Lit("\"]\"")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , TemplateOptions([Tokenize("\".[\"")])
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$Literal\"")
+            , Lit("\"$Expression\"")
+            , Lit("\"$TypeName\"")
+            , Lit("\"$NumericType\"")
+            , Lit("\"$ClassLiteral\"")
+            , Lit("\"$Dims\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

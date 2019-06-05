@@ -1,0 +1,1127 @@
+Module(
+  Unparameterized("normalized/Extensions-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/Names-norm"))
+      , Module(Unparameterized("normalized/TypeExpr-norm"))
+      , Module(Unparameterized("normalized/Lexical-norm"))
+      , Module(Unparameterized("normalized/ModuleExpressions-norm"))
+      , Module(Unparameterized("normalized/Patterns-norm"))
+      , Module(Unparameterized("normalized/Classes-norm"))
+      , Module(Unparameterized("normalized/TypesAndExceptions-norm"))
+      , Module(Unparameterized("normalized/ModuleTypes-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("PackageType"), Constructor("PackageType"))
+          , Rhs([Sort("ModTypePath")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PackageType"), Constructor("PackageType"))
+          , Rhs(
+              [Sort("ModTypePath"), Lit("\"with\""), IterStarSep(Sort("PackageConstraint"), Lit("\"and\""))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PackageConstraint"), Constructor("PackageConstraint"))
+          , Rhs(
+              [Lit("\"type\""), Sort("TypeConstr"), Lit("\"=\""), Sort("TypeExpr")]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Definition"), Constructor("Open2"))
+          , Rhs([Lit("\"open!\""), Sort("ModulePath")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Sort("AttributeName")
+          , Rhs(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Conc(Numeric("\\95"), Range(Numeric("\\97"), Numeric("\\122")))
+                      )
+                    )
+                  )
+                )
+              , IterStar(
+                  CharClass(
+                    Simple(
+                      Present(
+                        Conc(
+                          Numeric("\\39")
+                        , Conc(
+                            Range(Numeric("\\48"), Numeric("\\57"))
+                          , Conc(
+                              Range(Numeric("\\65"), Numeric("\\90"))
+                            , Conc(Numeric("\\95"), Range(Numeric("\\97"), Numeric("\\122")))
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("AttributeID")
+          , Rhs([IterSep(Sort("AttributeName"), Lit("\".\""))])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Sort("AttributeName")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Numeric("\\39")
+                    , Conc(
+                        Range(Numeric("\\48"), Numeric("\\57"))
+                      , Conc(
+                          Range(Numeric("\\65"), Numeric("\\90"))
+                        , Conc(Numeric("\\95"), Range(Numeric("\\97"), Numeric("\\122")))
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("AttributePayload"), Constructor("ModItems"))
+          , Rhs([Sort("ModuleItems")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AttributePayload"), Constructor("NoModItems"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AttributePayload"), Constructor("TypeExpr"))
+          , Rhs([Lit("\":\""), Sort("TypeExpr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AttributePayload"), Constructor("Def"))
+          , Rhs([Lit("\":\""), Sort("Definition")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AttributePayload"), Constructor("NoDef"))
+          , Rhs([Lit("\":\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AttributePayload"), Constructor("Pattern"))
+          , Rhs([Lit("\"?\""), Sort("Pattern")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AttributePayload"), Constructor("Pattern"))
+          , Rhs(
+              [Lit("\"?\""), Sort("Pattern"), Lit("\"when\""), Sort("Expr")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Attribute"), Constructor("Attribute"))
+          , Rhs(
+              [Lit("\"[@\""), Sort("AttributeID"), Sort("AttributePayload"), Lit("\"]\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expr"), Constructor("ExprAttr"))
+          , Rhs([Sort("Expr"), Sort("Attribute")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("TypeExprAttr"))
+          , Rhs([Sort("TypeExpr"), Sort("Attribute")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("PatternAttr"))
+          , Rhs([Sort("Pattern"), Sort("Attribute")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModuleExpr"), Constructor("ModuleExprAttr"))
+          , Rhs([Sort("ModuleExpr"), Sort("Attribute")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModuleType"), Constructor("ModuleTypeAttr"))
+          , Rhs([Sort("ModuleType"), Sort("Attribute")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassExpr"), Constructor("ClassExprAttr"))
+          , Rhs([Sort("ClassExpr"), Sort("Attribute")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassType"), Constructor("ClassTypeAttr"))
+          , Rhs(
+              [ Sort("LabelNameOpt")
+              , Sort("TypeExpr")
+              , Lit("\"->\"")
+              , Sort("ClassType")
+              , Sort("Attribute")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassBodyType"), Constructor("ClassBodyTypeAttr"))
+          , Rhs(
+              [ Lit("\"object\"")
+              , Sort("OptTypeExpr")
+              , IterStar(Sort("ClassFieldSpec"))
+              , Lit("\"end\"")
+              , Sort("Attribute")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassBodyType"), Constructor("ClassBodyType"))
+          , Rhs([Sort("OptTypeExprList"), Sort("ClassPath"), Sort("Attribute")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TagSpec"), Constructor("TagSpec1"))
+          , Rhs([Lit("\"`\""), Sort("TagName"), Sort("Attribute")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TagSpec"), Constructor("TagSpec1"))
+          , Rhs(
+              [ Lit("\"`\"")
+              , Sort("TagName")
+              , Sort("Attribute")
+              , Lit("\"of\"")
+              , Sort("TypeExpr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TagSpecFull"), Constructor("TagSpecFull"))
+          , Rhs(
+              [Lit("\"`\""), Sort("TagName"), Sort("Attribute"), IterStar(Sort("AndTypeExpr"))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TagSpecFull"), Constructor("TagSpecFull"))
+          , Rhs(
+              [ Lit("\"`\"")
+              , Sort("TagName")
+              , Sort("Attribute")
+              , Lit("\"of\"")
+              , Sort("TypeExpr")
+              , IterStar(Sort("AndTypeExpr"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MethodType"), Constructor("MethodType"))
+          , Rhs(
+              [Sort("MethodName"), Sort("Attribute"), Lit("\":\""), Sort("PolyTypeExpr")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstrDecl"), Constructor("ConstrDecl1"))
+          , Rhs(
+              [ Sort("ConstrName")
+              , Lit("\"of\"")
+              , IterSep(Sort("TypeExpr"), Lit("\"*\""))
+              , Iter(Sort("Attribute"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstrDecl"), Constructor("ConstrDecl2"))
+          , Rhs(
+              [ Lit("\"()\"")
+              , Lit("\"of\"")
+              , IterSep(Sort("TypeExpr"), Lit("\"*\""))
+              , Iter(Sort("Attribute"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldDecl"), Constructor("FieldDecl"))
+          , Rhs(
+              [ Opt(Sort("Mutable"))
+              , Sort("FieldName")
+              , Lit("\":\"")
+              , Sort("PolyTypeExpr")
+              , Iter(Sort("Attribute"))
+              ]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ ProdsRefGroup(
+                [ SortConsRef(Sort("ModuleExpr"), Constructor("Functor"))
+                , SortConsRef(Sort("ModuleExpr"), Constructor("FunctorEmptyBrackets"))
+                ]
+              )
+            , SimpleRefGroup(SortConsRef(Sort("ModuleExpr"), Constructor("ModuleExprAttr")))
+            ]
+          )
+        , Chain(
+            [ SimpleRefGroup(SortConsRef(Sort("ModuleType"), Constructor("Functor")))
+            , SimpleRefGroup(SortConsRef(Sort("ModuleType"), Constructor("ModuleTypeAttr")))
+            ]
+          )
+        , Chain(
+            [ SimpleRefGroup(SortConsRef(Sort("Pattern"), Constructor("PatternAs")))
+            , SimpleRefGroup(SortConsRef(Sort("Pattern"), Constructor("PatternAttr")))
+            ]
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("ItemAttribute"), Constructor("ItemAttribute"))
+          , Rhs(
+              [Lit("\"[@@\""), Sort("AttributeID"), Sort("AttributePayload"), Lit("\"]\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeDef"), Constructor("TypeDefItemAttr"))
+          , Rhs([Sort("TypeDef"), Sort("ItemAttribute")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("DefinitionOrExpr"), Constructor("ExprItemAttr"))
+          , Rhs([Sort("Expr"), Iter(Sort("ItemAttribute"))])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("DefinitionOrExprList"), Constructor("Expr"))
+          , Rhs(
+              [Lit("\";;\""), Sort("Expr"), Iter(Sort("ItemAttribute"))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassBinding"), Constructor("ClassBindingItemAttr"))
+          , Rhs([Sort("ClassBinding"), Sort("ItemAttribute")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassSpec"), Constructor("ClassSpecItemAttr"))
+          , Rhs([Sort("ClassSpec"), Sort("ItemAttribute")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassTypeDef"), Constructor("ClassTypeDefItemAttr"))
+          , Rhs([Sort("ClassTypeDef"), Sort("ItemAttribute")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Definition"), Constructor("ExceptionDefItemAttr"))
+          , Rhs([Sort("ExceptionDefinition"), Iter(Sort("ItemAttribute"))])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Definition"), Constructor("ExternalDefItemAttr"))
+          , Rhs(
+              [ Lit("\"external\"")
+              , Sort("ValueName")
+              , Lit("\":\"")
+              , Sort("TypeExpr")
+              , Lit("\"=\"")
+              , Sort("ExternalDeclaration")
+              , Iter(Sort("ItemAttribute"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Definition"), Constructor("ModuleDef1ItemAttr"))
+          , Rhs(
+              [ Lit("\"module\"")
+              , Sort("ModuleName")
+              , IterStar(Sort("ModuleNameTypeParam"))
+              , Sort("ColonModuleTypeOpt")
+              , Lit("\"=\"")
+              , Sort("ModuleExpr")
+              , Iter(Sort("ItemAttribute"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Definition"), Constructor("ModuleDef2ItemAttr"))
+          , Rhs(
+              [ Lit("\"module\"")
+              , Sort("ModuleName")
+              , IterStar(Sort("ModuleNameTypeParam"))
+              , Lit("\":\"")
+              , Sort("ModuleType")
+              , Iter(Sort("ItemAttribute"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Definition"), Constructor("ModuleTypeItemAttr"))
+          , Rhs(
+              [ Lit("\"module\"")
+              , Lit("\"type\"")
+              , Sort("ModTypeName")
+              , Lit("\"=\"")
+              , Sort("ModuleType")
+              , Iter(Sort("ItemAttribute"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Definition"), Constructor("ModuleTypeItemAttr"))
+          , Rhs(
+              [Lit("\"module\""), Lit("\"type\""), Sort("ModTypeName"), Iter(Sort("ItemAttribute"))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Definition"), Constructor("ModuleRec1ItemAttr"))
+          , Rhs(
+              [ Lit("\"module\"")
+              , Lit("\"rec\"")
+              , Sort("ModuleName")
+              , Lit("\":\"")
+              , Sort("ModuleType")
+              , Lit("\"=\"")
+              , Sort("ModuleExpr")
+              , IterStar(Sort("ItemAttribute"))
+              , IterStar(Sort("AndModuleTypeModuleExprAttr"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AndModuleTypeModuleExprAttr"), Constructor("NamedTypedModuleEquals"))
+          , Rhs(
+              [ Lit("\"and\"")
+              , Sort("ModuleName")
+              , Lit("\":\"")
+              , Sort("ModuleType")
+              , Lit("\"=\"")
+              , Sort("ModuleExpr")
+              , IterStar(Sort("ItemAttribute"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassFieldSpec"), Constructor("ClassFieldSpecItemAttr"))
+          , Rhs([Sort("ClassFieldSpec"), Sort("ItemAttribute")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassField"), Constructor("ClassFieldItemAttr"))
+          , Rhs([Sort("ClassField"), Sort("ItemAttribute")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("FloatingAttribute"), Constructor("FloatingAttribute"))
+          , Rhs(
+              [Lit("\"[@@@\""), Sort("AttributeID"), Sort("AttributePayload"), Lit("\"]\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Definition"), Constructor("DefinitionFloattingAttr"))
+          , Rhs([Sort("FloatingAttribute")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassFieldSpec"), Constructor("ClassFieldSpecFloattingAttr"))
+          , Rhs([Sort("FloatingAttribute")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassField"), Constructor("ClassFieldFloattingAttr"))
+          , Rhs([Sort("FloatingAttribute")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Extension"), Constructor("Extension"))
+          , Rhs(
+              [Lit("\"[%\""), Sort("AttributeID"), Sort("AttributePayload"), Lit("\"]\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("Expr"), Rhs([Sort("Extension")]), NoAttrs())
+        , SdfProduction(Sort("TypeExpr"), Rhs([Sort("Extension")]), NoAttrs())
+        , SdfProduction(Sort("Pattern"), Rhs([Sort("Extension")]), NoAttrs())
+        , SdfProduction(Sort("ModuleExpr"), Rhs([Sort("Extension")]), NoAttrs())
+        , SdfProduction(Sort("ModuleType"), Rhs([Sort("Extension")]), NoAttrs())
+        , SdfProduction(Sort("ClassExpr"), Rhs([Sort("Extension")]), NoAttrs())
+        , SdfProduction(Sort("ClassType"), Rhs([Sort("Extension")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("ItemExtension"), Constructor("ItemExtension"))
+          , Rhs(
+              [Lit("\"[%%\""), Sort("AttributeID"), Sort("AttributePayload"), Lit("\"]\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("Definition"), Rhs([Sort("ItemExtension")]), NoAttrs())
+        , SdfProduction(Sort("ClassFieldSpec"), Rhs([Sort("ItemExtension")]), NoAttrs())
+        , SdfProduction(Sort("ClassField"), Rhs([Sort("ItemExtension")]), NoAttrs())
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(Sort("StringLiteral"), Rhs([Sort("QuotedString")]), NoAttrs())
+        , SdfProduction(
+            Sort("QuotedString")
+          , Rhs(
+              [ CharClass(Simple(Present(Numeric("\\123"))))
+              , Sort("QuotedStringID")
+              , CharClass(Simple(Present(Numeric("\\124"))))
+              , Sort("QuotedStringChar")
+              , CharClass(Simple(Present(Numeric("\\124"))))
+              , Sort("QuotedStringID")
+              , CharClass(Simple(Present(Numeric("\\125"))))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("QuotedStringID")
+          , Rhs(
+              [ IterStar(
+                  CharClass(
+                    Simple(
+                      Present(
+                        Conc(Numeric("\\95"), Range(Numeric("\\97"), Numeric("\\122")))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("HashInfixSymbol")
+          , Rhs(
+              [ Lit("\"#\"")
+              , IterStar(Sort("OperatorChar"))
+              , Lit("\"#\"")
+              , IterStar(Alt(Sort("OperatorChar"), Lit("\"#\"")))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("QuotedStringChar")
+          , Rhs(
+              [ IterStar(
+                  Alt(
+                    CharClass(
+                      Simple(
+                        Present(
+                          Conc(
+                            Range(Numeric("\\0"), Numeric("\\122"))
+                          , Range(Numeric("\\125"), Numeric("\\255"))
+                          )
+                        )
+                      )
+                    )
+                  , Alt(Sort("VerticalBar"), Alt(Sort("OpenCurlyBracketID"), Sort("QuotedString")))
+                  )
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("OpenCurlyBracketID")
+          , Rhs(
+              [ CharClass(Simple(Present(Numeric("\\123"))))
+              , IterStar(
+                  CharClass(Simple(Present(Range(Numeric("\\97"), Numeric("\\122")))))
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("VerticalBar")
+          , Rhs(
+              [ Lit("\"|\"")
+              , IterStar(
+                  CharClass(
+                    Simple(
+                      Present(
+                        Conc(Numeric("\\95"), Range(Numeric("\\97"), Numeric("\\122")))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Sort("HashInfixSymbol")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Numeric("\\33")
+                    , Conc(
+                        Range(Numeric("\\35"), Numeric("\\38"))
+                      , Conc(
+                          Range(Numeric("\\42"), Numeric("\\43"))
+                        , Conc(
+                            Range(Numeric("\\45"), Numeric("\\47"))
+                          , Conc(
+                              Numeric("\\58")
+                            , Conc(
+                                Numeric("\\60")
+                              , Conc(
+                                  Range(Numeric("\\62"), Numeric("\\64"))
+                                , Conc(Numeric("\\94"), Conc(Numeric("\\124"), Numeric("\\126")))
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        , Follow(
+            [Sort("VerticalBar")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Numeric("\\95")
+                    , Conc(Range(Numeric("\\97"), Numeric("\\122")), Numeric("\\125"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        , Follow(
+            [Sort("OpenCurlyBracketID")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(Range(Numeric("\\97"), Numeric("\\122")), Numeric("\\124"))
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("Exception"))
+          , Rhs([Lit("\"exception\""), Sort("Pattern")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("TypeRepresentation"), Constructor("Extensible"))
+          , Rhs([Lit("\"=\""), Lit("\"..\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Definition"), Constructor("TypeExtension"))
+          , Rhs(
+              [Lit("\"type\""), Opt(Sort("TypeParams")), Sort("TypeConstr"), Sort("TypeExtensionDef")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExtensionDef"), Constructor("TypeExtensionDef"))
+          , Rhs(
+              [ Lit("\"+=\"")
+              , Opt(Sort("Private"))
+              , Sort("OptBar")
+              , IterSep(Sort("ConstrDef"), Lit("\"|\""))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("ConstrDef"), Rhs([Sort("ConstrDecl")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstrDef"), Constructor("ConstrDef"))
+          , Rhs([Sort("ConstrName"), Lit("\"=\""), Sort("Constr")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("ConstrDecl"), Constructor("ConstrDeclRecord1"))
+          , Rhs(
+              [ Sort("ConstrName")
+              , Lit("\"of\"")
+              , Lit("\"{\"")
+              , IterSep(Sort("FieldDecl"), Lit("\";\""))
+              , Sort("OptSemiColon")
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstrDecl"), Constructor("ConstrDeclRecord2"))
+          , Rhs(
+              [ Lit("\"[]\"")
+              , Lit("\"of\"")
+              , Lit("\"{\"")
+              , IterSep(Sort("FieldDecl"), Lit("\";\""))
+              , Sort("OptSemiColon")
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstrDecl"), Constructor("ConstrDeclRecord3"))
+          , Rhs(
+              [ Lit("\"(::)\"")
+              , Lit("\"of\"")
+              , Lit("\"{\"")
+              , IterSep(Sort("FieldDecl"), Lit("\";\""))
+              , Sort("OptSemiColon")
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstrDecl"), Constructor("ConstrDeclRecord4"))
+          , Rhs(
+              [ Sort("ConstrName")
+              , Lit("\":\"")
+              , Lit("\"{\"")
+              , IterSep(Sort("FieldDecl"), Lit("\";\""))
+              , Sort("OptSemiColon")
+              , Lit("\"}\"")
+              , Lit("\"->\"")
+              , Sort("TypeExpr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstrDecl"), Constructor("ConstrDeclRecord5"))
+          , Rhs(
+              [ Sort("ConstrName")
+              , Lit("\":\"")
+              , Lit("\"{\"")
+              , IterSep(Sort("FieldDecl"), Lit("\";\""))
+              , Sort("OptSemiColon")
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstrDecl"), Constructor("ConstrDeclRecord6"))
+          , Rhs(
+              [ Lit("\"()\"")
+              , Lit("\"of\"")
+              , Lit("\"{\"")
+              , IterSep(Sort("FieldDecl"), Lit("\";\""))
+              , Sort("OptSemiColon")
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ExceptionDefinition"), Constructor("ExceptionRecord"))
+          , Rhs(
+              [ Lit("\"exception\"")
+              , Sort("ConstrName")
+              , Lit("\"of\"")
+              , Lit("\"{\"")
+              , IterSep(Sort("FieldDecl"), Lit("\";\""))
+              , Sort("OptSemiColon")
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$PackageType\"")
+            , Lit("\"$ModTypePath\"")
+            , Lit("\"$PackageConstraint\"")
+            , Lit("\"$TypeConstr\"")
+            , Lit("\"$TypeExpr\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$Definition\""), Lit("\"$ModulePath\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$ModuleItems\"")
+            , Lit("\"$Definition\"")
+            , Lit("\"$AttributeID\"")
+            , Lit("\"$AttributePayload\"")
+            , Lit("\"$Expr\"")
+            , Lit("\"$Pattern\"")
+            , Lit("\"$ModuleExpr\"")
+            , Lit("\"$ModuleType\"")
+            , Lit("\"$ClassExpr\"")
+            , Lit("\"$LabelNameOpt\"")
+            , Lit("\"$ClassType\"")
+            , Lit("\"$OptTypeExpr\"")
+            , Lit("\"$ClassFieldSpec\"")
+            , Lit("\"$ClassBodyType\"")
+            , Lit("\"$OptTypeExprList\"")
+            , Lit("\"$ClassPath\"")
+            , Lit("\"$TagSpec\"")
+            , Lit("\"$TagSpecFull\"")
+            , Lit("\"$TagName\"")
+            , Lit("\"$AndTypeExpr\"")
+            , Lit("\"$MethodType\"")
+            , Lit("\"$MethodName\"")
+            , Lit("\"$ConstrName\"")
+            , Lit("\"$ConstrDecl\"")
+            , Lit("\"$TypeExpr\"")
+            , Lit("\"$FieldDecl\"")
+            , Lit("\"$Mutable\"")
+            , Lit("\"$FieldName\"")
+            , Lit("\"$PolyTypeExpr\"")
+            , Lit("\"$Attribute\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$AttributeID\"")
+            , Lit("\"$AttributePayload\"")
+            , Lit("\"$TypeDef\"")
+            , Lit("\"$DefinitionOrExpr\"")
+            , Lit("\"$DefinitionOrExprList\"")
+            , Lit("\"$Expr\"")
+            , Lit("\"$ClassBinding\"")
+            , Lit("\"$ClassSpec\"")
+            , Lit("\"$ClassTypeDef\"")
+            , Lit("\"$ExceptionDefinition\"")
+            , Lit("\"$ValueName\"")
+            , Lit("\"$TypeExpr\"")
+            , Lit("\"$ExternalDeclaration\"")
+            , Lit("\"$ColonModuleTypeOpt\"")
+            , Lit("\"$ModuleNameTypeParam\"")
+            , Lit("\"$ModTypeName\"")
+            , Lit("\"$Definition\"")
+            , Lit("\"$AndModuleTypeModuleExprAttr\"")
+            , Lit("\"$ModuleName\"")
+            , Lit("\"$ModuleType\"")
+            , Lit("\"$ModuleExpr\"")
+            , Lit("\"$ClassFieldSpec\"")
+            , Lit("\"$ClassField\"")
+            , Lit("\"$ItemAttribute\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$AttributeID\"")
+            , Lit("\"$AttributePayload\"")
+            , Lit("\"$Definition\"")
+            , Lit("\"$ClassFieldSpec\"")
+            , Lit("\"$ClassField\"")
+            , Lit("\"$FloatingAttribute\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$Expr\"")
+            , Lit("\"$TypeExpr\"")
+            , Lit("\"$Pattern\"")
+            , Lit("\"$ModuleExpr\"")
+            , Lit("\"$ModuleType\"")
+            , Lit("\"$ClassExpr\"")
+            , Lit("\"$ClassType\"")
+            , Lit("\"$Extension\"")
+            , Lit("\"$AttributeID\"")
+            , Lit("\"$AttributePayload\"")
+            , Lit("\"$Definition\"")
+            , Lit("\"$ClassFieldSpec\"")
+            , Lit("\"$ClassField\"")
+            , Lit("\"$ItemExtension\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$Pattern\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$TypeRepresentation\"")
+            , Lit("\"$Definition\"")
+            , Lit("\"$TypeParams\"")
+            , Lit("\"$TypeConstr\"")
+            , Lit("\"$TypeExtensionDef\"")
+            , Lit("\"$Private\"")
+            , Lit("\"$OptBar\"")
+            , Lit("\"$ConstrDecl\"")
+            , Lit("\"$ConstrDef\"")
+            , Lit("\"$ConstrName\"")
+            , Lit("\"$Constr\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$TypeExpr\"")
+            , Lit("\"$ConstrDecl\"")
+            , Lit("\"$ExceptionDefinition\"")
+            , Lit("\"$ConstrName\"")
+            , Lit("\"$FieldDecl\"")
+            , Lit("\"$OptSemiColon\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

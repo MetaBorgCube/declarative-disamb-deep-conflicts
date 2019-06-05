@@ -1,0 +1,68 @@
+Module(
+  Unparameterized("normalized/types/ParameterizedTypes-norm")
+, [Imports([Module(Unparameterized("normalized/types/ReferenceTypes-norm")), Module(Unparameterized("normalized/interfaces/Annotations-norm"))])]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("TypeArguments"), Constructor("TypeArguments"))
+          , Rhs(
+              [Lit("\"<\""), IterSep(Sort("TypeArgument"), Lit("\",\"")), Lit("\">\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("TypeArgument"), Rhs([Sort("ReferenceType")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeArgument"), Constructor("WildCard"))
+          , Rhs([Sort("WildCard")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("WildCard"), Constructor("WildCard"))
+          , Rhs([IterStar(Sort("Annotation")), Lit("\"?\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("WildCard"), Constructor("WildCardExtends"))
+          , Rhs(
+              [IterStar(Sort("Annotation")), Lit("\"?\""), Lit("\"extends\""), Sort("ReferenceType")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("WildCard"), Constructor("WildCardSuper"))
+          , Rhs(
+              [IterStar(Sort("Annotation")), Lit("\"?\""), Lit("\"super\""), Sort("ReferenceType")]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$TypeArguments\"")
+            , Lit("\"$TypeArgument\"")
+            , Lit("\"$WildCard\"")
+            , Lit("\"$Annotation\"")
+            , Lit("\"$ReferenceType\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

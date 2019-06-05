@@ -1,0 +1,180 @@
+Module(
+  Unparameterized("normalized/Identifiers-norm")
+, []
+, [ SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Sort("Id")
+          , Rhs(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              , IterStar(
+                  CharClass(
+                    Simple(
+                      Present(
+                        Conc(
+                          Range(Numeric("\\48"), Numeric("\\57"))
+                        , Conc(
+                            Range(Numeric("\\65"), Numeric("\\90"))
+                          , Conc(Numeric("\\95"), Range(Numeric("\\97"), Numeric("\\122")))
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Sort("Id")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\48"), Numeric("\\57"))
+                    , Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Conc(Numeric("\\95"), Range(Numeric("\\97"), Numeric("\\122")))
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"nil\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"let\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"in\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"end\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"if\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"then\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"else\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"var\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"for\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"to\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"do\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"break\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"label\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"goto\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"array\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"of\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"declarations\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"var\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"type\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"function\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"true\"")])
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Id")
+          , Rhs([Lit("\"false\"")])
+          , Attrs([Reject()])
+          )
+        ]
+      )
+    )
+  ]
+)

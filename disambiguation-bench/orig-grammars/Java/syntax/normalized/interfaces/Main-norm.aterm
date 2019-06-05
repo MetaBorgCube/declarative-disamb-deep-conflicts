@@ -1,0 +1,13 @@
+Module(
+  Unparameterized("normalized/interfaces/Main-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/interfaces/InterfaceDeclarations-norm"))
+      , Module(Unparameterized("normalized/interfaces/InterfaceMethodDeclarations-norm"))
+      , Module(Unparameterized("normalized/interfaces/AnnotationTypes-norm"))
+      , Module(Unparameterized("normalized/interfaces/Annotations-norm"))
+      , Module(Unparameterized("normalized/interfaces/ConstantDeclarations-norm"))
+      ]
+    )
+  ]
+, []
+)

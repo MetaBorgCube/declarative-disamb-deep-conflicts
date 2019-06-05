@@ -1,0 +1,396 @@
+Module(
+  Unparameterized("normalized/TypeExpr-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/Lexical-norm"))
+      , Module(Unparameterized("normalized/Names-norm"))
+      , Module(Unparameterized("normalized/Extensions-norm"))
+      , Module(Unparameterized("normalized/TypesAndExceptions-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("LabelName"))
+          , Rhs(
+              [Lit("\"?\""), Sort("LabelName"), Lit("\":\""), Sort("TypeExpr")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("LabelName2"))
+          , Rhs([Sort("LabelName"), Lit("\":\""), Sort("TypeExpr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("TypeExprConstr1"))
+          , Rhs([Sort("TypeExpr"), Sort("TypeConstr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("Star"))
+          , Rhs(
+              [Sort("TypeExpr"), Lit("\"*\""), IterSep(Sort("TypeExpr"), Lit("\"*\""))]
+            )
+          , Attrs([LongestMatch(), Assoc(NonAssoc())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("Arrow"))
+          , Rhs([Sort("TypeExpr"), Lit("\"->\""), Sort("TypeExpr")])
+          , Attrs([Assoc(Right())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("TypeExprAsId"))
+          , Rhs(
+              [Sort("TypeExpr"), Lit("\"as\""), Lit("\"'\""), Sort("Ident")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("TypeExprPrivate"))
+          , Rhs([Lit("\"private\""), Sort("TypeExpr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("Tag"))
+          , Rhs([Lit("\"'\""), Sort("Ident")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("AnyTypexpr"))
+          , Rhs([Lit("\"_\"")])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("TypeExpr")
+          , Rhs([Lit("\"(\""), Sort("TypeExpr"), Lit("\")\"")])
+          , Attrs([Bracket()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("TypeExprConstr2"))
+          , Rhs([Sort("TypeConstr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("TypeExprTypeConstr"))
+          , Rhs(
+              [ Lit("\"(\"")
+              , Sort("TypeExpr")
+              , Lit("\",\"")
+              , IterSep(Sort("TypeExpr"), Lit("\",\""))
+              , Lit("\")\"")
+              , Sort("TypeConstr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("PolymorphicVariant"))
+          , Rhs([Sort("PolymorphicVariantType")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("EmptyAngleBrackets"))
+          , Rhs([Lit("\"<\""), Lit("\"..\""), Lit("\">\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("EmptyAngleBrackets2"))
+          , Rhs([Lit("\"<\""), Lit("\">\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("AngleBrackets1"))
+          , Rhs(
+              [Lit("\"<\""), IterSep(Sort("MethodType"), Lit("\";\"")), Lit("\">\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("AngleBrackets2"))
+          , Rhs(
+              [ Lit("\"<\"")
+              , IterSep(Sort("MethodType"), Lit("\";\""))
+              , Lit("\";\"")
+              , Lit("\">\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("AngleBrackets3"))
+          , Rhs(
+              [ Lit("\"<\"")
+              , IterSep(Sort("MethodType"), Lit("\";\""))
+              , Lit("\";\"")
+              , Lit("\"..\"")
+              , Lit("\">\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("TypeExprHash1"))
+          , Rhs([Lit("\"#\""), Sort("ClassPath")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("TypeExprHash2"))
+          , Rhs([Sort("TypeExpr"), Lit("\"#\""), Sort("ClassPath")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("TypeExprHash3"))
+          , Rhs(
+              [ Lit("\"(\"")
+              , IterSep(Sort("TypeExpr"), Lit("\",\""))
+              , Lit("\")\"")
+              , Lit("\"#\"")
+              , Sort("ClassPath")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("TypeExprPackage"))
+          , Rhs(
+              [Lit("\"(\""), Lit("\"module\""), Sort("PackageType"), Lit("\")\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("SemiColonDotsOpt"), Rhs([]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("SemiColonDotsOpt"), Constructor("SemiColonDots"))
+          , Rhs([Lit("\";\""), Lit("\"..\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PolymorphicVariantType"), Constructor("PolymorphicVariantType1"))
+          , Rhs(
+              [ Lit("\"[\"")
+              , Sort("OptBar")
+              , IterStarSep(Sort("TagSpec"), Lit("\"|\""))
+              , Lit("\"]\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PolymorphicVariantType"), Constructor("PolymorphicVariantType2"))
+          , Rhs(
+              [Lit("\"[>\""), IterStarSep(Sort("TagSpec"), Lit("\"|\"")), Lit("\"]\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PolymorphicVariantType"), Constructor("PolymorphicVariantType3"))
+          , Rhs(
+              [ Lit("\"[<\"")
+              , Sort("OptBar")
+              , IterSep(Sort("TagSpecFull"), Lit("\"|\""))
+              , Lit("\"]\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PolymorphicVariantType"), Constructor("PolymorphicVariantType4"))
+          , Rhs(
+              [ Lit("\"[<\"")
+              , Sort("OptBar")
+              , IterSep(Sort("TagSpecFull"), Lit("\"|\""))
+              , Lit("\">\"")
+              , Iter(Sort("QuoteTagName"))
+              , Lit("\"]\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("QuoteTagName"), Constructor("TagName"))
+          , Rhs([Lit("\"`\""), Sort("TagName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PolyTypeExpr"), Constructor("Polytype1"))
+          , Rhs([Sort("TypeExpr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PolyTypeExpr"), Constructor("Polytype2"))
+          , Rhs(
+              [Iter(Sort("QuoteIdent")), Lit("\".\""), Sort("TypeExpr")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("QuoteIdent"), Constructor("Indent"))
+          , Rhs([Lit("\"'\""), Sort("Ident")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MethodType"), Constructor("MethodType"))
+          , Rhs([Sort("MethodName"), Lit("\":\""), Sort("PolyTypeExpr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TagSpec"), Constructor("TagSpec1"))
+          , Rhs([Lit("\"`\""), Sort("TagName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TagSpec"), Constructor("TagSpec1"))
+          , Rhs(
+              [Lit("\"`\""), Sort("TagName"), Lit("\"of\""), Sort("TypeExpr")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TagSpec"), Constructor("TagSpec2"))
+          , Rhs([Sort("TypeExpr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TagSpecFull"), Constructor("TagSpecFull"))
+          , Rhs(
+              [Lit("\"`\""), Sort("TagName"), IterStar(Sort("AndTypeExpr"))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TagSpecFull"), Constructor("TagSpecFull"))
+          , Rhs(
+              [ Lit("\"`\"")
+              , Sort("TagName")
+              , Lit("\"of\"")
+              , Sort("TypeExpr")
+              , IterStar(Sort("AndTypeExpr"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("TagSpecFull"), Rhs([Sort("TypeExpr")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("AndTypeExpr"), Constructor("TypeExpr"))
+          , Rhs([Lit("\"&\""), Sort("TypeExpr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeExpr"), Constructor("TypeExprAttr"))
+          , Rhs([Sort("TypeExpr"), Sort("Attribute")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ ProdsRefGroup(
+                [ SortConsRef(Sort("TypeExpr"), Constructor("LabelName"))
+                , SortConsRef(Sort("TypeExpr"), Constructor("LabelName2"))
+                ]
+              )
+            , SimpleRefGroup(SortConsRef(Sort("TypeExpr"), Constructor("TypeExprConstr1")))
+            , SimpleRefGroup(SortConsRef(Sort("TypeExpr"), Constructor("Star")))
+            , AssocRefGroup(Right(), [SortConsRef(Sort("TypeExpr"), Constructor("Arrow"))])
+            , SimpleRefGroup(SortConsRef(Sort("TypeExpr"), Constructor("TypeExprAttr")))
+            , SimpleRefGroup(SortConsRef(Sort("TypeExpr"), Constructor("TypeExprAsId")))
+            , SimpleRefGroup(SortConsRef(Sort("TypeExpr"), Constructor("TypeExprPrivate")))
+            , SimpleRefGroup(SortConsRef(Sort("TypeExpr"), Constructor("TypeExprHash2")))
+            ]
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ NonTransitive(
+                WithArguments(
+                  SimpleGroup(
+                    SdfProduction(
+                      IterSep(Sort("TypeExpr"), Lit("\"*\""))
+                    , Rhs(
+                        [IterSep(Sort("TypeExpr"), Lit("\"*\"")), Lit("\"*\""), Sort("TypeExpr")]
+                      )
+                    , NoAttrs()
+                    )
+                  )
+                , Default(["2"])
+                )
+              )
+            , ProdsRefGroup(
+                [ SortConsRef(Sort("TypeExpr"), Constructor("Star"))
+                , SortConsRef(Sort("TypeExpr"), Constructor("Arrow"))
+                , SortConsRef(Sort("TypeExpr"), Constructor("TypeExprAsId"))
+                ]
+              )
+            ]
+          )
+        , Chain(
+            [ NonTransitive(
+                WithArguments(
+                  SimpleGroup(
+                    SdfProduction(
+                      IterSep(Sort("TypeExpr"), Lit("\"*\""))
+                    , Rhs([Sort("TypeExpr")])
+                    , NoAttrs()
+                    )
+                  )
+                , Default(["0"])
+                )
+              )
+            , ProdsRefGroup(
+                [ SortConsRef(Sort("TypeExpr"), Constructor("Star"))
+                , SortConsRef(Sort("TypeExpr"), Constructor("Arrow"))
+                , SortConsRef(Sort("TypeExpr"), Constructor("TypeExprAsId"))
+                ]
+              )
+            ]
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$LabelName\"")
+            , Lit("\"$TypeConstr\"")
+            , Lit("\"$ClassPath\"")
+            , Lit("\"$PackageType\"")
+            , Lit("\"$SemiColonDotsOpt\"")
+            , Lit("\"$PolymorphicVariantType\"")
+            , Lit("\"$OptBar\"")
+            , Lit("\"$QuoteTagName\"")
+            , Lit("\"$QuoteIdent\"")
+            , Lit("\"$Ident\"")
+            , Lit("\"$MethodType\"")
+            , Lit("\"$MethodName\"")
+            , Lit("\"$PolyTypeExpr\"")
+            , Lit("\"$TagSpec\"")
+            , Lit("\"$TagName\"")
+            , Lit("\"$TagSpecFull\"")
+            , Lit("\"$AndTypeExpr\"")
+            , Lit("\"$TypeExpr\"")
+            , Lit("\"$Attribute\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

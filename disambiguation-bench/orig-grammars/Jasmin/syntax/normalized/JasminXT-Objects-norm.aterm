@@ -1,0 +1,212 @@
+Module(
+  Unparameterized("normalized/JasminXT-Objects-norm")
+, [ Imports(
+      [Module(Unparameterized("normalized/JasminXT-Names-norm")), Module(Unparameterized("normalized/JasminXT-Numbers-norm")), Module(Unparameterized("normalized/JasminXT-Types-norm"))]
+    )
+  ]
+, [ SDFSection(ContextFreeStartSymbols([Sort("Instruction")]))
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("NEW"))
+          , Rhs([Lit("\"new\""), Sort("ClassRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("NEWARRAY"))
+          , Rhs([Lit("\"newarray\""), Sort("BaseTypeName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ANEWARRAY"))
+          , Rhs([Lit("\"anewarray\""), Sort("ANewArrayArg")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("ANewArrayArg"), Rhs([Sort("ClassRef")]), NoAttrs())
+        , SdfProduction(Sort("ANewArrayArg"), Rhs([Sort("ArrayType")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("MULTIANEWARRAY"))
+          , Rhs([Lit("\"multianewarray\""), Sort("ArrayType"), Sort("Int")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("GETFIELD"))
+          , Rhs([Lit("\"getfield\""), Sort("FieldRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("PUTFIELD"))
+          , Rhs([Lit("\"putfield\""), Sort("FieldRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("GETSTATIC"))
+          , Rhs([Lit("\"getstatic\""), Sort("FieldRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("PUTSTATIC"))
+          , Rhs([Lit("\"putstatic\""), Sort("FieldRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("IALOAD"))
+          , Rhs([Lit("\"iaload\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LALOAD"))
+          , Rhs([Lit("\"laload\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("BALOAD"))
+          , Rhs([Lit("\"baload\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("CALOAD"))
+          , Rhs([Lit("\"caload\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("SALOAD"))
+          , Rhs([Lit("\"saload\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("FALOAD"))
+          , Rhs([Lit("\"faload\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("DALOAD"))
+          , Rhs([Lit("\"daload\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("AALOAD"))
+          , Rhs([Lit("\"aaload\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("IASTORE"))
+          , Rhs([Lit("\"iastore\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LASTORE"))
+          , Rhs([Lit("\"lastore\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("BASTORE"))
+          , Rhs([Lit("\"bastore\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("CASTORE"))
+          , Rhs([Lit("\"castore\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("SASTORE"))
+          , Rhs([Lit("\"sastore\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("FASTORE"))
+          , Rhs([Lit("\"fastore\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("DASTORE"))
+          , Rhs([Lit("\"dastore\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("AASTORE"))
+          , Rhs([Lit("\"aastore\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ARRAYLENGTH"))
+          , Rhs([Lit("\"arraylength\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("CHECKCAST"))
+          , Rhs([Lit("\"checkcast\""), Sort("ClassRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("INSTANCEOF"))
+          , Rhs([Lit("\"instanceof\""), Sort("ClassRef")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"new\"")
+            , Lit("\"newarray\"")
+            , Lit("\"anewarray\"")
+            , Lit("\"multianewarray\"")
+            , Lit("\"getfield\"")
+            , Lit("\"putfield\"")
+            , Lit("\"getstatic\"")
+            , Lit("\"putstatic\"")
+            , Lit("\"checkcast\"")
+            , Lit("\"instanceof\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\0"), Numeric("\\8"))
+                    , Conc(
+                        Range(Numeric("\\10"), Numeric("\\31"))
+                      , Range(Numeric("\\33"), Numeric("\\255"))
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$BaseTypeName\"")
+            , Lit("\"$ANewArrayArg\"")
+            , Lit("\"$ArrayType\"")
+            , Lit("\"$Int\"")
+            , Lit("\"$FieldRef\"")
+            , Lit("\"$Instruction\"")
+            , Lit("\"$ClassRef\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

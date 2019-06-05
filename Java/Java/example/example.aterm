@@ -1,0 +1,33 @@
+CompilationUnit(
+  None()
+, []
+, [ ClassDeclaration(
+      []
+    , Id("Foo")
+    , None()
+    , None()
+    , None()
+    , [ FieldDecl(
+          []
+        , NumericType(Int())
+        , [VariableDeclInit(VariableDecl(Id("x")), Deci("0"))]
+        )
+      , MethodDecl(
+          []
+        , MethodHeader(NumericType(Int()), Id("x"), NoParams(), [], None())
+        , Block(
+            [ ExpressionStatement(
+                InvokeQExp(
+                  ExpressionName(AmbiguousName(Id("System")), Id("out"))
+                , None()
+                , Id("println")
+                , [StringLiteral("\"I have an Apple.\"")]
+                )
+              )
+            ]
+          )
+        )
+      ]
+    )
+  ]
+)

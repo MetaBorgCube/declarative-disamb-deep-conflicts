@@ -1,0 +1,122 @@
+Module(
+  Unparameterized("normalized/Data-norm")
+, [ Imports(
+      [Module(Unparameterized("normalized/Common-norm")), Module(Unparameterized("normalized/Expressions-norm")), Module(Unparameterized("normalized/Types-norm"))]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProduction(Sort("Data"), Rhs([Sort("EntityInstance")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("EntityInstance"), Constructor("EntityInstance"))
+          , Rhs(
+              [ Opt(Sort("IDSpace"))
+              , Lit("\":\"")
+              , Sort("EntityType")
+              , Lit("\"{\"")
+              , IterStar(Sort("MemberValue"))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("EntityInstance"), Constructor("EntityInstanceNoType"))
+          , Rhs(
+              [ Opt(Sort("IDSpace"))
+              , Lit("\"{\"")
+              , IterStar(Sort("MemberValue"))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("RelationInstance"), Constructor("RelationInstance"))
+          , Rhs(
+              [ Lit("\"<\"")
+              , Opt(Sort("IDSpace"))
+              , Lit("\":\"")
+              , Sort("EntityType")
+              , Lit("\"{\"")
+              , IterStar(Sort("MemberValue"))
+              , Lit("\"}\"")
+              , Lit("\">\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("RelationInstance"), Constructor("RelationInstanceNoType"))
+          , Rhs(
+              [ Lit("\"<\"")
+              , Opt(Sort("IDSpace"))
+              , Lit("\"{\"")
+              , IterStar(Sort("MemberValue"))
+              , Lit("\"}\"")
+              , Lit("\">\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MemberValue"), Constructor("MemberValue"))
+          , Rhs(
+              [Sort("ID"), Lit("\"=\""), IterSep(Sort("Value"), Lit("\",\""))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Value"), Constructor("LitVal"))
+          , Rhs([Sort("LitVal")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("Value"), Rhs([Sort("EntityInstanceValue")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("Value"), Constructor("EntityInstanceWrapper"))
+          , Rhs([Sort("RelationInstance"), Sort("EntityInstanceValue")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("EntityInstanceValue"), Constructor("EntityInstanceRef"))
+          , Rhs([Sort("ID")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("EntityInstanceValue"), Rhs([Sort("EntityInstance")]), NoAttrs())
+        , SdfProduction(Sort("IDSpace"), Rhs([Sort("ID")]), NoAttrs())
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$Data\"")
+            , Lit("\"$EntityType\"")
+            , Lit("\"$MemberValue\"")
+            , Lit("\"$LitVal\"")
+            , Lit("\"$Value\"")
+            , Lit("\"$RelationInstance\"")
+            , Lit("\"$EntityInstanceValue\"")
+            , Lit("\"$EntityInstance\"")
+            , Lit("\"$IDSpace\"")
+            , Lit("\"$ID\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

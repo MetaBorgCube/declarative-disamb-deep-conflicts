@@ -1,0 +1,7 @@
+Module(
+  Unparameterized("normalized/completion/Base-completion-insertions-norm")
+, [Imports([Module(Unparameterized("normalized/Base-norm"))])]
+, [SDFSection(
+     LexicalSyntax([SdfProduction(Sort("COMPLETION-INSERTION"), Rhs([]), NoAttrs())])
+   )]
+)

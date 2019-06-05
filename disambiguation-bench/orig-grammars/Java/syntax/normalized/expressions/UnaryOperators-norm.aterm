@@ -1,0 +1,93 @@
+Module(
+  Unparameterized("normalized/expressions/UnaryOperators-norm")
+, [ Imports(
+      [Module(Unparameterized("normalized/types/PrimitiveTypes-norm")), Module(Unparameterized("normalized/types/ReferenceTypes-norm")), Module(Unparameterized("normalized/expressions/LambdaExpressions-norm"))]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("Plus"))
+          , Rhs([Lit("\"+\""), Sort("Expression")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("Minus"))
+          , Rhs([Lit("\"-\""), Sort("Expression")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("PreIncr"))
+          , Rhs([Lit("\"++\""), Sort("Expression")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("PreDecr"))
+          , Rhs([Lit("\"--\""), Sort("Expression")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("Complement"))
+          , Rhs([Lit("\"~\""), Sort("Expression")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("Not"))
+          , Rhs([Lit("\"!\""), Sort("Expression")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("CastPrimitive"))
+          , Rhs(
+              [Lit("\"(\""), Sort("PrimitiveType"), Lit("\")\""), Sort("Expression")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("CastReference"))
+          , Rhs(
+              [ Lit("\"(\"")
+              , Sort("ReferenceType")
+              , IterStar(Sort("AdditionalBound"))
+              , Lit("\")\"")
+              , Sort("Expression")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AdditionalBound"), Constructor("AdditionalBound"))
+          , Rhs([Lit("\"&\""), Sort("ClassType")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$PrimitiveType\"")
+            , Lit("\"$ReferenceType\"")
+            , Lit("\"$Expression\"")
+            , Lit("\"$AdditionalBound\"")
+            , Lit("\"$ClassType\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

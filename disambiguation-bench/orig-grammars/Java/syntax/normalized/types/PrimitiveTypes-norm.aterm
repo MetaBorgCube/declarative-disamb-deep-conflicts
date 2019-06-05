@@ -1,0 +1,76 @@
+Module(
+  Unparameterized("normalized/types/PrimitiveTypes-norm")
+, [Imports([Module(Unparameterized("normalized/interfaces/Annotations-norm"))])]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("PrimitiveType"), Constructor("NumericType"))
+          , Rhs([IterStar(Sort("Annotation")), Sort("NumericType")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PrimitiveType"), Constructor("BooleanType"))
+          , Rhs([IterStar(Sort("Annotation")), Lit("\"boolean\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("NumericType"), Constructor("Byte"))
+          , Rhs([Lit("\"byte\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("NumericType"), Constructor("Short"))
+          , Rhs([Lit("\"short\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("NumericType"), Constructor("Int"))
+          , Rhs([Lit("\"int\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("NumericType"), Constructor("Long"))
+          , Rhs([Lit("\"long\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("NumericType"), Constructor("Char"))
+          , Rhs([Lit("\"char\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("NumericType"), Constructor("Float"))
+          , Rhs([Lit("\"float\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("NumericType"), Constructor("Double"))
+          , Rhs([Lit("\"double\"")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$PrimitiveType\""), Lit("\"$Annotation\""), Lit("\"$NumericType\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

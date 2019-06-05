@@ -1,0 +1,122 @@
+Module(
+  Unparameterized("normalized/JasminXT-Whitespace-norm")
+, []
+, [ SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Layout()
+          , Rhs(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\9"), Numeric("\\10"))
+                      , Conc(Numeric("\\13"), Numeric("\\32"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Layout()
+          , Rhs(
+              [ Lit("\";\"")
+              , CharClass(Simple(Present(Conc(Numeric("\\10"), Numeric("\\13")))))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Layout()
+          , Rhs(
+              [ Lit("\";\"")
+              , CharClass(Simple(Present(Conc(Numeric("\\9"), Numeric("\\32")))))
+              , IterStar(
+                  CharClass(
+                    Simple(
+                      Present(
+                        Conc(
+                          Range(Numeric("\\0"), Numeric("\\9"))
+                        , Conc(
+                            Range(Numeric("\\11"), Numeric("\\12"))
+                          , Range(Numeric("\\14"), Numeric("\\255"))
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              , Alt(
+                  CharClass(Simple(Present(Conc(Numeric("\\10"), Numeric("\\13")))))
+                , Sort("EOF")
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("EOF")
+          , Rhs([CharClass(Simple(Absent()))])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Sort("EOF")]
+          , Single(
+              CharClass(Simple(Present(Range(Numeric("\\0"), Numeric("\\255")))))
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeRestrictions(
+        [ Follow(
+            [Opt(Layout())]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\9"), Numeric("\\10"))
+                    , Conc(Numeric("\\13"), Numeric("\\32"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        , Follow(
+            [Opt(Layout())]
+          , Single(
+              Seq(
+                Simple(Present(Numeric("\\59")))
+              , Single(
+                  CharClass(Simple(Present(Conc(Numeric("\\9"), Numeric("\\32")))))
+                )
+              )
+            )
+          )
+        , Follow(
+            [Opt(Layout())]
+          , Single(
+              Seq(
+                Simple(Present(Numeric("\\59")))
+              , Single(
+                  CharClass(Simple(Present(Conc(Numeric("\\10"), Numeric("\\13")))))
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  ]
+)

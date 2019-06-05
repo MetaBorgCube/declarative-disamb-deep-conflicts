@@ -1,0 +1,102 @@
+Module(
+  Unparameterized("normalized/expressions/ClassInstanceCreation-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/names/Names-norm"))
+      , Module(Unparameterized("normalized/lexical/Identifiers-norm"))
+      , Module(Unparameterized("normalized/interfaces/Annotations-norm"))
+      , Module(Unparameterized("normalized/types/ParameterizedTypes-norm"))
+      , Module(Unparameterized("normalized/classes/ClassDeclarations-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProduction(Sort("Expression"), Rhs([Sort("UnqualifiedInstance")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("QualifiedInstance"))
+          , Rhs([Sort("Expression"), Lit("\".\""), Sort("UnqualifiedInstance")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("UnqualifiedInstance"), Constructor("NewInstance"))
+          , Rhs(
+              [ Lit("\"new\"")
+              , Opt(Sort("TypeArguments"))
+              , IterStar(Sort("Annotation"))
+              , Sort("Id")
+              , IterStar(Sort("QualifiedId"))
+              , Opt(Sort("TypeArgumentsOrDiamond"))
+              , Lit("\"(\"")
+              , IterStarSep(Sort("Expression"), Lit("\",\""))
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("UnqualifiedInstance"), Constructor("NewInstance"))
+          , Rhs(
+              [ Lit("\"new\"")
+              , Opt(Sort("TypeArguments"))
+              , IterStar(Sort("Annotation"))
+              , Sort("Id")
+              , IterStar(Sort("QualifiedId"))
+              , Opt(Sort("TypeArgumentsOrDiamond"))
+              , Lit("\"(\"")
+              , IterStarSep(Sort("Expression"), Lit("\",\""))
+              , Lit("\")\"")
+              , Lit("\"{\"")
+              , IterStar(Sort("ClassBodyDeclaration"))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("QualifiedId"), Constructor("QualifiedId"))
+          , Rhs(
+              [Lit("\".\""), IterStar(Sort("Annotation")), Sort("Id")]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("TypeArgumentsOrDiamond"), Rhs([Sort("TypeArguments")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeArgumentsOrDiamond"), Constructor("Diamond"))
+          , Rhs([Lit("\"<\""), Lit("\">\"")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , TemplateOptions([Tokenize("\"<\"")])
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$UnqualifiedInstance\"")
+            , Lit("\"$Expression\"")
+            , Lit("\"$ClassBodyDeclaration\"")
+            , Lit("\"$QualifiedId\"")
+            , Lit("\"$Annotation\"")
+            , Lit("\"$Id\"")
+            , Lit("\"$TypeArguments\"")
+            , Lit("\"$TypeArgumentsOrDiamond\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

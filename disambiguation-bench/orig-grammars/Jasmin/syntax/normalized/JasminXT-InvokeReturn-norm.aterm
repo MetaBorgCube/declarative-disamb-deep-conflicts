@@ -1,0 +1,162 @@
+Module(
+  Unparameterized("normalized/JasminXT-InvokeReturn-norm")
+, [ Imports(
+      [Module(Unparameterized("normalized/JasminXT-Names-norm")), Module(Unparameterized("normalized/JasminXT-Descriptors-norm")), Module(Unparameterized("normalized/JasminXT-Numbers-norm"))]
+    )
+  ]
+, [ SDFSection(ContextFreeStartSymbols([Sort("Instruction")]))
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("INVOKESPECIAL"))
+          , Rhs([Lit("\"invokenonvirtual\""), Sort("MethodRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("INVOKEVIRTUAL"))
+          , Rhs([Lit("\"invokevirtual\""), Sort("MethodRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("INVOKESTATIC"))
+          , Rhs([Lit("\"invokestatic\""), Sort("MethodRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("INVOKEINTERFACE"))
+          , Rhs([Lit("\"invokeinterface\""), Sort("MethodRef"), Sort("Int")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("RETURN"))
+          , Rhs([Lit("\"return\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("IRETURN"))
+          , Rhs([Lit("\"ireturn\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LRETURN"))
+          , Rhs([Lit("\"lreturn\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("FRETURN"))
+          , Rhs([Lit("\"freturn\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("DRETURN"))
+          , Rhs([Lit("\"dreturn\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ARETURN"))
+          , Rhs([Lit("\"areturn\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("RET"))
+          , Rhs([Lit("\"ret\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("RET_W"))
+          , Rhs([Lit("\"ret_w\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , TemplateOptions(
+      [ KeywordFollowRestriction(
+          Single(
+            CharClass(
+              Simple(
+                Present(
+                  Conc(
+                    Range(Numeric("\\0"), Numeric("\\8"))
+                  , Conc(
+                      Range(Numeric("\\11"), Numeric("\\12"))
+                    , Conc(
+                        Range(Numeric("\\14"), Numeric("\\31"))
+                      , Conc(
+                          Range(Numeric("\\33"), Numeric("\\58"))
+                        , Range(Numeric("\\60"), Numeric("\\255"))
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      ]
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"invokenonvirtual\"")
+            , Lit("\"invokevirtual\"")
+            , Lit("\"invokestatic\"")
+            , Lit("\"invokeinterface\"")
+            , Lit("\"return\"")
+            , Lit("\"ireturn\"")
+            , Lit("\"lreturn\"")
+            , Lit("\"freturn\"")
+            , Lit("\"dreturn\"")
+            , Lit("\"areturn\"")
+            , Lit("\"ret\"")
+            , Lit("\"ret_w\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\0"), Numeric("\\8"))
+                    , Conc(
+                        Range(Numeric("\\11"), Numeric("\\12"))
+                      , Conc(
+                          Range(Numeric("\\14"), Numeric("\\31"))
+                        , Conc(
+                            Range(Numeric("\\33"), Numeric("\\58"))
+                          , Range(Numeric("\\60"), Numeric("\\255"))
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$MethodRef\""), Lit("\"$Int\""), Lit("\"$Instruction\""), Lit("\"$VarRef\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

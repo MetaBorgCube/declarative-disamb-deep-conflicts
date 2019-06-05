@@ -1,0 +1,5 @@
+Module(
+  Unparameterized("normalized/arrays/Main-norm")
+, [Imports([Module(Unparameterized("normalized/arrays/ArrayInitializers-norm"))])]
+, []
+)

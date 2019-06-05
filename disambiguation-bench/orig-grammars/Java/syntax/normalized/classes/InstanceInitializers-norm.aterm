@@ -1,0 +1,36 @@
+Module(
+  Unparameterized("normalized/classes/InstanceInitializers-norm")
+, [Imports([Module(Unparameterized("normalized/statements/Blocks-norm"))])]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("InstanceInitializer"), Constructor("InstanceInit"))
+          , Rhs([Sort("Block")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$InstanceInitializer\""), Lit("\"$Block\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

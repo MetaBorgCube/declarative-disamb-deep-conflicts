@@ -1,0 +1,8 @@
+Module(
+  Unparameterized("normalized/statements/Main-norm")
+, [ Imports(
+      [Module(Unparameterized("normalized/statements/Blocks-norm")), Module(Unparameterized("normalized/statements/LocalVariableDeclarations-norm")), Module(Unparameterized("normalized/statements/Statements-norm"))]
+    )
+  ]
+, []
+)

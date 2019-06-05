@@ -1,0 +1,509 @@
+Module(
+  Unparameterized("normalized/JasminXT-LoadStore-norm")
+, [ Imports(
+      [Module(Unparameterized("normalized/JasminXT-Names-norm")), Module(Unparameterized("normalized/JasminXT-Numbers-norm")), Module(Unparameterized("normalized/JasminXT-Strings-norm"))]
+    )
+  ]
+, [ SDFSection(ContextFreeStartSymbols([Sort("Instruction")]))
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("BIPUSH"))
+          , Rhs([Lit("\"bipush\""), Sort("Int")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("SIPUSH"))
+          , Rhs([Lit("\"sipush\""), Sort("Int")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ICONST_M1"))
+          , Rhs([Lit("\"iconst_m1\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ICONST_0"))
+          , Rhs([Lit("\"iconst_0\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ICONST_1"))
+          , Rhs([Lit("\"iconst_1\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ICONST_2"))
+          , Rhs([Lit("\"iconst_2\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ICONST_3"))
+          , Rhs([Lit("\"iconst_3\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ICONST_4"))
+          , Rhs([Lit("\"iconst_4\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ICONST_5"))
+          , Rhs([Lit("\"iconst_5\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LCONST_0"))
+          , Rhs([Lit("\"lconst_0\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LCONST_1"))
+          , Rhs([Lit("\"lconst_1\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("FCONST_0"))
+          , Rhs([Lit("\"fconst_0\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("FCONST_1"))
+          , Rhs([Lit("\"fconst_1\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("FCONST_2"))
+          , Rhs([Lit("\"fconst_2\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("DCONST_0"))
+          , Rhs([Lit("\"dconst_0\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("DCONST_1"))
+          , Rhs([Lit("\"dconst_1\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ACONST_NULL"))
+          , Rhs([Lit("\"aconst_null\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LDC"))
+          , Rhs([Lit("\"ldc\""), Sort("Constant")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LDC_W"))
+          , Rhs([Lit("\"ldc_w\""), Sort("Constant")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LDC2_W"))
+          , Rhs([Lit("\"ldc2_w\""), Sort("Constant")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ILOAD"))
+          , Rhs([Lit("\"iload\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LLOAD"))
+          , Rhs([Lit("\"lload\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("FLOAD"))
+          , Rhs([Lit("\"fload\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("DLOAD"))
+          , Rhs([Lit("\"dload\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ALOAD"))
+          , Rhs([Lit("\"aload\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ILOAD_W"))
+          , Rhs([Lit("\"iload_w\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LLOAD_W"))
+          , Rhs([Lit("\"lload_w\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("FLOAD_W"))
+          , Rhs([Lit("\"fload_w\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("DLOAD_W"))
+          , Rhs([Lit("\"dload_w\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ALOAD_W"))
+          , Rhs([Lit("\"aload_w\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ILOAD_0"))
+          , Rhs([Lit("\"iload_0\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ILOAD_1"))
+          , Rhs([Lit("\"iload_1\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ILOAD_2"))
+          , Rhs([Lit("\"iload_2\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ILOAD_3"))
+          , Rhs([Lit("\"iload_3\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ALOAD_0"))
+          , Rhs([Lit("\"aload_0\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ALOAD_1"))
+          , Rhs([Lit("\"aload_1\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ALOAD_2"))
+          , Rhs([Lit("\"aload_2\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ALOAD_3"))
+          , Rhs([Lit("\"aload_3\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LLOAD_0"))
+          , Rhs([Lit("\"lload_0\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LLOAD_1"))
+          , Rhs([Lit("\"lload_1\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LLOAD_2"))
+          , Rhs([Lit("\"lload_2\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LLOAD_3"))
+          , Rhs([Lit("\"lload_3\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("DLOAD_0"))
+          , Rhs([Lit("\"dload_0\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("DLOAD_1"))
+          , Rhs([Lit("\"dload_1\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("DLOAD_2"))
+          , Rhs([Lit("\"dload_2\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("DLOAD_3"))
+          , Rhs([Lit("\"dload_3\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("FLOAD_0"))
+          , Rhs([Lit("\"fload_0\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("FLOAD_1"))
+          , Rhs([Lit("\"fload_1\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("FLOAD_2"))
+          , Rhs([Lit("\"fload_2\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("FLOAD_3"))
+          , Rhs([Lit("\"fload_3\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ISTORE"))
+          , Rhs([Lit("\"istore\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LSTORE"))
+          , Rhs([Lit("\"lstore\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("FSTORE"))
+          , Rhs([Lit("\"fstore\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("DSTORE"))
+          , Rhs([Lit("\"dstore\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ASTORE"))
+          , Rhs([Lit("\"astore\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ISTORE_W"))
+          , Rhs([Lit("\"istore_w\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LSTORE_W"))
+          , Rhs([Lit("\"lstore_w\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("FSTORE_W"))
+          , Rhs([Lit("\"fstore_w\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("DSTORE_W"))
+          , Rhs([Lit("\"dstore_w\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ASTORE_W"))
+          , Rhs([Lit("\"astore_w\""), Sort("VarRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ISTORE_0"))
+          , Rhs([Lit("\"istore_0\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ISTORE_1"))
+          , Rhs([Lit("\"istore_1\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ISTORE_2"))
+          , Rhs([Lit("\"istore_2\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ISTORE_3"))
+          , Rhs([Lit("\"istore_3\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ASTORE_0"))
+          , Rhs([Lit("\"astore_0\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ASTORE_1"))
+          , Rhs([Lit("\"astore_1\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ASTORE_2"))
+          , Rhs([Lit("\"astore_2\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("ASTORE_3"))
+          , Rhs([Lit("\"astore_3\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LSTORE_0"))
+          , Rhs([Lit("\"lstore_0\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LSTORE_1"))
+          , Rhs([Lit("\"lstore_1\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LSTORE_2"))
+          , Rhs([Lit("\"lstore_2\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("LSTORE_3"))
+          , Rhs([Lit("\"lstore_3\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("FSTORE_0"))
+          , Rhs([Lit("\"fstore_0\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("FSTORE_1"))
+          , Rhs([Lit("\"fstore_1\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("FSTORE_2"))
+          , Rhs([Lit("\"fstore_2\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("FSTORE_3"))
+          , Rhs([Lit("\"fstore_3\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("DSTORE_0"))
+          , Rhs([Lit("\"dstore_0\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("DSTORE_1"))
+          , Rhs([Lit("\"dstore_1\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("DSTORE_2"))
+          , Rhs([Lit("\"dstore_2\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("DSTORE_3"))
+          , Rhs([Lit("\"dstore_3\"")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"bipush\"")
+            , Lit("\"sipush\"")
+            , Lit("\"ldc\"")
+            , Lit("\"ldc2_w\"")
+            , Lit("\"ldc_w\"")
+            , Lit("\"iload\"")
+            , Lit("\"lload\"")
+            , Lit("\"fload\"")
+            , Lit("\"dload\"")
+            , Lit("\"aload\"")
+            , Lit("\"iload_w\"")
+            , Lit("\"lload_w\"")
+            , Lit("\"fload_w\"")
+            , Lit("\"dload_w\"")
+            , Lit("\"aload_w\"")
+            , Lit("\"istore\"")
+            , Lit("\"lstore\"")
+            , Lit("\"fstore\"")
+            , Lit("\"dstore\"")
+            , Lit("\"astore\"")
+            , Lit("\"istore_w\"")
+            , Lit("\"lstore_w\"")
+            , Lit("\"fstore_w\"")
+            , Lit("\"dstore_w\"")
+            , Lit("\"astore_w\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\0"), Numeric("\\8"))
+                    , Conc(
+                        Range(Numeric("\\10"), Numeric("\\31"))
+                      , Range(Numeric("\\33"), Numeric("\\255"))
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$Int\""), Lit("\"$Instruction\""), Lit("\"$Constant\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$VarRef\""), Lit("\"$Instruction\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

@@ -1,0 +1,85 @@
+Module(
+  Unparameterized("normalized/completion/JasminXT-Descriptors-completion-insertions-norm")
+, [Imports([Module(Unparameterized("normalized/JasminXT-Descriptors-norm")), Module(Unparameterized("normalized/completion/JasminXT-Types-completion-insertions-norm"))])]
+, [ SDFSection(
+      ContextFreeStartSymbols(
+        [ Sort("FieldDescriptor")
+        , Sort("ParameterDescriptor")
+        , Sort("AnnotationDescriptor")
+        , Sort("FieldType")
+        , Sort("ReturnDescriptor")
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("FieldDescriptor"), Constructor("FieldDescriptor-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ParameterDescriptor"), Constructor("ParameterDescriptor-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AnnotationDescriptor"), Constructor("AnnotationDescriptor-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldType"), Constructor("FieldType-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ReturnDescriptor"), Constructor("ReturnDescriptor-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Lit("\"V\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax([SdfProduction(Sort("COMPLETION-INSERTION"), Rhs([]), NoAttrs())])
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$FieldDescriptor\"")
+            , Lit("\"$ParameterDescriptor\"")
+            , Lit("\"$AnnotationDescriptor\"")
+            , Lit("\"$FieldType\"")
+            , Lit("\"$ReturnDescriptor\"")
+            , Lit("\"$COMPLETION-INSERTION\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

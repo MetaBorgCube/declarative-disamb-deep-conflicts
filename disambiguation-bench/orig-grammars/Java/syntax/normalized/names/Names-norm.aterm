@@ -1,0 +1,93 @@
+Module(
+  Unparameterized("normalized/names/Names-norm")
+, [Imports([Module(Unparameterized("normalized/lexical/Identifiers-norm"))])]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("PackageName"), Constructor("PackageName"))
+          , Rhs([Sort("Id")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PackageName"), Constructor("PackageName"))
+          , Rhs([Sort("PackageName"), Lit("\".\""), Sort("Id")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeName"), Constructor("TypeName"))
+          , Rhs([Sort("Id")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeName"), Constructor("TypeName"))
+          , Rhs([Sort("PackageOrTypeName"), Lit("\".\""), Sort("Id")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PackageOrTypeName"), Constructor("PackageOrTypeName"))
+          , Rhs([Sort("Id")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("PackageOrTypeName"), Constructor("PackageOrTypeName"))
+          , Rhs([Sort("PackageOrTypeName"), Lit("\".\""), Sort("Id")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ExpressionName"), Constructor("ExpressionName"))
+          , Rhs([Sort("Id")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ExpressionName"), Constructor("ExpressionName"))
+          , Rhs([Sort("AmbiguousName"), Lit("\".\""), Sort("Id")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AmbiguousName"), Constructor("AmbiguousName"))
+          , Rhs([Sort("Id")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AmbiguousName"), Constructor("AmbiguousName"))
+          , Rhs([Sort("AmbiguousName"), Lit("\".\""), Sort("Id")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MethodName"), Constructor("MethodName"))
+          , Rhs([Sort("Id")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$PackageName\"")
+            , Lit("\"$TypeName\"")
+            , Lit("\"$PackageOrTypeName\"")
+            , Lit("\"$ExpressionName\"")
+            , Lit("\"$AmbiguousName\"")
+            , Lit("\"$MethodName\"")
+            , Lit("\"$Id\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

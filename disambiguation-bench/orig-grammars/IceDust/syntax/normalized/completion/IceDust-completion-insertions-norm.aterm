@@ -1,0 +1,18 @@
+Module(
+  Unparameterized("normalized/completion/IceDust-completion-insertions-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/IceDust-norm"))
+      , Module(Unparameterized("normalized/completion/Common-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/Data-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/Execute-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/Expressions-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/Model-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/Types-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/Modules-completion-insertions-norm"))
+      ]
+    )
+  ]
+, [SDFSection(
+     LexicalSyntax([SdfProduction(Sort("COMPLETION-INSERTION"), Rhs([]), NoAttrs())])
+   )]
+)

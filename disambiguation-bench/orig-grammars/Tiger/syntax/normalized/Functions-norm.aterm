@@ -1,0 +1,88 @@
+Module(
+  Unparameterized("normalized/Functions-norm")
+, [Imports([Module(Unparameterized("normalized/Identifiers-norm")), Module(Unparameterized("normalized/Types-norm"))])]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Dec"), Constructor("FunDecs"))
+          , Rhs([Sort("FunDec")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FunDec"), Constructor("ProcDec"))
+          , Rhs(
+              [ Lit("\"function\"")
+              , Sort("Id")
+              , Lit("\"(\"")
+              , IterStarSep(Sort("FArg"), Lit("\",\""))
+              , Lit("\")\"")
+              , Lit("\"=\"")
+              , Sort("Exp")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FunDec"), Constructor("FunDec"))
+          , Rhs(
+              [ Lit("\"function\"")
+              , Sort("Id")
+              , Lit("\"(\"")
+              , IterStarSep(Sort("FArg"), Lit("\",\""))
+              , Lit("\")\"")
+              , Lit("\":\"")
+              , Sort("Type")
+              , Lit("\"=\"")
+              , Sort("Exp")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FArg"), Constructor("FArg"))
+          , Rhs([Sort("Id"), Lit("\":\""), Sort("Type")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Call"))
+          , Rhs(
+              [ Sort("Id")
+              , Lit("\"(\"")
+              , IterStarSep(Sort("Exp"), Lit("\",\""))
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$Dec\"")
+            , Lit("\"$FunDec\"")
+            , Lit("\"$FArg\"")
+            , Lit("\"$Type\"")
+            , Lit("\"$Id\"")
+            , Lit("\"$Exp\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

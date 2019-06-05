@@ -1,0 +1,450 @@
+Module(
+  Unparameterized("normalized/statements/Statements-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/classes/FieldDeclarations-norm"))
+      , Module(Unparameterized("normalized/classes/MethodDeclarations-norm"))
+      , Module(Unparameterized("normalized/lexical/Identifiers-norm"))
+      , Module(Unparameterized("normalized/statements/Blocks-norm"))
+      , Module(Unparameterized("normalized/names/Names-norm"))
+      , Module(Unparameterized("normalized/types/ReferenceTypes-norm"))
+      , Module(Unparameterized("normalized/expressions/Main-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("Labeled"))
+          , Rhs([Sort("Id"), Lit("\":\""), Sort("Statement")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("If"))
+          , Rhs(
+              [ Lit("\"if\"")
+              , Lit("\"(\"")
+              , Sort("Expression")
+              , Lit("\")\"")
+              , Sort("Statement")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("IfElse"))
+          , Rhs(
+              [ Lit("\"if\"")
+              , Lit("\"(\"")
+              , Sort("Expression")
+              , Lit("\")\"")
+              , Sort("Statement")
+              , Lit("\"else\"")
+              , Sort("Statement")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("While"))
+          , Rhs(
+              [ Lit("\"while\"")
+              , Lit("\"(\"")
+              , Sort("Expression")
+              , Lit("\")\"")
+              , Sort("Statement")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("For"))
+          , Rhs(
+              [ Lit("\"for\"")
+              , Lit("\"(\"")
+              , Sort("ForInit")
+              , Lit("\";\"")
+              , Opt(Sort("Expression"))
+              , Lit("\";\"")
+              , Sort("ForUpdate")
+              , Lit("\")\"")
+              , Sort("Statement")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("ForEach"))
+          , Rhs(
+              [ Lit("\"for\"")
+              , Lit("\"(\"")
+              , IterStar(Sort("VariableModifier"))
+              , Sort("UnannType")
+              , Sort("VarDeclId")
+              , Lit("\":\"")
+              , Sort("Expression")
+              , Lit("\")\"")
+              , Sort("Statement")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ForInit"), Constructor("ExprList"))
+          , Rhs([IterStarSep(Sort("Expression"), Lit("\",\""))])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ForInit"), Constructor("VarDecls"))
+          , Rhs(
+              [ IterStar(Sort("VariableModifier"))
+              , Sort("UnannType")
+              , IterSep(Sort("VarDecl"), Lit("\",\""))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ForUpdate"), Constructor("ExprList"))
+          , Rhs([IterStarSep(Sort("Expression"), Lit("\",\""))])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("Statement"), Rhs([Sort("Block")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("Empty"))
+          , Rhs([Lit("\";\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("ExpressionStatement"))
+          , Rhs([Sort("Expression"), Lit("\";\"")])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("Statement")
+          , Rhs(
+              [ Sort("ExpressionName")
+              , Lit("\"<\"")
+              , Sort("ExpressionName")
+              , Lit("\">\"")
+              , Sort("Expression")
+              , Lit("\";\"")
+              ]
+            )
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Statement")
+          , Rhs(
+              [ Sort("ExpressionName")
+              , Lit("\"<\"")
+              , Sort("ExpressionName")
+              , Lit("\"<\"")
+              , Sort("ExpressionName")
+              , Lit("\">>\"")
+              , Sort("Expression")
+              , Lit("\";\"")
+              ]
+            )
+          , Attrs([Reject()])
+          )
+        , SdfProduction(
+            Sort("Statement")
+          , Rhs(
+              [ Sort("ExpressionName")
+              , Lit("\"<\"")
+              , Sort("ExpressionName")
+              , Lit("\"<\"")
+              , Sort("ExpressionName")
+              , Lit("\"<\"")
+              , Sort("ExpressionName")
+              , Lit("\">>>\"")
+              , Sort("Expression")
+              , Lit("\";\"")
+              ]
+            )
+          , Attrs([Reject()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("Assert"))
+          , Rhs([Lit("\"assert\""), Sort("Expression"), Lit("\";\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("Assert"))
+          , Rhs(
+              [ Lit("\"assert\"")
+              , Sort("Expression")
+              , Lit("\":\"")
+              , Sort("Expression")
+              , Lit("\";\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("Switch"))
+          , Rhs(
+              [ Lit("\"switch\"")
+              , Lit("\"(\"")
+              , Sort("Expression")
+              , Lit("\")\"")
+              , Lit("\"{\"")
+              , IterStar(Sort("SwitchGroup"))
+              , IterStar(Sort("SwitchLabel"))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("SwitchGroup"), Constructor("SwitchGroup"))
+          , Rhs([Iter(Sort("SwitchLabel")), Iter(Sort("BlockStatement"))])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("SwitchLabel"), Constructor("CaseExpr"))
+          , Rhs([Lit("\"case\""), Sort("Expression"), Lit("\":\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("SwitchLabel"), Constructor("Default"))
+          , Rhs([Lit("\"default\""), Lit("\":\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("DoWhile"))
+          , Rhs(
+              [ Lit("\"do\"")
+              , Sort("Statement")
+              , Lit("\"while\"")
+              , Lit("\"(\"")
+              , Sort("Expression")
+              , Lit("\")\"")
+              , Lit("\";\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("Break"))
+          , Rhs([Lit("\"break\""), Lit("\";\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("Break"))
+          , Rhs([Lit("\"break\""), Sort("Id"), Lit("\";\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("Continue"))
+          , Rhs([Lit("\"continue\""), Lit("\";\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("Continue"))
+          , Rhs([Lit("\"continue\""), Sort("Id"), Lit("\";\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("Return"))
+          , Rhs([Lit("\"return\""), Lit("\";\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("Return"))
+          , Rhs([Lit("\"return\""), Sort("Expression"), Lit("\";\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("Synchronized"))
+          , Rhs(
+              [ Lit("\"synchronized\"")
+              , Lit("\"(\"")
+              , Sort("Expression")
+              , Lit("\")\"")
+              , Sort("Block")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("Throw"))
+          , Rhs([Lit("\"throw\""), Sort("Expression"), Lit("\";\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("Try"))
+          , Rhs(
+              [Lit("\"try\""), Sort("Block"), Iter(Sort("CatchClause"))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("TryFinally"))
+          , Rhs(
+              [ Lit("\"try\"")
+              , Sort("Block")
+              , IterStar(Sort("CatchClause"))
+              , Lit("\"finally\"")
+              , Sort("Block")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("CatchClause"), Constructor("Catch"))
+          , Rhs(
+              [ Lit("\"catch\"")
+              , Lit("\"(\"")
+              , Sort("CatchFormalParameter")
+              , Lit("\")\"")
+              , Sort("Block")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("CatchFormalParameter"), Constructor("CatchParam"))
+          , Rhs(
+              [IterStar(Sort("VariableModifier")), Sort("CatchType"), Sort("VarDeclId")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("CatchType"), Constructor("CatchType"))
+          , Rhs([Sort("UnannClassType"), IterStar(Sort("CatchTypeRest"))])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("CatchTypeRest"), Constructor("CatchTypeElem"))
+          , Rhs([Lit("\"|\""), Sort("ClassType")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("TryWithResources"))
+          , Rhs(
+              [ Lit("\"try\"")
+              , Lit("\"(\"")
+              , IterStarSep(Sort("Resource"), Lit("\";\""))
+              , Lit("\")\"")
+              , Sort("Block")
+              , IterStar(Sort("CatchClause"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("TryWithResourcesSemiColon"))
+          , Rhs(
+              [ Lit("\"try\"")
+              , Lit("\"(\"")
+              , IterStarSep(Sort("Resource"), Lit("\";\""))
+              , Lit("\";\"")
+              , Lit("\")\"")
+              , Sort("Block")
+              , IterStar(Sort("CatchClause"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("TryWithResources"))
+          , Rhs(
+              [ Lit("\"try\"")
+              , Lit("\"(\"")
+              , IterStarSep(Sort("Resource"), Lit("\";\""))
+              , Lit("\")\"")
+              , Sort("Block")
+              , IterStar(Sort("CatchClause"))
+              , Lit("\"finally\"")
+              , Sort("Block")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Statement"), Constructor("TryWithResourcesSemiColon"))
+          , Rhs(
+              [ Lit("\"try\"")
+              , Lit("\"(\"")
+              , IterStarSep(Sort("Resource"), Lit("\";\""))
+              , Lit("\";\"")
+              , Lit("\")\"")
+              , Sort("Block")
+              , IterStar(Sort("CatchClause"))
+              , Lit("\"finally\"")
+              , Sort("Block")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Resource"), Constructor("Resource"))
+          , Rhs(
+              [ IterStar(Sort("VariableModifier"))
+              , Sort("UnannType")
+              , Sort("VarDeclId")
+              , Lit("\"=\"")
+              , Sort("Expression")
+              ]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , TemplateOptions([Tokenize("\"(;\"")])
+  , SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ SimpleRefGroup(SortConsRef(Sort("Statement"), Constructor("IfElse")))
+            , SimpleRefGroup(SortConsRef(Sort("Statement"), Constructor("If")))
+            ]
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$ForInit\"")
+            , Lit("\"$VarDecl\"")
+            , Lit("\"$ForUpdate\"")
+            , Lit("\"$ExpressionName\"")
+            , Lit("\"$SwitchGroup\"")
+            , Lit("\"$BlockStatement\"")
+            , Lit("\"$SwitchLabel\"")
+            , Lit("\"$Id\"")
+            , Lit("\"$CatchFormalParameter\"")
+            , Lit("\"$CatchType\"")
+            , Lit("\"$UnannClassType\"")
+            , Lit("\"$CatchTypeRest\"")
+            , Lit("\"$ClassType\"")
+            , Lit("\"$Statement\"")
+            , Lit("\"$CatchClause\"")
+            , Lit("\"$Block\"")
+            , Lit("\"$Resource\"")
+            , Lit("\"$VariableModifier\"")
+            , Lit("\"$UnannType\"")
+            , Lit("\"$VarDeclId\"")
+            , Lit("\"$Expression\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

@@ -1,0 +1,454 @@
+Module(
+  Unparameterized("normalized/Patterns-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/Extensions-norm"))
+      , Module(Unparameterized("normalized/Names-norm"))
+      , Module(Unparameterized("normalized/Lexical-norm"))
+      , Module(Unparameterized("normalized/TypeExpr-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("ConstrPattern"))
+          , Rhs([Sort("Constr"), Sort("Pattern")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("TagNamePattern"))
+          , Rhs([Lit("\"`\""), Sort("TagName"), Sort("Pattern")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("ListCons"))
+          , Rhs([Sort("Pattern"), Lit("\"::\""), Sort("Pattern")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("Patterns"))
+          , Rhs(
+              [Sort("Pattern"), Lit("\",\""), IterSep(Sort("Pattern"), Lit("\",\""))]
+            )
+          , Attrs([LongestMatch(), Assoc(NonAssoc())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("PatternBar"))
+          , Rhs([Sort("Pattern"), Lit("\"|\""), Sort("Pattern")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("PatternAs"))
+          , Rhs([Sort("Pattern"), Lit("\"as\""), Sort("ValueName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("PatternValueName"))
+          , Rhs([Sort("ValueName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("WildCard"))
+          , Rhs([Lit("\"_\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("PatternConst"))
+          , Rhs([Sort("ConstantNegative")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("PatternRange"))
+          , Rhs([Sort("CharLiteral"), Lit("\"..\""), Sort("CharLiteral")])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("Pattern")
+          , Rhs([Lit("\"(\""), Sort("Pattern"), Lit("\")\"")])
+          , Attrs([Bracket()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("PatternTypeExpr"))
+          , Rhs(
+              [ Lit("\"(\"")
+              , Sort("Pattern")
+              , Lit("\":\"")
+              , Sort("TypeExpr")
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("PatternHash"))
+          , Rhs([Lit("\"#\""), Sort("TypeConstr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("PatternRec"))
+          , Rhs(
+              [ Lit("\"{\"")
+              , IterSep(Sort("FieldOrFieldEqPattern"), Lit("\";\""))
+              , Opt(Sort("SemiColonUnderscore"))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("PatternRec2"))
+          , Rhs(
+              [ Lit("\"{\"")
+              , IterSep(Sort("FieldOrFieldEqPattern"), Lit("\";\""))
+              , Opt(Sort("SemiColonUnderscore"))
+              , Lit("\";\"")
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("PatternTuple"))
+          , Rhs(
+              [ Lit("\"[\"")
+              , IterSep(Sort("Pattern"), Lit("\";\""))
+              , Lit("\";\"")
+              , Lit("\"]\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("PatternTuple2"))
+          , Rhs(
+              [Lit("\"[\""), IterSep(Sort("Pattern"), Lit("\";\"")), Lit("\"]\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("PatternArray"))
+          , Rhs(
+              [ Lit("\"[|\"")
+              , IterSep(Sort("Pattern"), Lit("\";\""))
+              , Lit("\";\"")
+              , Lit("\"|]\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("PatternArray2"))
+          , Rhs(
+              [Lit("\"[|\""), IterSep(Sort("Pattern"), Lit("\";\"")), Lit("\"|]\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("LazyPattern"))
+          , Rhs([Lit("\"lazy\""), Sort("Pattern")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("PatternPackage"))
+          , Rhs(
+              [ Lit("\"(\"")
+              , Lit("\"module\"")
+              , Sort("ModuleName")
+              , Sort("ColonPackageTypeOpt")
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("ModulePath"))
+          , Rhs(
+              [Sort("ModulePath"), Lit("\".(\""), Sort("Pattern"), Lit("\")\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Pattern"), Constructor("Exception"))
+          , Rhs([Lit("\"exception\""), Sort("Pattern")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("ColonPackageTypeOpt"), Rhs([]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("ColonPackageTypeOpt"), Constructor("PackageType"))
+          , Rhs([Lit("\":\""), Sort("PackageType")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldOrFieldEqPattern"), Constructor("FieldEqPattern"))
+          , Rhs([Sort("Field"), Lit("\"=\""), Sort("Pattern")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldOrFieldEqPattern"), Constructor("FieldPattern"))
+          , Rhs([Sort("Field")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Constant"), Constructor("PosInt"))
+          , Rhs([Sort("PositiveInt")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Constant"), Constructor("Int32"))
+          , Rhs([Sort("Int32Literal")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Constant"), Constructor("Int64"))
+          , Rhs([Sort("Int64Literal")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Constant"), Constructor("NativeInt"))
+          , Rhs([Sort("NativeIntLiteral")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Constant"), Constructor("FloatLiteral"))
+          , Rhs([Sort("PositiveFloat")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Constant"), Constructor("CharLiteral"))
+          , Rhs([Sort("CharLiteral")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Constant"), Constructor("StringLiteral"))
+          , Rhs([Sort("StringLiteral")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Constant"), Constructor("Constr"))
+          , Rhs([Sort("Constr")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Constant"), Constructor("False"))
+          , Rhs([Lit("\"false\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Constant"), Constructor("True"))
+          , Rhs([Lit("\"true\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Constant"), Constructor("EmptyParenthesis"))
+          , Rhs([Lit("\"(\""), Lit("\")\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Constant"), Constructor("EmptyBrackets"))
+          , Rhs([Lit("\"[\""), Lit("\"]\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Constant"), Constructor("EmptyArray"))
+          , Rhs([Lit("\"[|\""), Lit("\"|]\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Constant"), Constructor("EmptyCurly"))
+          , Rhs([Lit("\"{<\""), Lit("\">}\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Constant"), Constructor("TagName"))
+          , Rhs([Lit("\"`\""), Sort("TagName")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("ConstantNegative"), Rhs([Sort("NegativeInt")]), NoAttrs())
+        , SdfProduction(Sort("ConstantNegative"), Rhs([Sort("NegativeInt32")]), NoAttrs())
+        , SdfProduction(Sort("ConstantNegative"), Rhs([Sort("NegativeInt64")]), NoAttrs())
+        , SdfProduction(Sort("ConstantNegative"), Rhs([Sort("NegativeNativeInt")]), NoAttrs())
+        , SdfProduction(Sort("ConstantNegative"), Rhs([Sort("Constant")]), NoAttrs())
+        , SdfProduction(Sort("ConstantNegative"), Rhs([Sort("NegativeFloat")]), NoAttrs())
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("SemiColonUnderscore"), Constructor("SemiColonUnderscore"))
+          , Rhs([Lit("\";\""), Lit("\"_\"")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ ProdsRefGroup(
+                [ SortConsRef(Sort("Pattern"), Constructor("Exception"))
+                , SortConsRef(Sort("Pattern"), Constructor("LazyPattern"))
+                ]
+              )
+            , SimpleRefGroup(SortConsRef(Sort("Pattern"), Constructor("ConstrPattern")))
+            , SimpleRefGroup(SortConsRef(Sort("Pattern"), Constructor("TagNamePattern")))
+            , SimpleRefGroup(SortConsRef(Sort("Pattern"), Constructor("ListCons")))
+            , SimpleRefGroup(SortConsRef(Sort("Pattern"), Constructor("Patterns")))
+            , SimpleRefGroup(SortConsRef(Sort("Pattern"), Constructor("PatternBar")))
+            , SimpleRefGroup(SortConsRef(Sort("Pattern"), Constructor("PatternAs")))
+            ]
+          )
+        , Assoc(
+            SimpleRefGroup(SortConsRef(Sort("Pattern"), Constructor("ListCons")))
+          , Right()
+          , SimpleRefGroup(SortConsRef(Sort("Pattern"), Constructor("ListCons")))
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ NonTransitive(
+                WithArguments(
+                  SimpleGroup(
+                    SdfProduction(
+                      IterSep(Sort("Pattern"), Lit("\",\""))
+                    , Rhs(
+                        [IterSep(Sort("Pattern"), Lit("\",\"")), Lit("\",\""), Sort("Pattern")]
+                      )
+                    , NoAttrs()
+                    )
+                  )
+                , Default(["2"])
+                )
+              )
+            , ProdsRefGroup(
+                [ SortConsRef(Sort("Pattern"), Constructor("Patterns"))
+                , SortConsRef(Sort("Pattern"), Constructor("PatternBar"))
+                , SortConsRef(Sort("Pattern"), Constructor("PatternAs"))
+                ]
+              )
+            ]
+          )
+        , Chain(
+            [ NonTransitive(
+                WithArguments(
+                  SimpleGroup(
+                    SdfProduction(
+                      IterSep(Sort("Pattern"), Lit("\",\""))
+                    , Rhs([Sort("Pattern")])
+                    , NoAttrs()
+                    )
+                  )
+                , Default(["0"])
+                )
+              )
+            , ProdsRefGroup(
+                [ SortConsRef(Sort("Pattern"), Constructor("Patterns"))
+                , SortConsRef(Sort("Pattern"), Constructor("PatternBar"))
+                , SortConsRef(Sort("Pattern"), Constructor("PatternAs"))
+                ]
+              )
+            ]
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"_\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Numeric("\\39")
+                    , Conc(
+                        Range(Numeric("\\48"), Numeric("\\57"))
+                      , Conc(
+                          Range(Numeric("\\65"), Numeric("\\90"))
+                        , Conc(Numeric("\\95"), Range(Numeric("\\97"), Numeric("\\122")))
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$ValueName\"")
+            , Lit("\"$TypeExpr\"")
+            , Lit("\"$TypeConstr\"")
+            , Lit("\"$SemiColonUnderscore\"")
+            , Lit("\"$ModuleName\"")
+            , Lit("\"$ModulePath\"")
+            , Lit("\"$ColonPackageTypeOpt\"")
+            , Lit("\"$PackageType\"")
+            , Lit("\"$Pattern\"")
+            , Lit("\"$FieldOrFieldEqPattern\"")
+            , Lit("\"$Field\"")
+            , Lit("\"$PositiveInt\"")
+            , Lit("\"$Int32Literal\"")
+            , Lit("\"$Int64Literal\"")
+            , Lit("\"$NativeIntLiteral\"")
+            , Lit("\"$PositiveFloat\"")
+            , Lit("\"$CharLiteral\"")
+            , Lit("\"$StringLiteral\"")
+            , Lit("\"$Constr\"")
+            , Lit("\"$TagName\"")
+            , Lit("\"$NegativeInt\"")
+            , Lit("\"$NegativeInt32\"")
+            , Lit("\"$NegativeInt64\"")
+            , Lit("\"$NegativeNativeInt\"")
+            , Lit("\"$Constant\"")
+            , Lit("\"$ConstantNegative\"")
+            , Lit("\"$NegativeFloat\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$SemiColonUnderscore\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

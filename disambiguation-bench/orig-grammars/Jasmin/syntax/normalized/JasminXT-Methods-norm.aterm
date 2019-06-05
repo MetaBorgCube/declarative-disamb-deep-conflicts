@@ -1,0 +1,172 @@
+Module(
+  Unparameterized("normalized/JasminXT-Methods-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/JasminXT-Names-norm"))
+      , Module(Unparameterized("normalized/JasminXT-Numbers-norm"))
+      , Module(Unparameterized("normalized/JasminXT-Strings-norm"))
+      , Module(Unparameterized("normalized/JasminXT-Descriptors-norm"))
+      , Module(Unparameterized("normalized/JasminXT-Instructions-norm"))
+      , Module(Unparameterized("normalized/JasminXT-Directives-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(ContextFreeStartSymbols([Sort("Method")]))
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Method"), Constructor("JBCMethod"))
+          , Rhs(
+              [ Lit("\".method\"")
+              , IterStar(Sort("MethodAccess"))
+              , Sort("MethodName")
+              , Sort("MethodDescriptor")
+              , IterStar(Sort("Statement"))
+              , Lit("\".end\"")
+              , Lit("\"method\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MethodAccess"), Constructor("PUBLIC"))
+          , Rhs([Lit("\"public\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MethodAccess"), Constructor("PRIVATE"))
+          , Rhs([Lit("\"private\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MethodAccess"), Constructor("PROTECTED"))
+          , Rhs([Lit("\"protected\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MethodAccess"), Constructor("STATIC"))
+          , Rhs([Lit("\"static\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MethodAccess"), Constructor("FINAL"))
+          , Rhs([Lit("\"final\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MethodAccess"), Constructor("SYNCHRONIZED"))
+          , Rhs([Lit("\"synchronized\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MethodAccess"), Constructor("NATIVE"))
+          , Rhs([Lit("\"native\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MethodAccess"), Constructor("ABSTRACT"))
+          , Rhs([Lit("\"abstract\"")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProduction(Sort("Statement"), Rhs([Sort("PCInstruction")]), NoAttrs())
+        , SdfProduction(Sort("Statement"), Rhs([Sort("Directive")]), NoAttrs())
+        , SdfProduction(Sort("Statement"), Rhs([Sort("Label")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("Label"), Constructor("JBCLabel"))
+          , Rhs([Sort("LabelName"), Lit("\":\"")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\".method\"")
+            , Lit("\".end\"")
+            , Lit("\"public\"")
+            , Lit("\"private\"")
+            , Lit("\"protected\"")
+            , Lit("\"static\"")
+            , Lit("\"final\"")
+            , Lit("\"synchronized\"")
+            , Lit("\"native\"")
+            , Lit("\"abstract\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\0"), Numeric("\\8"))
+                    , Conc(
+                        Range(Numeric("\\10"), Numeric("\\31"))
+                      , Range(Numeric("\\33"), Numeric("\\255"))
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$Method\"")
+            , Lit("\"$MethodName\"")
+            , Lit("\"$MethodDescriptor\"")
+            , Lit("\"$Statement\"")
+            , Lit("\"$MethodAccess\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$PCInstruction\"")
+            , Lit("\"$Directive\"")
+            , Lit("\"$Statement\"")
+            , Lit("\"$Label\"")
+            , Lit("\"$LabelName\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

@@ -1,0 +1,56 @@
+Module(
+  Unparameterized("normalized/expressions/ArrayAccess-norm")
+, [Imports([Module(Unparameterized("normalized/names/Names-norm")), Module(Unparameterized("normalized/expressions/ArrayCreation-norm"))])]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProduction(Sort("Expression"), Rhs([Sort("ArrayAccess")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("ArrayAccess"), Constructor("ArrayAccess"))
+          , Rhs(
+              [Sort("Expression"), Lit("\"[\""), Sort("Expression"), Lit("\"]\"")]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ NonTransitive(
+                WithArguments(
+                  SimpleRefGroup(SortConsRef(Sort("ArrayAccess"), Constructor("ArrayAccess")))
+                , Default(["0"])
+                )
+              )
+            , SimpleGroup(
+                SdfProduction(Sort("Expression"), Rhs([Sort("ArrayCreationExpression")]), NoAttrs())
+              )
+            ]
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$ArrayAccess\""), Lit("\"$Expression\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

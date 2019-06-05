@@ -1,0 +1,21 @@
+Module(
+  Unparameterized("normalized/completion/expressions/Disambiguation-completion-insertions-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/expressions/Disambiguation-norm"))
+      , Module(Unparameterized("normalized/completion/expressions/ClassInstanceCreation-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/expressions/Postfix-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/expressions/UnaryOperators-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/expressions/BinaryOperators-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/expressions/ArrayAccess-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/expressions/FieldAccess-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/expressions/MethodInvocation-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/expressions/AssignmentOperators-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/expressions/LambdaExpressions-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/names/Names-completion-insertions-norm"))
+      ]
+    )
+  ]
+, [SDFSection(
+     LexicalSyntax([SdfProduction(Sort("COMPLETION-INSERTION"), Rhs([]), NoAttrs())])
+   )]
+)

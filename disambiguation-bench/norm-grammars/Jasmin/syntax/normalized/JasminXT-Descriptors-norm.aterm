@@ -1,0 +1,223 @@
+Module(
+  Unparameterized("normalized/JasminXT-Descriptors-norm")
+, [Imports([Module(Unparameterized("normalized/JasminXT-Types-norm"))])]
+, [ SDFSection(
+      Kernel(
+        [ SdfProduction(
+            Lit("\"V\"")
+          , Rhs([CharClass(Simple(Present(Numeric("\\86"))))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Lit("\"(\"")
+          , Rhs([CharClass(Simple(Present(Numeric("\\40"))))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Lit("\")\"")
+          , Rhs([CharClass(Simple(Present(Numeric("\\41"))))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Cf(Opt(Layout()))
+          , Rhs([Cf(Layout())])
+          , NoAttrs()
+          )
+        , SdfProduction(Cf(Opt(Layout())), Rhs([]), NoAttrs())
+        , SdfProduction(
+            Iter(Cf(Sort("ParameterDescriptor")))
+          , Rhs([Cf(Sort("ParameterDescriptor"))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Iter(Cf(Sort("ParameterDescriptor")))
+          , Rhs(
+              [Iter(Cf(Sort("ParameterDescriptor"))), Cf(Sort("ParameterDescriptor"))]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(IterStar(Cf(Sort("ParameterDescriptor"))), Rhs([]), NoAttrs())
+        , SdfProduction(
+            IterStar(Cf(Sort("ParameterDescriptor")))
+          , Rhs([Iter(Cf(Sort("ParameterDescriptor")))])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Cf(Sort("FieldDescriptor")), Constructor("JBCFieldDesc"))
+          , Rhs([Cf(Sort("FieldType"))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Cf(Sort("ParameterDescriptor"))
+          , Rhs([Cf(Sort("FieldType"))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Cf(Sort("AnnotationDescriptor"))
+          , Rhs([Cf(Sort("FieldType"))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Cf(Sort("ReturnDescriptor"))
+          , Rhs([Cf(Sort("FieldType"))])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Cf(Sort("ReturnDescriptor")), Constructor("Void"))
+          , Rhs([Lit("\"V\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Cf(Sort("MethodDescriptor")), Constructor("JBCMethodDesc"))
+          , Rhs(
+              [ Lit("\"(\"")
+              , IterStar(Cf(Sort("ParameterDescriptor")))
+              , Lit("\")\"")
+              , Cf(Sort("ReturnDescriptor"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Cf(Layout())
+          , Rhs([Cf(Layout()), Cf(Layout())])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProduction(
+            Start()
+          , Rhs(
+              [Cf(Opt(Layout())), Cf(Sort("FieldDescriptor")), Cf(Opt(Layout()))]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Start()
+          , Rhs(
+              [Cf(Opt(Layout())), Cf(Sort("ReturnDescriptor")), Cf(Opt(Layout()))]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Start()
+          , Rhs(
+              [Cf(Opt(Layout())), Cf(Sort("BaseType")), Cf(Opt(Layout()))]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            FileStart()
+          , Rhs([Start(), CharClass(Simple(Present(Numeric("\\256"))))])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      Restrictions(
+        [ Follow(
+            [Lit("\"$FieldDescriptor\"")]
+          , List(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        , Follow(
+            [Lit("\"$ParameterDescriptor\"")]
+          , List(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        , Follow(
+            [Lit("\"$AnnotationDescriptor\"")]
+          , List(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        , Follow(
+            [Lit("\"$FieldType\"")]
+          , List(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        , Follow(
+            [Lit("\"$ReturnDescriptor\"")]
+          , List(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      Priorities(
+        [ Assoc(
+            SimpleGroup(
+              SdfProduction(
+                Cf(Layout())
+              , Rhs([Cf(Layout()), Cf(Layout())])
+              , NoAttrs()
+              )
+            )
+          , Left()
+          , SimpleGroup(
+              SdfProduction(
+                Cf(Layout())
+              , Rhs([Cf(Layout()), Cf(Layout())])
+              , NoAttrs()
+              )
+            )
+          )
+        ]
+      )
+    )
+  ]
+)

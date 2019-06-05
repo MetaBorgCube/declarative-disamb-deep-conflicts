@@ -1,0 +1,441 @@
+Module(
+  Unparameterized("normalized/JasminXT-Names-norm")
+, [ Imports(
+      [Module(Unparameterized("normalized/JasminXT-Strings-norm")), Module(Unparameterized("normalized/JasminXT-Numbers-norm")), Module(Unparameterized("normalized/JasminXT-Descriptors-norm"))]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeStartSymbols(
+        [ Sort("Identifier")
+        , Sort("SQIdentifier")
+        , Sort("QualifiedName")
+        , Sort("LabelName")
+        , Sort("MethodName")
+        , Sort("ClassRef")
+        , Sort("VarRef")
+        , Sort("LabelRef")
+        , Sort("FRef")
+        , Sort("MRef")
+        , Sort("BaseTypeName")
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Sort("Identifier")
+          , Rhs(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              , IterStar(
+                  CharClass(
+                    Simple(
+                      Present(
+                        Conc(
+                          Range(Numeric("\\48"), Numeric("\\57"))
+                        , Conc(
+                            Range(Numeric("\\65"), Numeric("\\90"))
+                          , Conc(Numeric("\\95"), Range(Numeric("\\97"), Numeric("\\122")))
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("SQIdentifier"), Rhs([Sort("Identifier")]), NoAttrs())
+        , SdfProduction(
+            Sort("SQIdentifier")
+          , Rhs([Lit("\"'\""), Sort("Identifier"), Lit("\"'\"")])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("QualifiedName")
+          , Rhs([IterSep(Sort("Identifier"), Lit("\"/\""))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("LabelName")
+          , Rhs(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\0"), Numeric("\\8"))
+                      , Conc(
+                          Range(Numeric("\\11"), Numeric("\\12"))
+                        , Conc(
+                            Range(Numeric("\\14"), Numeric("\\31"))
+                          , Conc(
+                              Numeric("\\33")
+                            , Conc(
+                                Range(Numeric("\\35"), Numeric("\\44"))
+                              , Conc(
+                                  Numeric("\\47")
+                                , Conc(
+                                    Range(Numeric("\\59"), Numeric("\\60"))
+                                  , Range(Numeric("\\62"), Numeric("\\255"))
+                                  )
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              , IterStar(
+                  CharClass(
+                    Simple(
+                      Present(
+                        Conc(
+                          Range(Numeric("\\0"), Numeric("\\8"))
+                        , Conc(
+                            Range(Numeric("\\11"), Numeric("\\12"))
+                          , Conc(
+                              Range(Numeric("\\14"), Numeric("\\31"))
+                            , Conc(
+                                Numeric("\\33")
+                              , Conc(
+                                  Range(Numeric("\\35"), Numeric("\\44"))
+                                , Conc(
+                                    Range(Numeric("\\47"), Numeric("\\57"))
+                                  , Conc(
+                                      Range(Numeric("\\59"), Numeric("\\60"))
+                                    , Range(Numeric("\\62"), Numeric("\\255"))
+                                    )
+                                  )
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Sort("Identifier")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\48"), Numeric("\\57"))
+                    , Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Conc(Numeric("\\95"), Range(Numeric("\\97"), Numeric("\\122")))
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        , Follow(
+            [Sort("LabelName")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\0"), Numeric("\\8"))
+                    , Conc(
+                        Range(Numeric("\\11"), Numeric("\\12"))
+                      , Conc(
+                          Range(Numeric("\\14"), Numeric("\\31"))
+                        , Conc(
+                            Numeric("\\33")
+                          , Conc(
+                              Range(Numeric("\\35"), Numeric("\\44"))
+                            , Conc(
+                                Range(Numeric("\\47"), Numeric("\\57"))
+                              , Conc(
+                                  Range(Numeric("\\59"), Numeric("\\60"))
+                                , Range(Numeric("\\62"), Numeric("\\255"))
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProduction(Sort("FileName"), Rhs([Sort("String")]), NoAttrs())
+        , SdfProduction(Sort("ClassName"), Rhs([Sort("QualifiedName")]), NoAttrs())
+        , SdfProduction(Sort("AttributeName"), Rhs([Sort("Identifier")]), NoAttrs())
+        , SdfProduction(Sort("AnnotationName"), Rhs([Sort("Identifier")]), NoAttrs())
+        , SdfProduction(Sort("FieldName"), Rhs([Sort("Identifier")]), NoAttrs())
+        , SdfProduction(Sort("MethodName"), Rhs([Sort("Identifier")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("MethodName"), Constructor("Init"))
+          , Rhs([Lit("\"<init>\"")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("VarName"), Rhs([Sort("SQIdentifier")]), NoAttrs())
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("ClassRef"), Constructor("CRef"))
+          , Rhs([Sort("ClassName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("VarRef"), Constructor("VarNum"))
+          , Rhs([Sort("Int")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("LabelRef"), Constructor("LabelRef"))
+          , Rhs([Sort("LabelName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("LabelRef"), Constructor("Absolute"))
+          , Rhs([Sort("Int")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FRef"), Constructor("FRef"))
+          , Rhs([Sort("FieldName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MRef"), Constructor("MRef"))
+          , Rhs([Sort("MethodName")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      Kernel(
+        [ SdfProductionWithCons(
+            SortCons(Cf(Sort("FieldRef")), Constructor("JBCFieldRef"))
+          , Rhs(
+              [ Cf(Sort("ClassRef"))
+              , Lit("\"/\"")
+              , Cf(Sort("FRef"))
+              , Cf(Opt(Layout()))
+              , Cf(Sort("FieldDescriptor"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Cf(Sort("MethodRef")), Constructor("JBCMethodRef"))
+          , Rhs(
+              [ Cf(Sort("ClassRef"))
+              , Lit("\"/\"")
+              , Cf(Sort("MRef"))
+              , Cf(Opt(Layout()))
+              , Cf(Sort("MethodDescriptor"))
+              ]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("BaseTypeName"), Constructor("ByteName"))
+          , Rhs([Lit("\"byte\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("BaseTypeName"), Constructor("CharName"))
+          , Rhs([Lit("\"char\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("BaseTypeName"), Constructor("DoubleName"))
+          , Rhs([Lit("\"double\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("BaseTypeName"), Constructor("FloatName"))
+          , Rhs([Lit("\"float\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("BaseTypeName"), Constructor("IntName"))
+          , Rhs([Lit("\"int\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("BaseTypeName"), Constructor("LongName"))
+          , Rhs([Lit("\"long\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("BaseTypeName"), Constructor("ShortName"))
+          , Rhs([Lit("\"short\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("BaseTypeName"), Constructor("BooleanName"))
+          , Rhs([Lit("\"boolean\"")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      Kernel(
+        [ SdfProductionWithCons(
+            SortCons(Cf(Sort("ObjectType")), Constructor("Reference"))
+          , Rhs(
+              [Lit("\"L\""), Cf(Sort("ClassRef")), Lit("\";\"")]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [SdfProduction(Sort("FieldType"), Rhs([Sort("ObjectType")]), NoAttrs())]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$FileName\"")
+            , Lit("\"$String\"")
+            , Lit("\"$ClassName\"")
+            , Lit("\"$QualifiedName\"")
+            , Lit("\"$AttributeName\"")
+            , Lit("\"$AnnotationName\"")
+            , Lit("\"$FieldName\"")
+            , Lit("\"$Identifier\"")
+            , Lit("\"$MethodName\"")
+            , Lit("\"$VarName\"")
+            , Lit("\"$SQIdentifier\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$ClassRef\"")
+            , Lit("\"$ClassName\"")
+            , Lit("\"$VarRef\"")
+            , Lit("\"$LabelName\"")
+            , Lit("\"$LabelRef\"")
+            , Lit("\"$Int\"")
+            , Lit("\"$FRef\"")
+            , Lit("\"$FieldName\"")
+            , Lit("\"$MRef\"")
+            , Lit("\"$MethodName\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$BaseTypeName\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$FieldType\""), Lit("\"$ObjectType\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

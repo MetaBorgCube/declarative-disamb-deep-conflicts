@@ -1,0 +1,256 @@
+Module(
+  Unparameterized("normalized/completion/Names-completion-insertions-norm")
+, [Imports([Module(Unparameterized("normalized/Names-norm")), Module(Unparameterized("normalized/completion/Lexical-completion-insertions-norm"))])]
+, [ SDFSection(
+      ContextFreeStartSymbols(
+        [ Sort("ValuePath")
+        , Sort("DotModulePathOpt")
+        , Sort("OperatorCharList")
+        , Sort("ValueName")
+        , Sort("Operations")
+        , Sort("TagName")
+        , Sort("TypeConstr")
+        , Sort("TypeConstrName")
+        , Sort("LabelName")
+        , Sort("CapitalizedIdent")
+        , Sort("InstVarName")
+        , Sort("MethodName")
+        , Sort("LowerCaseIdent")
+        , Sort("Constr")
+        , Sort("ConstrName")
+        , Sort("Field")
+        , Sort("ModulePath")
+        , Sort("FieldName")
+        , Sort("ClassPath")
+        , Sort("ModulePathDotOpt")
+        , Sort("ClassName")
+        , Sort("ModTypePath")
+        , Sort("ModTypeName")
+        , Sort("Ident")
+        , Sort("ExtendedModulePathDotOpt")
+        , Sort("ExtendedModulePath")
+        , Sort("ModuleNameDot")
+        , Sort("ModuleName")
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("ValuePath"), Constructor("ValuePath-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("DotModulePathOpt"), Constructor("DotModulePathOpt-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("OperatorCharList"), Constructor("OperatorCharList-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ValueName"), Constructor("ValueName-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Operations"), Constructor("Operations-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TagName"), Constructor("TagName-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeConstr"), Constructor("TypeConstr-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeConstrName"), Constructor("TypeConstrName-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("LabelName"), Constructor("LabelName-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("CapitalizedIdent"), Constructor("CapitalizedIdent-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InstVarName"), Constructor("InstVarName-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("MethodName"), Constructor("MethodName-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("LowerCaseIdent"), Constructor("LowerCaseIdent-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Constr"), Constructor("Constr-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ConstrName"), Constructor("ConstrName-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Field"), Constructor("Field-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModulePath"), Constructor("ModulePath-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldName"), Constructor("FieldName-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassPath"), Constructor("ClassPath-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModulePathDotOpt"), Constructor("ModulePathDotOpt-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassName"), Constructor("ClassName-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModTypePath"), Constructor("ModTypePath-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModTypeName"), Constructor("ModTypeName-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Ident"), Constructor("Ident-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ExtendedModulePathDotOpt"), Constructor("ExtendedModulePathDotOpt-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ExtendedModulePath"), Constructor("ExtendedModulePath-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModuleNameDot"), Constructor("ModuleNameDot-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModuleName"), Constructor("ModuleName-Plhdr"))
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([PlaceholderInsertion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Lit("\"(\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\")\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        , SdfProduction(
+            Lit("\".\"")
+          , Rhs([Sort("COMPLETION-INSERTION")])
+          , Attrs([LiteralCompletion()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax([SdfProduction(Sort("COMPLETION-INSERTION"), Rhs([]), NoAttrs())])
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$ValuePath\"")
+            , Lit("\"$DotModulePathOpt\"")
+            , Lit("\"$OperatorCharList\"")
+            , Lit("\"$ValueName\"")
+            , Lit("\"$Operations\"")
+            , Lit("\"$TagName\"")
+            , Lit("\"$TypeConstr\"")
+            , Lit("\"$TypeConstrName\"")
+            , Lit("\"$LabelName\"")
+            , Lit("\"$CapitalizedIdent\"")
+            , Lit("\"$InstVarName\"")
+            , Lit("\"$MethodName\"")
+            , Lit("\"$LowerCaseIdent\"")
+            , Lit("\"$Constr\"")
+            , Lit("\"$ConstrName\"")
+            , Lit("\"$Field\"")
+            , Lit("\"$ModulePath\"")
+            , Lit("\"$FieldName\"")
+            , Lit("\"$ClassPath\"")
+            , Lit("\"$ModulePathDotOpt\"")
+            , Lit("\"$ClassName\"")
+            , Lit("\"$ModTypePath\"")
+            , Lit("\"$ModTypeName\"")
+            , Lit("\"$Ident\"")
+            , Lit("\"$ExtendedModulePathDotOpt\"")
+            , Lit("\"$ExtendedModulePath\"")
+            , Lit("\"$ModuleNameDot\"")
+            , Lit("\"$ModuleName\"")
+            , Lit("\"$COMPLETION-INSERTION\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

@@ -1,0 +1,36 @@
+Module(
+  Unparameterized("normalized/Execute-norm")
+, [Imports([Module(Unparameterized("normalized/Expressions-norm")), Module(Unparameterized("normalized/Common-norm"))])]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProduction(
+            Sort("Execute")
+          , Rhs([Sort("Exp")])
+          , Attrs([LongestMatch()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$Execute\""), Lit("\"$Exp\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

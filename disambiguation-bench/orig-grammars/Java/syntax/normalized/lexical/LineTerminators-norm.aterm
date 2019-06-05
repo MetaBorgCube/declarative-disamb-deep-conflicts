@@ -1,0 +1,54 @@
+Module(
+  Unparameterized("normalized/lexical/LineTerminators-norm")
+, []
+, [ SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Sort("LineTerminator")
+          , Rhs([CharClass(Simple(Present(Numeric("\\10"))))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("LineTerminator")
+          , Rhs(
+              [ CharClass(Simple(Present(Numeric("\\13"))))
+              , CharClass(Simple(Present(Numeric("\\10"))))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("LineTerminator"), Rhs([Sort("CarriageReturn")]), NoAttrs())
+        , SdfProduction(Sort("LineTerminator"), Rhs([Sort("EndOfFile")]), NoAttrs())
+        , SdfProduction(
+            Sort("CarriageReturn")
+          , Rhs([CharClass(Simple(Present(Numeric("\\13"))))])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Sort("CarriageReturn")]
+          , Single(CharClass(Simple(Present(Numeric("\\10")))))
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax([SdfProduction(Sort("EndOfFile"), Rhs([]), NoAttrs())])
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Sort("EndOfFile")]
+          , Single(
+              CharClass(Simple(Present(Range(Numeric("\\0"), Numeric("\\255")))))
+            )
+          )
+        ]
+      )
+    )
+  ]
+)

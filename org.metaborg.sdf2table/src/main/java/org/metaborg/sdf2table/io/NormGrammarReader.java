@@ -22,6 +22,7 @@ import org.metaborg.sdf2table.grammar.DeprecatedAttribute;
 import org.metaborg.sdf2table.grammar.FileStartSymbol;
 import org.metaborg.sdf2table.grammar.GeneralAttribute;
 import org.metaborg.sdf2table.grammar.IAttribute;
+import org.metaborg.sdf2table.grammar.IPriority;
 import org.metaborg.sdf2table.grammar.IProduction;
 import org.metaborg.sdf2table.grammar.IterSepSymbol;
 import org.metaborg.sdf2table.grammar.IterStarSepSymbol;
@@ -93,7 +94,14 @@ public class NormGrammarReader {
     public NormGrammar readGrammar(IStrategoTerm mainModule) throws Exception {
         readModule(mainModule);
         
+        Set<IPriority> allPriorities = Sets.newHashSet();
+        allPriorities.addAll(grammar.getTransitivePriorities());
+        allPriorities.addAll(grammar.getNonTransitivePriorities());
+        
+        grammar.setInputPriorities(grammar.getNonTransitivePriorities().size() - 1);
+        
         grammar.priorityTransitiveClosure();
+        
         grammar.normalizeFollowRestrictionLookahead();
 
         return grammar;
@@ -183,7 +191,7 @@ public class NormGrammarReader {
                             addPriorities(tsection);
                             break;
                         default:
-                            System.err.println("Unknown module section `" + tsection.getName() + "'");
+//                            System.err.println("Unknown module section `" + tsection.getName() + "'");
                             break;
                     }
                 }

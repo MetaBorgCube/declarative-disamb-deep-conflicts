@@ -1,0 +1,72 @@
+Module(
+  Unparameterized("normalized/Modules-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/Common-norm"))
+      , Module(Unparameterized("normalized/Model-norm"))
+      , Module(Unparameterized("normalized/Data-norm"))
+      , Module(Unparameterized("normalized/Execute-norm"))
+      , Module(Unparameterized("normalized/Types-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Start"), Constructor("Module"))
+          , Rhs(
+              [ Lit("\"module\"")
+              , Sort("ID")
+              , Opt(Sort("Strategy"))
+              , IterStar(Sort("ModuleSection"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModuleSection"), Constructor("ModelSection"))
+          , Rhs([Lit("\"model\""), IterStar(Sort("Model"))])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModuleSection"), Constructor("DataSection"))
+          , Rhs([Lit("\"data\""), IterStar(Sort("Data"))])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModuleSection"), Constructor("ExecuteSection"))
+          , Rhs([Lit("\"execute\""), IterStar(Sort("Execute"))])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$Start\"")
+            , Lit("\"$ID\"")
+            , Lit("\"$Strategy\"")
+            , Lit("\"$Model\"")
+            , Lit("\"$Data\"")
+            , Lit("\"$ModuleSection\"")
+            , Lit("\"$Execute\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

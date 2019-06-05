@@ -1,0 +1,7 @@
+Module(
+  Unparameterized("normalized/completion/JasminXT-Whitespace-completion-insertions-norm")
+, [Imports([Module(Unparameterized("normalized/JasminXT-Whitespace-norm"))])]
+, [SDFSection(
+     LexicalSyntax([SdfProduction(Sort("COMPLETION-INSERTION"), Rhs([]), NoAttrs())])
+   )]
+)

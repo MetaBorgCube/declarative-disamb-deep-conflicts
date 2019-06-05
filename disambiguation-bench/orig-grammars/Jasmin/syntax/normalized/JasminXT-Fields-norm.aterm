@@ -1,0 +1,202 @@
+Module(
+  Unparameterized("normalized/JasminXT-Fields-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/JasminXT-Names-norm"))
+      , Module(Unparameterized("normalized/JasminXT-Numbers-norm"))
+      , Module(Unparameterized("normalized/JasminXT-Strings-norm"))
+      , Module(Unparameterized("normalized/JasminXT-Descriptors-norm"))
+      , Module(Unparameterized("normalized/JasminXT-Annotations-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(ContextFreeStartSymbols([Sort("Field")]))
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Field"), Constructor("JBCField"))
+          , Rhs(
+              [ Lit("\".field\"")
+              , IterStar(Sort("FieldAccess"))
+              , Sort("FieldName")
+              , Sort("FieldDescriptor")
+              , Sort("FieldSignatureSpec")
+              , Sort("InitialValue")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Field"), Constructor("JBCExtField"))
+          , Rhs(
+              [ Lit("\".field\"")
+              , IterStar(Sort("FieldAccess"))
+              , Sort("FieldName")
+              , Sort("FieldDescriptor")
+              , Sort("FieldSignatureSpec")
+              , Sort("InitialValue")
+              , IterStar(Sort("FieldAttribute"))
+              , Lit("\".end\"")
+              , Lit("\"field\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldAttribute"), Constructor("JBCSignature"))
+          , Rhs([Lit("\".signature\""), Sort("String")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldAttribute"), Constructor("JBCDeprecated"))
+          , Rhs([Lit("\".deprecated\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldAttribute"), Constructor("JBCAttribute"))
+          , Rhs([Lit("\".attribute\""), Sort("AttributeName"), Sort("FileName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldAttribute"), Constructor("JBCAnnotation"))
+          , Rhs([Sort("Annotation")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldSignatureSpec"), Constructor("FieldSig"))
+          , Rhs([Lit("\"signature\""), Sort("String")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldSignatureSpec"), Constructor("None"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InitialValue"), Constructor("InitVal"))
+          , Rhs([Lit("\"=\""), Sort("Constant")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InitialValue"), Constructor("None"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldAccess"), Constructor("PUBLIC"))
+          , Rhs([Lit("\"public\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldAccess"), Constructor("PRIVATE"))
+          , Rhs([Lit("\"private\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldAccess"), Constructor("PROTECTED"))
+          , Rhs([Lit("\"protected\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldAccess"), Constructor("STATIC"))
+          , Rhs([Lit("\"static\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldAccess"), Constructor("FINAL"))
+          , Rhs([Lit("\"final\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldAccess"), Constructor("VOLATILE"))
+          , Rhs([Lit("\"volatile\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldAccess"), Constructor("TRANSIENT"))
+          , Rhs([Lit("\"transient\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldAccess"), Constructor("FPSTRICT"))
+          , Rhs([Lit("\"fpstrict\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldAccess"), Constructor("SYNTHETIC"))
+          , Rhs([Lit("\"synthetic\"")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\".field\"")
+            , Lit("\".end\"")
+            , Lit("\".signature\"")
+            , Lit("\".deprecated\"")
+            , Lit("\"signature\"")
+            , Lit("\"=\"")
+            , Lit("\"public\"")
+            , Lit("\"private\"")
+            , Lit("\"protected\"")
+            , Lit("\"static\"")
+            , Lit("\"final\"")
+            , Lit("\"volatile\"")
+            , Lit("\"transient\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\0"), Numeric("\\8"))
+                    , Conc(
+                        Range(Numeric("\\10"), Numeric("\\31"))
+                      , Range(Numeric("\\33"), Numeric("\\255"))
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$Field\"")
+            , Lit("\"$FieldName\"")
+            , Lit("\"$FieldDescriptor\"")
+            , Lit("\"$AttributeName\"")
+            , Lit("\"$FileName\"")
+            , Lit("\"$FieldAttribute\"")
+            , Lit("\"$Annotation\"")
+            , Lit("\"$String\"")
+            , Lit("\"$FieldSignatureSpec\"")
+            , Lit("\"$Constant\"")
+            , Lit("\"$InitialValue\"")
+            , Lit("\"$FieldAccess\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

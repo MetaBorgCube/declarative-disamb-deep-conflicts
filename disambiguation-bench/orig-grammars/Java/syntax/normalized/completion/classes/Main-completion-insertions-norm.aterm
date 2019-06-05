@@ -1,0 +1,18 @@
+Module(
+  Unparameterized("normalized/completion/classes/Main-completion-insertions-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/classes/Main-norm"))
+      , Module(Unparameterized("normalized/completion/classes/ClassDeclarations-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/classes/FieldDeclarations-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/classes/MethodDeclarations-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/classes/EnumDeclarations-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/classes/InstanceInitializers-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/classes/StaticInitializers-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/classes/ConstructorDeclarations-completion-insertions-norm"))
+      ]
+    )
+  ]
+, [SDFSection(
+     LexicalSyntax([SdfProduction(Sort("COMPLETION-INSERTION"), Rhs([]), NoAttrs())])
+   )]
+)

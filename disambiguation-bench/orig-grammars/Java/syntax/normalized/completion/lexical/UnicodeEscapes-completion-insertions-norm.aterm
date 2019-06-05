@@ -1,0 +1,7 @@
+Module(
+  Unparameterized("normalized/completion/lexical/UnicodeEscapes-completion-insertions-norm")
+, [Imports([Module(Unparameterized("normalized/lexical/UnicodeEscapes-norm"))])]
+, [SDFSection(
+     LexicalSyntax([SdfProduction(Sort("COMPLETION-INSERTION"), Rhs([]), NoAttrs())])
+   )]
+)

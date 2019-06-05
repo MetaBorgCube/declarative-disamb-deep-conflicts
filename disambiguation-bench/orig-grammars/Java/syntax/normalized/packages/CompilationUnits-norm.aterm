@@ -1,0 +1,41 @@
+Module(
+  Unparameterized("normalized/packages/CompilationUnits-norm")
+, [ Imports(
+      [Module(Unparameterized("normalized/packages/PackageDeclarations-norm")), Module(Unparameterized("normalized/packages/ImportDeclarations-norm")), Module(Unparameterized("normalized/packages/TypeDeclarations-norm"))]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("CompilationUnit"), Constructor("CompilationUnit"))
+          , Rhs(
+              [Opt(Sort("PackageDeclaration")), IterStar(Sort("ImportDeclaration")), IterStar(Sort("TypeDeclaration"))]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$CompilationUnit\""), Lit("\"$PackageDeclaration\""), Lit("\"$ImportDeclaration\""), Lit("\"$TypeDeclaration\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

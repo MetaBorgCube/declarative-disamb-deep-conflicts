@@ -1,0 +1,94 @@
+Module(
+  Unparameterized("normalized/JasminXT-Numbers-norm")
+, []
+, [ SDFSection(ContextFreeStartSymbols([Sort("Int")]))
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Sort("Double")
+          , Rhs(
+              [Sort("Int"), Lit("\".\""), Sort("Int"), Lit("\"d\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("Float")
+          , Rhs([Sort("Int"), Lit("\".\""), Sort("Int")])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("Int")
+          , Rhs(
+              [Iter(
+                 CharClass(Simple(Present(Range(Numeric("\\48"), Numeric("\\57")))))
+               )]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Sort("NegInt")
+          , Rhs([Lit("\"-\""), Sort("Int")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Sort("Int")]
+          , Single(
+              CharClass(Simple(Present(Range(Numeric("\\48"), Numeric("\\57")))))
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Constant"), Constructor("Double"))
+          , Rhs([Sort("Double")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Constant"), Constructor("Float"))
+          , Rhs([Sort("Float")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Constant"), Constructor("Int"))
+          , Rhs([Sort("Int")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$Double\""), Lit("\"$Float\""), Lit("\"$Constant\""), Lit("\"$Int\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

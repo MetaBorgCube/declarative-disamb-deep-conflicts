@@ -1,0 +1,155 @@
+Module(
+  Unparameterized("normalized/ModuleTypes-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/Lexical-norm"))
+      , Module(Unparameterized("normalized/Classes-norm"))
+      , Module(Unparameterized("normalized/Names-norm"))
+      , Module(Unparameterized("normalized/TypesAndExceptions-norm"))
+      , Module(Unparameterized("normalized/ModuleExpressions-norm"))
+      , Module(Unparameterized("normalized/TypeExpr-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("ModuleType"), Constructor("ModuleTypePath"))
+          , Rhs([Sort("ModTypePath")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModuleType"), Constructor("Signature"))
+          , Rhs(
+              [Lit("\"sig\""), IterStar(Sort("DefinitionSemi")), Lit("\"end\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModuleType"), Constructor("Functor"))
+          , Rhs(
+              [ Lit("\"functor\"")
+              , Lit("\"(\"")
+              , Sort("ModuleName")
+              , Lit("\":\"")
+              , Sort("ModuleType")
+              , Lit("\")\"")
+              , Lit("\"->\"")
+              , Sort("ModuleType")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModuleType"), Constructor("ModuleTypeOf"))
+          , Rhs(
+              [Lit("\"module\""), Lit("\"type\""), Lit("\"of\""), Sort("ModuleExpr")]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("ModuleType")
+          , Rhs([Lit("\"(\""), Sort("ModuleType"), Lit("\")\"")])
+          , Attrs([Bracket()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModuleType"), Constructor("ModuleTypeWith"))
+          , Rhs(
+              [Sort("ModuleType"), Lit("\"with\""), IterSep(Sort("ModConstraint"), Lit("\"and\""))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("DefinitionSemi"), Constructor("Definition"))
+          , Rhs([Sort("Definition"), Sort("DoubleSemiColonOpt")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModConstraint"), Constructor("ModConsType1"))
+          , Rhs(
+              [ Lit("\"type\"")
+              , Opt(Sort("TypeParams"))
+              , Sort("TypeConstr")
+              , Lit("\"=\"")
+              , Sort("TypeExpr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModConstraint"), Constructor("ModConsType2"))
+          , Rhs(
+              [ Lit("\"type\"")
+              , Opt(Sort("TypeParameters"))
+              , Sort("TypeConstrName")
+              , Lit("\":=\"")
+              , Opt(Sort("TypeParameters"))
+              , Sort("TypeConstr")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModConstraint"), Constructor("ModeConsModule1"))
+          , Rhs(
+              [Lit("\"module\""), Sort("ModulePath"), Lit("\"=\""), Sort("ExtendedModulePath")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ModConstraint"), Constructor("ModeConsModule2"))
+          , Rhs(
+              [Lit("\"module\""), Sort("ModuleName"), Lit("\":=\""), Sort("ExtendedModulePath")]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ SimpleRefGroup(SortConsRef(Sort("ModuleType"), Constructor("ModuleTypeWith")))
+            , SimpleRefGroup(SortConsRef(Sort("ModuleType"), Constructor("Functor")))
+            ]
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$ModTypePath\"")
+            , Lit("\"$ModuleExpr\"")
+            , Lit("\"$ModuleType\"")
+            , Lit("\"$DefinitionSemi\"")
+            , Lit("\"$Definition\"")
+            , Lit("\"$DoubleSemiColonOpt\"")
+            , Lit("\"$TypeParams\"")
+            , Lit("\"$TypeExpr\"")
+            , Lit("\"$TypeConstrName\"")
+            , Lit("\"$TypeParameters\"")
+            , Lit("\"$TypeConstr\"")
+            , Lit("\"$ModulePath\"")
+            , Lit("\"$ModConstraint\"")
+            , Lit("\"$ModuleName\"")
+            , Lit("\"$ExtendedModulePath\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

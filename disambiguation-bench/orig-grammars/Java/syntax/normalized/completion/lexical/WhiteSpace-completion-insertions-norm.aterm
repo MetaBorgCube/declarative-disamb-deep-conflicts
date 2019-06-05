@@ -1,0 +1,7 @@
+Module(
+  Unparameterized("normalized/completion/lexical/WhiteSpace-completion-insertions-norm")
+, [Imports([Module(Unparameterized("normalized/lexical/WhiteSpace-norm"))])]
+, [SDFSection(
+     LexicalSyntax([SdfProduction(Sort("COMPLETION-INSERTION"), Rhs([]), NoAttrs())])
+   )]
+)

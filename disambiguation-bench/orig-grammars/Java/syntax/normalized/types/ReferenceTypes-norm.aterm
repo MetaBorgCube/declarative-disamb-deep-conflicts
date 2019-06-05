@@ -1,0 +1,103 @@
+Module(
+  Unparameterized("normalized/types/ReferenceTypes-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/lexical/Identifiers-norm"))
+      , Module(Unparameterized("normalized/types/PrimitiveTypes-norm"))
+      , Module(Unparameterized("normalized/types/ParameterizedTypes-norm"))
+      , Module(Unparameterized("normalized/interfaces/Annotations-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProduction(Sort("ReferenceType"), Rhs([Sort("ClassType")]), NoAttrs())
+        , SdfProduction(Sort("ReferenceType"), Rhs([Sort("ArrayType")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassType"), Constructor("ClassType"))
+          , Rhs(
+              [IterStar(Sort("Annotation")), Sort("Id"), Opt(Sort("TypeArguments"))]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ClassType"), Constructor("ClassOrInterfaceTypeMember"))
+          , Rhs(
+              [ Sort("ClassType")
+              , Lit("\".\"")
+              , IterStar(Sort("Annotation"))
+              , Sort("Id")
+              , Opt(Sort("TypeArguments"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("TypeVariable"), Constructor("TypeVar"))
+          , Rhs([IterStar(Sort("Annotation")), Sort("Id")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ArrayType"), Constructor("ArrayTypePrimitive"))
+          , Rhs([Sort("PrimitiveType"), Sort("AnnotatedDims")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ArrayType"), Constructor("ArrayTypeClassType"))
+          , Rhs([Sort("ClassType"), Sort("AnnotatedDims")])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("AnnotatedDims")
+          , Rhs([Iter(Sort("AnnotatedDim"))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("AnnotatedDimsEmpty")
+          , Rhs([IterStar(Sort("AnnotatedDim"))])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("AnnotatedDim"), Constructor("AnnotateDim"))
+          , Rhs(
+              [IterStar(Sort("Annotation")), Lit("\"[\""), Lit("\"]\"")]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , TemplateOptions([Tokenize("\"[\"")])
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$ReferenceType\"")
+            , Lit("\"$TypeArguments\"")
+            , Lit("\"$TypeVariable\"")
+            , Lit("\"$Id\"")
+            , Lit("\"$PrimitiveType\"")
+            , Lit("\"$ArrayType\"")
+            , Lit("\"$ClassType\"")
+            , Lit("\"$AnnotatedDims\"")
+            , Lit("\"$AnnotatedDimsEmpty\"")
+            , Lit("\"$AnnotatedDim\"")
+            , Lit("\"$Annotation\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

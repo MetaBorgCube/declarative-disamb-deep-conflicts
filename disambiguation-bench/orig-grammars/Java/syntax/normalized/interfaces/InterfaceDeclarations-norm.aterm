@@ -1,0 +1,116 @@
+Module(
+  Unparameterized("normalized/interfaces/InterfaceDeclarations-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/lexical/Identifiers-norm"))
+      , Module(Unparameterized("normalized/classes/ClassDeclarations-norm"))
+      , Module(Unparameterized("normalized/types/ReferenceTypes-norm"))
+      , Module(Unparameterized("normalized/interfaces/Annotations-norm"))
+      , Module(Unparameterized("normalized/interfaces/ConstantDeclarations-norm"))
+      , Module(Unparameterized("normalized/interfaces/InterfaceMethodDeclarations-norm"))
+      , Module(Unparameterized("normalized/interfaces/AnnotationTypes-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("InterfaceDeclaration"), Constructor("NormalInterface"))
+          , Rhs(
+              [ IterStar(Sort("InterfaceModifier"))
+              , Lit("\"interface\"")
+              , Sort("Id")
+              , Opt(Sort("TypeParameters"))
+              , Opt(Sort("ExtendsInterfaces"))
+              , Lit("\"{\"")
+              , IterStar(Sort("InterfaceMemberDeclaration"))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("InterfaceDeclaration"), Rhs([Sort("AnnotationTypeDeclaration")]), NoAttrs())
+        , SdfProduction(Sort("InterfaceModifier"), Rhs([Sort("Annotation")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("InterfaceModifier"), Constructor("Public"))
+          , Rhs([Lit("\"public\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InterfaceModifier"), Constructor("Protected"))
+          , Rhs([Lit("\"protected\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InterfaceModifier"), Constructor("Private"))
+          , Rhs([Lit("\"private\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InterfaceModifier"), Constructor("Abstract"))
+          , Rhs([Lit("\"abstract\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InterfaceModifier"), Constructor("Static"))
+          , Rhs([Lit("\"static\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("InterfaceModifier"), Constructor("Strictfp"))
+          , Rhs([Lit("\"strictfp\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("ExtendsInterfaces"), Constructor("ExtendsInterfaces"))
+          , Rhs(
+              [Lit("\"extends\""), IterSep(Sort("ClassType"), Lit("\",\""))]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("InterfaceMemberDeclaration"), Rhs([Sort("ConstantDeclaration")]), NoAttrs())
+        , SdfProduction(Sort("InterfaceMemberDeclaration"), Rhs([Sort("InterfaceMethodDeclaration")]), NoAttrs())
+        , SdfProduction(Sort("InterfaceMemberDeclaration"), Rhs([Sort("ClassDeclaration")]), NoAttrs())
+        , SdfProduction(Sort("InterfaceMemberDeclaration"), Rhs([Sort("InterfaceDeclaration")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("InterfaceMemberDeclaration"), Constructor("SemiColon"))
+          , Rhs([Lit("\";\"")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$Id\"")
+            , Lit("\"$TypeParameters\"")
+            , Lit("\"$AnnotationTypeDeclaration\"")
+            , Lit("\"$Annotation\"")
+            , Lit("\"$InterfaceModifier\"")
+            , Lit("\"$ExtendsInterfaces\"")
+            , Lit("\"$ClassType\"")
+            , Lit("\"$ConstantDeclaration\"")
+            , Lit("\"$InterfaceMethodDeclaration\"")
+            , Lit("\"$ClassDeclaration\"")
+            , Lit("\"$InterfaceDeclaration\"")
+            , Lit("\"$InterfaceMemberDeclaration\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

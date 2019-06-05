@@ -21,6 +21,8 @@ import com.google.common.collect.Sets;
 public class NormGrammar implements INormGrammar, Serializable {
 
     private static final long serialVersionUID = -13739894962185282L;
+    
+    private int inputPriorities = 0;
 
     // all files used in this grammar
     private Set<File> filesRead;
@@ -447,5 +449,15 @@ public class NormGrammar implements INormGrammar, Serializable {
     public void setCombinedExpressionGrammars(Set<Set<IProduction>> combinedExpressionGrammars) {
         this.combinedExpressionGrammars = combinedExpressionGrammars;
     }
+
+
+	public int getInputPriorities() {
+		return inputPriorities;
+	}
+
+
+	public void setInputPriorities(int inputPriorities) {
+		this.inputPriorities = inputPriorities;
+	}
 
 }

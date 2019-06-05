@@ -1,0 +1,79 @@
+Module(
+  Unparameterized("normalized/Tiger-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/Whitespace-norm"))
+      , Module(Unparameterized("normalized/Types-norm"))
+      , Module(Unparameterized("normalized/Identifiers-norm"))
+      , Module(Unparameterized("normalized/Bindings-norm"))
+      , Module(Unparameterized("normalized/Variables-norm"))
+      , Module(Unparameterized("normalized/Functions-norm"))
+      , Module(Unparameterized("normalized/Numbers-norm"))
+      , Module(Unparameterized("normalized/Strings-norm"))
+      , Module(Unparameterized("normalized/Records-norm"))
+      , Module(Unparameterized("normalized/Arrays-norm"))
+      , Module(Unparameterized("normalized/Control-Flow-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeStartSymbols([Sort("Module"), Sort("Exp"), Sort("Id")])
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Module"), Constructor("Mod"))
+          , Rhs([Sort("Exp")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ SimpleRefGroup(SortConsRef(Sort("Exp"), Constructor("Or")))
+            , SimpleRefGroup(SortConsRef(Sort("Exp"), Constructor("Array")))
+            , SimpleRefGroup(SortConsRef(Sort("Exp"), Constructor("Assign")))
+            ]
+          )
+        , Chain(
+            [ ProdsRefGroup(
+                [ SortConsRef(Sort("Exp"), Constructor("Uminus"))
+                , SortConsRef(Sort("LValue"), Constructor("FieldVar"))
+                , SortConsRef(Sort("LValue"), Constructor("Subscript"))
+                ]
+              )
+            , AssocRefGroup(
+                Left()
+              , [ SortConsRef(Sort("Exp"), Constructor("Times"))
+                , SortConsRef(Sort("Exp"), Constructor("Divide"))
+                ]
+              )
+            ]
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$Module\""), Lit("\"$Exp\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

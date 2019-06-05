@@ -1,0 +1,14 @@
+Module(
+  Unparameterized("normalized/completion/statements/Main-completion-insertions-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/statements/Main-norm"))
+      , Module(Unparameterized("normalized/completion/statements/Blocks-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/statements/LocalVariableDeclarations-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/statements/Statements-completion-insertions-norm"))
+      ]
+    )
+  ]
+, [SDFSection(
+     LexicalSyntax([SdfProduction(Sort("COMPLETION-INSERTION"), Rhs([]), NoAttrs())])
+   )]
+)

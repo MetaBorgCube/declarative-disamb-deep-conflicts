@@ -1,0 +1,84 @@
+Module(
+  Unparameterized("normalized/JasminXT-Types-norm")
+, []
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("BaseType"), Constructor("Byte"))
+          , Rhs([Lit("\"B\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("BaseType"), Constructor("Char"))
+          , Rhs([Lit("\"C\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("BaseType"), Constructor("Double"))
+          , Rhs([Lit("\"D\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("BaseType"), Constructor("Float"))
+          , Rhs([Lit("\"F\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("BaseType"), Constructor("Int"))
+          , Rhs([Lit("\"I\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("BaseType"), Constructor("Long"))
+          , Rhs([Lit("\"J\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("BaseType"), Constructor("Short"))
+          , Rhs([Lit("\"S\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("BaseType"), Constructor("Boolean"))
+          , Rhs([Lit("\"Z\"")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("FieldType"), Rhs([Sort("BaseType")]), NoAttrs())
+        , SdfProduction(Sort("FieldType"), Rhs([Sort("ArrayType")]), NoAttrs())
+        , SdfProduction(Sort("ComponentType"), Rhs([Sort("FieldType")]), NoAttrs())
+        ]
+      )
+    )
+  , SDFSection(
+      Kernel(
+        [ SdfProductionWithCons(
+            SortCons(Cf(Sort("ArrayType")), Constructor("Array"))
+          , Rhs([Lit("\"[\""), Cf(Sort("ComponentType"))])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$BaseType\""), Lit("\"$ArrayType\""), Lit("\"$ComponentType\""), Lit("\"$FieldType\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

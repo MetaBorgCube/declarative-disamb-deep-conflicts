@@ -1,0 +1,302 @@
+Module(
+  Unparameterized("normalized/literals/IntegerLiterals-norm")
+, []
+, [ SDFSection(ContextFreeStartSymbols([Sort("IntLiteral")]))
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("IntLiteral"), Constructor("Deci"))
+          , Rhs([Sort("DeciLiteral")])
+          , Attrs([Prefer()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("IntLiteral"), Constructor("Hexa"))
+          , Rhs([Sort("HexaLiteral")])
+          , Attrs([Prefer()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("IntLiteral"), Constructor("Octa"))
+          , Rhs([Sort("OctaLiteral")])
+          , Attrs([Prefer()])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("IntLiteral"), Constructor("Bin"))
+          , Rhs([Sort("BinLiteral")])
+          , Attrs([Prefer()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Sort("DeciLiteral")
+          , Rhs(
+              [ Sort("DeciNumeral")
+              , Opt(
+                  CharClass(Simple(Present(Conc(Numeric("\\76"), Numeric("\\108")))))
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("HexaLiteral")
+          , Rhs(
+              [ Sort("HexaNumeral")
+              , Opt(
+                  CharClass(Simple(Present(Conc(Numeric("\\76"), Numeric("\\108")))))
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("OctaLiteral")
+          , Rhs(
+              [ Sort("OctaNumeral")
+              , Opt(
+                  CharClass(Simple(Present(Conc(Numeric("\\76"), Numeric("\\108")))))
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("BinLiteral")
+          , Rhs(
+              [ Sort("BinNumeral")
+              , Opt(
+                  CharClass(Simple(Present(Conc(Numeric("\\76"), Numeric("\\108")))))
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("DeciNumeral"), Rhs([Lit("\"0\"")]), NoAttrs())
+        , SdfProduction(
+            Sort("DeciNumeral")
+          , Rhs(
+              [ CharClass(Simple(Present(Range(Numeric("\\49"), Numeric("\\57")))))
+              , IterStar(
+                  CharClass(
+                    Simple(
+                      Present(
+                        Conc(Range(Numeric("\\48"), Numeric("\\57")), Numeric("\\95"))
+                      )
+                    )
+                  )
+                )
+              , CharClass(Simple(Present(Range(Numeric("\\48"), Numeric("\\57")))))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("DeciNumeral")
+          , Rhs(
+              [CharClass(Simple(Present(Range(Numeric("\\49"), Numeric("\\57")))))]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("HexaNumeral")
+          , Rhs(
+              [ CharClass(Simple(Present(Numeric("\\48"))))
+              , CharClass(Simple(Present(Conc(Numeric("\\88"), Numeric("\\120")))))
+              , IterStar(
+                  CharClass(
+                    Simple(
+                      Present(
+                        Conc(
+                          Range(Numeric("\\48"), Numeric("\\57"))
+                        , Conc(
+                            Range(Numeric("\\65"), Numeric("\\70"))
+                          , Conc(Numeric("\\95"), Range(Numeric("\\97"), Numeric("\\102")))
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              , CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\48"), Numeric("\\57"))
+                      , Conc(
+                          Range(Numeric("\\65"), Numeric("\\70"))
+                        , Range(Numeric("\\97"), Numeric("\\102"))
+                        )
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("OctaNumeral")
+          , Rhs(
+              [ CharClass(Simple(Present(Numeric("\\48"))))
+              , IterStar(
+                  CharClass(
+                    Simple(
+                      Present(
+                        Conc(Range(Numeric("\\48"), Numeric("\\55")), Numeric("\\95"))
+                      )
+                    )
+                  )
+                )
+              , CharClass(Simple(Present(Range(Numeric("\\48"), Numeric("\\55")))))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("BinNumeral")
+          , Rhs(
+              [ Lit("\"0\"")
+              , CharClass(Simple(Present(Conc(Numeric("\\66"), Numeric("\\98")))))
+              , Sort("BinDigits")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("BinDigits")
+          , Rhs(
+              [CharClass(Simple(Present(Range(Numeric("\\48"), Numeric("\\49")))))]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("BinDigits")
+          , Rhs(
+              [ CharClass(Simple(Present(Range(Numeric("\\48"), Numeric("\\49")))))
+              , IterStar(
+                  CharClass(
+                    Simple(
+                      Present(
+                        Conc(Range(Numeric("\\48"), Numeric("\\49")), Numeric("\\95"))
+                      )
+                    )
+                  )
+                )
+              , CharClass(Simple(Present(Range(Numeric("\\48"), Numeric("\\49")))))
+              ]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Sort("DeciNumeral")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Numeric("\\46")
+                    , Conc(
+                        Range(Numeric("\\48"), Numeric("\\57"))
+                      , Conc(
+                          Numeric("\\68")
+                        , Conc(Numeric("\\70"), Conc(Numeric("\\100"), Numeric("\\102")))
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        , Follow(
+            [Sort("HexaNumeral")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\48"), Numeric("\\57"))
+                    , Conc(
+                        Range(Numeric("\\65"), Numeric("\\70"))
+                      , Range(Numeric("\\97"), Numeric("\\102"))
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        , Follow(
+            [Sort("OctaNumeral")]
+          , Single(
+              CharClass(Simple(Present(Range(Numeric("\\48"), Numeric("\\55")))))
+            )
+          )
+        , Follow(
+            [Sort("BinNumeral")]
+          , Single(
+              CharClass(Simple(Present(Range(Numeric("\\48"), Numeric("\\49")))))
+            )
+          )
+        , Follow(
+            [Sort("DeciLiteral")]
+          , Single(
+              CharClass(Simple(Present(Conc(Numeric("\\76"), Numeric("\\108")))))
+            )
+          )
+        , Follow(
+            [Sort("HexaLiteral")]
+          , Single(
+              CharClass(Simple(Present(Conc(Numeric("\\76"), Numeric("\\108")))))
+            )
+          )
+        , Follow(
+            [Sort("OctaLiteral")]
+          , Single(
+              CharClass(Simple(Present(Conc(Numeric("\\76"), Numeric("\\108")))))
+            )
+          )
+        , Follow(
+            [Sort("BinLiteral")]
+          , Single(
+              CharClass(Simple(Present(Conc(Numeric("\\76"), Numeric("\\108")))))
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$DeciLiteral\"")
+            , Lit("\"$HexaLiteral\"")
+            , Lit("\"$OctaLiteral\"")
+            , Lit("\"$IntLiteral\"")
+            , Lit("\"$BinLiteral\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

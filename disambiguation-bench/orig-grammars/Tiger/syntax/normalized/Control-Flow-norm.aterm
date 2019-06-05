@@ -1,0 +1,101 @@
+Module(
+  Unparameterized("normalized/Control-Flow-norm")
+, [Imports([Module(Unparameterized("normalized/Identifiers-norm")), Module(Unparameterized("normalized/Variables-norm"))])]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Seq"))
+          , Rhs(
+              [Lit("\"(\""), IterStarSep(Sort("Exp"), Lit("\";\"")), Lit("\")\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("If"))
+          , Rhs(
+              [ Lit("\"if\"")
+              , Sort("Exp")
+              , Lit("\"then\"")
+              , Sort("Exp")
+              , Lit("\"else\"")
+              , Sort("Exp")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("IfThen"))
+          , Rhs(
+              [Lit("\"if\""), Sort("Exp"), Lit("\"then\""), Sort("Exp")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("While"))
+          , Rhs(
+              [Lit("\"while\""), Sort("Exp"), Lit("\"do\""), Sort("Exp")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("For"))
+          , Rhs(
+              [ Lit("\"for\"")
+              , Sort("Var")
+              , Lit("\":=\"")
+              , Sort("Exp")
+              , Lit("\"to\"")
+              , Sort("Exp")
+              , Lit("\"do\"")
+              , Sort("Exp")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Break"))
+          , Rhs([Lit("\"break\"")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ SimpleRefGroup(SortConsRef(Sort("Exp"), Constructor("Assign")))
+            , ProdsRefGroup(
+                [ SortConsRef(Sort("Exp"), Constructor("While"))
+                , SortConsRef(Sort("Exp"), Constructor("For"))
+                ]
+              )
+            , SimpleRefGroup(SortConsRef(Sort("Exp"), Constructor("If")))
+            , SimpleRefGroup(SortConsRef(Sort("Exp"), Constructor("IfThen")))
+            ]
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$Var\""), Lit("\"$Exp\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

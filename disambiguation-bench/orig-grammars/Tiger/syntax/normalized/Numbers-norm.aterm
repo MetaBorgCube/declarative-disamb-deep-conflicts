@@ -1,0 +1,178 @@
+Module(
+  Unparameterized("normalized/Numbers-norm")
+, []
+, [ SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Sort("IntConst")
+          , Rhs(
+              [Iter(
+                 CharClass(Simple(Present(Range(Numeric("\\48"), Numeric("\\57")))))
+               )]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("RealConst"), Constructor("RealConstNoExp"))
+          , Rhs([Sort("IntConst"), Lit("\".\""), Sort("IntConst")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("RealConst"), Constructor("RealConst"))
+          , Rhs(
+              [ Sort("IntConst")
+              , Lit("\".\"")
+              , Sort("IntConst")
+              , Lit("\"e\"")
+              , Sort("Sign")
+              , Sort("IntConst")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("Sign"), Rhs([Lit("\"+\"")]), NoAttrs())
+        , SdfProduction(Sort("Sign"), Rhs([Lit("\"-\"")]), NoAttrs())
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Int"))
+          , Rhs([Sort("IntConst")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Uminus"))
+          , Rhs([Lit("\"-\""), Sort("Exp")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Times"))
+          , Rhs([Sort("Exp"), Lit("\"*\""), Sort("Exp")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Divide"))
+          , Rhs([Sort("Exp"), Lit("\"/\""), Sort("Exp")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Plus"))
+          , Rhs([Sort("Exp"), Lit("\"+\""), Sort("Exp")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Minus"))
+          , Rhs([Sort("Exp"), Lit("\"-\""), Sort("Exp")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Eq"))
+          , Rhs([Sort("Exp"), Lit("\"=\""), Sort("Exp")])
+          , Attrs([Assoc(NonAssoc())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Neq"))
+          , Rhs([Sort("Exp"), Lit("\"<>\""), Sort("Exp")])
+          , Attrs([Assoc(NonAssoc())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Gt"))
+          , Rhs([Sort("Exp"), Lit("\">\""), Sort("Exp")])
+          , Attrs([Assoc(NonAssoc())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Lt"))
+          , Rhs([Sort("Exp"), Lit("\"<\""), Sort("Exp")])
+          , Attrs([Assoc(NonAssoc())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Geq"))
+          , Rhs([Sort("Exp"), Lit("\">=\""), Sort("Exp")])
+          , Attrs([Assoc(NonAssoc())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Leq"))
+          , Rhs([Sort("Exp"), Lit("\"<=\""), Sort("Exp")])
+          , Attrs([Assoc(NonAssoc())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("And"))
+          , Rhs([Sort("Exp"), Lit("\"&\""), Sort("Exp")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Or"))
+          , Rhs([Sort("Exp"), Lit("\"|\""), Sort("Exp")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProduction(
+            Sort("Exp")
+          , Rhs([Lit("\"(\""), Sort("Exp"), Lit("\")\"")])
+          , Attrs([Bracket(), Avoid()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ ProdsRefGroup([SortConsRef(Sort("Exp"), Constructor("Uminus"))])
+            , AssocRefGroup(
+                Left()
+              , [ SortConsRef(Sort("Exp"), Constructor("Times"))
+                , SortConsRef(Sort("Exp"), Constructor("Divide"))
+                ]
+              )
+            , AssocRefGroup(
+                Left()
+              , [ SortConsRef(Sort("Exp"), Constructor("Plus"))
+                , SortConsRef(Sort("Exp"), Constructor("Minus"))
+                ]
+              )
+            , AssocRefGroup(
+                NonAssoc()
+              , [ SortConsRef(Sort("Exp"), Constructor("Eq"))
+                , SortConsRef(Sort("Exp"), Constructor("Neq"))
+                , SortConsRef(Sort("Exp"), Constructor("Gt"))
+                , SortConsRef(Sort("Exp"), Constructor("Lt"))
+                , SortConsRef(Sort("Exp"), Constructor("Geq"))
+                , SortConsRef(Sort("Exp"), Constructor("Leq"))
+                ]
+              )
+            , SimpleRefGroup(SortConsRef(Sort("Exp"), Constructor("And")))
+            , SimpleRefGroup(SortConsRef(Sort("Exp"), Constructor("Or")))
+            ]
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$IntConst\""), Lit("\"$Exp\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

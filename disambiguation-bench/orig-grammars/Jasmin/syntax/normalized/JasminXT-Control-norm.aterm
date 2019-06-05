@@ -1,0 +1,287 @@
+Module(
+  Unparameterized("normalized/JasminXT-Control-norm")
+, [Imports([Module(Unparameterized("normalized/JasminXT-Names-norm")), Module(Unparameterized("normalized/JasminXT-Numbers-norm"))])]
+, [ SDFSection(
+      ContextFreeStartSymbols(
+        [ Sort("Instruction")
+        , Sort("LabelRef")
+        , Sort("RelOffset")
+        , Sort("Target")
+        , Sort("TableEntry")
+        , Sort("LookupEntry")
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("RelOffset"), Constructor("RelativeFwd"))
+          , Rhs([Lit("\"+\""), Sort("Int")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("RelOffset"), Constructor("RelativeBwd"))
+          , Rhs([Lit("\"-\""), Sort("Int")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("Target"), Rhs([Sort("LabelRef")]), NoAttrs())
+        , SdfProduction(
+            Sort("Target")
+          , Rhs([Sort("RelOffset")])
+          , Attrs([Prefer()])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("IFEQ"))
+          , Rhs([Lit("\"ifeq\""), Sort("Target")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("IFLT"))
+          , Rhs([Lit("\"iflt\""), Sort("Target")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("IFLE"))
+          , Rhs([Lit("\"ifle\""), Sort("Target")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("IFNE"))
+          , Rhs([Lit("\"ifne\""), Sort("Target")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("IFGT"))
+          , Rhs([Lit("\"ifgt\""), Sort("Target")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("IFGE"))
+          , Rhs([Lit("\"ifge\""), Sort("Target")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("IFNULL"))
+          , Rhs([Lit("\"ifnull\""), Sort("Target")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("IFNONNULL"))
+          , Rhs([Lit("\"ifnonnull\""), Sort("Target")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("IF_ICMPEQ"))
+          , Rhs([Lit("\"if_icmpeq\""), Sort("Target")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("IF_ICMPLT"))
+          , Rhs([Lit("\"if_icmplt\""), Sort("Target")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("IF_ICMPLE"))
+          , Rhs([Lit("\"if_icmple\""), Sort("Target")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("IF_ICMPNE"))
+          , Rhs([Lit("\"if_icmpne\""), Sort("Target")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("IF_ICMPGT"))
+          , Rhs([Lit("\"if_icmpgt\""), Sort("Target")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("IF_ICMPGE"))
+          , Rhs([Lit("\"if_icmpge\""), Sort("Target")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("IF_ACMPEQ"))
+          , Rhs([Lit("\"if_acmpeq\""), Sort("Target")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("IF_ACMPNE"))
+          , Rhs([Lit("\"if_acmpne\""), Sort("Target")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("Table"))
+          , Rhs(
+              [ Lit("\"tableswitch\"")
+              , Sort("Int")
+              , IterStar(Sort("TableEntry"))
+              , Lit("\"default\"")
+              , Lit("\":\"")
+              , Sort("LabelRef")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("Lookup"))
+          , Rhs(
+              [ Lit("\"lookupswitch\"")
+              , IterStar(Sort("LookupEntry"))
+              , Lit("\"default\"")
+              , Lit("\":\"")
+              , Sort("LabelRef")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("TableEntry"), Rhs([Sort("LabelRef")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("LookupEntry"), Constructor("NPAIR"))
+          , Rhs([Sort("Int"), Lit("\":\""), Sort("LabelRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("GOTO"))
+          , Rhs([Lit("\"goto\""), Sort("LabelRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("GOTO_W"))
+          , Rhs([Lit("\"goto_w\""), Sort("LabelRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("JSR"))
+          , Rhs([Lit("\"jsr\""), Sort("LabelRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Instruction"), Constructor("JSR_W"))
+          , Rhs([Lit("\"jsr_w\""), Sort("LabelRef")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , TemplateOptions([Tokenize("\":\"")])
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"ifeq\"")
+            , Lit("\"iflt\"")
+            , Lit("\"ifle\"")
+            , Lit("\"ifne\"")
+            , Lit("\"ifgt\"")
+            , Lit("\"ifge\"")
+            , Lit("\"ifnull\"")
+            , Lit("\"ifnonnull\"")
+            , Lit("\"if_icmpeq\"")
+            , Lit("\"if_icmplt\"")
+            , Lit("\"if_icmple\"")
+            , Lit("\"if_icmpne\"")
+            , Lit("\"if_icmpgt\"")
+            , Lit("\"if_icmpge\"")
+            , Lit("\"if_acmpeq\"")
+            , Lit("\"if_acmpne\"")
+            , Lit("\"tableswitch\"")
+            , Lit("\"goto\"")
+            , Lit("\"goto_w\"")
+            , Lit("\"jsr\"")
+            , Lit("\"jsr_w\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\0"), Numeric("\\8"))
+                    , Conc(
+                        Range(Numeric("\\10"), Numeric("\\31"))
+                      , Range(Numeric("\\33"), Numeric("\\255"))
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        , Follow(
+            [Lit("\"lookupswitch\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\0"), Numeric("\\8"))
+                    , Conc(
+                        Range(Numeric("\\11"), Numeric("\\12"))
+                      , Conc(
+                          Range(Numeric("\\14"), Numeric("\\31"))
+                        , Range(Numeric("\\33"), Numeric("\\255"))
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$Int\""), Lit("\"$LabelRef\""), Lit("\"$Target\""), Lit("\"$RelOffset\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$Target\"")
+            , Lit("\"$TableEntry\"")
+            , Lit("\"$LookupEntry\"")
+            , Lit("\"$Int\"")
+            , Lit("\"$Instruction\"")
+            , Lit("\"$LabelRef\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

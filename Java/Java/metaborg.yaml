@@ -20,7 +20,7 @@ debug:
 language:
   sdf:
     pretty-print: Java
-    sdf2table: java
+    sdf2table: dynamic
     jsglr-version: data-dependent
     placeholder:
       prefix: "$"

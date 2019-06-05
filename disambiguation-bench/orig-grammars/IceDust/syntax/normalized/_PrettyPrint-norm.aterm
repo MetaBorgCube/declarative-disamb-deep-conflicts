@@ -1,0 +1,283 @@
+Module(
+  Unparameterized("normalized/_PrettyPrint-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/Common-norm"))
+      , Module(Unparameterized("normalized/Data-norm"))
+      , Module(Unparameterized("normalized/Model-norm"))
+      , Module(Unparameterized("normalized/Expressions-norm"))
+      , Module(Unparameterized("normalized/Types-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("MemberValue"), Constructor("MemberValuePP"))
+          , Rhs(
+              [Sort("ID"), Lit("\"=\""), IterSep(Sort("Value"), Lit("\",\""))]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("EntityInstance"), Constructor("EntityInstancePP"))
+          , Rhs(
+              [ Opt(Sort("IDSpace"))
+              , Lit("\":\"")
+              , Sort("EntityType")
+              , Lit("\"{\"")
+              , IterStar(Sort("MemberValue"))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("EntityInstance"), Constructor("EntityInstanceNoTypePP"))
+          , Rhs(
+              [ Opt(Sort("IDSpace"))
+              , Lit("\"{\"")
+              , IterStar(Sort("MemberValue"))
+              , Lit("\"}\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Member"), Constructor("AttributePP"))
+          , Rhs(
+              [ Sort("ID")
+              , Sort("MyLayOut")
+              , Lit("\":\"")
+              , Sort("PrimitiveType")
+              , Opt(Sort("Multiplicity"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Member"), Constructor("DerivationAttributePP"))
+          , Rhs(
+              [ Sort("ID")
+              , Sort("MyLayOut")
+              , Lit("\":\"")
+              , Sort("PrimitiveType")
+              , Opt(Sort("Multiplicity"))
+              , Sort("MyLayOut")
+              , Lit("\"=\"")
+              , Sort("Exp")
+              , Opt(Sort("Strategy"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Member"), Constructor("DerivationAttributePPMultiLine"))
+          , Rhs(
+              [ Sort("ID")
+              , Sort("MyLayOut")
+              , Lit("\":\"")
+              , Sort("PrimitiveType")
+              , Opt(Sort("Multiplicity"))
+              , Sort("MyLayOut")
+              , Lit("\"=\"")
+              , Sort("Exp")
+              , Opt(Sort("Strategy"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Member"), Constructor("DefaultAttributePP"))
+          , Rhs(
+              [ Sort("ID")
+              , Sort("MyLayOut")
+              , Lit("\":\"")
+              , Sort("PrimitiveType")
+              , Opt(Sort("Multiplicity"))
+              , Sort("MyLayOut")
+              , Lit("\"=\"")
+              , Sort("Exp")
+              , Lit("\"(\"")
+              , Lit("\"default\"")
+              , Lit("\")\"")
+              , Opt(Sort("Strategy"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Member"), Constructor("DefaultAttributePPMultiLine"))
+          , Rhs(
+              [ Sort("ID")
+              , Sort("MyLayOut")
+              , Lit("\":\"")
+              , Sort("PrimitiveType")
+              , Opt(Sort("Multiplicity"))
+              , Sort("MyLayOut")
+              , Lit("\"=\"")
+              , Sort("Exp")
+              , Lit("\"(\"")
+              , Lit("\"default\"")
+              , Lit("\")\"")
+              , Opt(Sort("Strategy"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("MyLayOut"), Rhs([]), NoAttrs())
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("IfPP"))
+          , Rhs(
+              [ Lit("\"if\"")
+              , Lit("\"(\"")
+              , Sort("Exp")
+              , Lit("\")\"")
+              , Sort("Exp")
+              , Lit("\"else\"")
+              , Sort("Exp")
+              ]
+            )
+          , Attrs([Assoc(Right())])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("AdditionPP"))
+          , Rhs([Sort("Exp"), Lit("\"+\""), Sort("Exp")])
+          , Attrs([Assoc(Left())])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$MemberValue\""), Lit("\"$ID\""), Lit("\"$Value\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$EntityType\""), Lit("\"$EntityInstance\""), Lit("\"$IDSpace\""), Lit("\"$MemberValue\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$Member\"")
+            , Lit("\"$ID\"")
+            , Lit("\"$PrimitiveType\"")
+            , Lit("\"$Multiplicity\"")
+            , Lit("\"$Exp\"")
+            , Lit("\"$Strategy\"")
+            , Lit("\"$MyLayOut\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$Exp\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$Exp\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

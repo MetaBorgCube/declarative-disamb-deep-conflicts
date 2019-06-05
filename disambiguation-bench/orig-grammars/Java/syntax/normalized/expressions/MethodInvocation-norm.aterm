@@ -1,0 +1,91 @@
+Module(
+  Unparameterized("normalized/expressions/MethodInvocation-norm")
+, [ Imports(
+      [Module(Unparameterized("normalized/names/Names-norm")), Module(Unparameterized("normalized/lexical/Identifiers-norm")), Module(Unparameterized("normalized/types/ParameterizedTypes-norm"))]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("Invoke"))
+          , Rhs(
+              [ Sort("MethodName")
+              , Lit("\"(\"")
+              , IterStarSep(Sort("Expression"), Lit("\",\""))
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("InvokeQExp"))
+          , Rhs(
+              [ Sort("Expression")
+              , Lit("\".\"")
+              , Opt(Sort("TypeArguments"))
+              , Sort("Id")
+              , Lit("\"(\"")
+              , IterStarSep(Sort("Expression"), Lit("\",\""))
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("InvokeSuper"))
+          , Rhs(
+              [ Lit("\"super.\"")
+              , Opt(Sort("TypeArguments"))
+              , Sort("Id")
+              , Lit("\"(\"")
+              , IterStarSep(Sort("Expression"), Lit("\",\""))
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("InvokeQSuper"))
+          , Rhs(
+              [ Sort("TypeName")
+              , Lit("\".super.\"")
+              , Opt(Sort("TypeArguments"))
+              , Sort("Id")
+              , Lit("\"(\"")
+              , IterStarSep(Sort("Expression"), Lit("\",\""))
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$MethodName\"")
+            , Lit("\"$TypeName\"")
+            , Lit("\"$TypeArguments\"")
+            , Lit("\"$Id\"")
+            , Lit("\"$Expression\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

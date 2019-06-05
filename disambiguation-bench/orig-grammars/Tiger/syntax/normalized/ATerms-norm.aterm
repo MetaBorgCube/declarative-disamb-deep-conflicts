@@ -1,0 +1,150 @@
+Module(
+  Unparameterized("normalized/ATerms-norm")
+, []
+, [ SDFSection(Sorts([DeclSort("Cons"), DeclSort("Term")]))
+  , SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Sort("Cons")
+          , Rhs(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              , IterStar(
+                  CharClass(
+                    Simple(
+                      Present(
+                        Conc(
+                          Range(Numeric("\\48"), Numeric("\\57"))
+                        , Conc(
+                            Range(Numeric("\\65"), Numeric("\\90"))
+                          , Range(Numeric("\\97"), Numeric("\\122"))
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("Cons"), Rhs([Sort("String")]), NoAttrs())
+        , SdfProduction(
+            Sort("Int")
+          , Rhs(
+              [Iter(
+                 CharClass(Simple(Present(Range(Numeric("\\48"), Numeric("\\57")))))
+               )]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("String")
+          , Rhs(
+              [Lit("\"\\\"\""), IterStar(Sort("StringChar")), Lit("\"\\\"\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("StringChar")
+          , Rhs(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\0"), Numeric("\\33"))
+                      , Conc(
+                          Range(Numeric("\\35"), Numeric("\\91"))
+                        , Range(Numeric("\\93"), Numeric("\\255"))
+                        )
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("StringChar")
+          , Rhs(
+              [ Lit("\"\\\\\"")
+              , CharClass(Simple(Present(Conc(Numeric("\\34"), Numeric("\\92")))))
+              ]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Term"), Constructor("Str"))
+          , Rhs([Sort("String")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Term"), Constructor("Int"))
+          , Rhs([Sort("Int")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Term"), Constructor("App"))
+          , Rhs(
+              [ Sort("Cons")
+              , Lit("\"(\"")
+              , IterStarSep(Sort("Term"), Lit("\",\""))
+              , Lit("\")\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Term"), Constructor("List"))
+          , Rhs(
+              [Lit("\"[\""), IterStarSep(Sort("Term"), Lit("\",\"")), Lit("\"]\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Term"), Constructor("Tuple"))
+          , Rhs(
+              [Lit("\"(\""), IterStarSep(Sort("Term"), Lit("\",\"")), Lit("\")\"")]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$String\""), Lit("\"$Int\""), Lit("\"$Cons\""), Lit("\"$Term\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

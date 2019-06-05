@@ -1,0 +1,7 @@
+Module(
+  Unparameterized("normalized/completion/arrays/Main-completion-insertions-norm")
+, [Imports([Module(Unparameterized("normalized/arrays/Main-norm")), Module(Unparameterized("normalized/completion/arrays/ArrayInitializers-completion-insertions-norm"))])]
+, [SDFSection(
+     LexicalSyntax([SdfProduction(Sort("COMPLETION-INSERTION"), Rhs([]), NoAttrs())])
+   )]
+)

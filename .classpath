@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="IceDust/IceDust/src/main/strategies"/>
+	<classpathentry kind="src" path="Jasmin/Jasmin/src/main/strategies"/>
+	<classpathentry kind="src" path="Java/Java/src/main/strategies"/>
+	<classpathentry kind="src" path="OCaml/OCaml/src/main/strategies"/>
+	<classpathentry kind="src" path="org.metaborg.sdf2table/src/main/java"/>
+	<classpathentry kind="src" path="org.spoofax.jsglr2/src/main/java"/>
+	<classpathentry kind="src" path="org.spoofax.jsglr2/src/test/java"/>
+	<classpathentry kind="src" path="Test/src/main/strategies"/>
+	<classpathentry kind="src" path="Tiger/Tiger/src/main/strategies"/>
+	<classpathentry kind="lib" path="IceDust/IceDust/target/metaborg/stratego-javastrat.jar"/>
+	<classpathentry kind="lib" path="Jasmin/Jasmin/target/metaborg/stratego-javastrat.jar"/>
+	<classpathentry kind="lib" path="Java/Java/target/metaborg/stratego-javastrat.jar"/>
+	<classpathentry kind="lib" path="OCaml/OCaml/target/metaborg/stratego-javastrat.jar"/>
+	<classpathentry kind="lib" path="org.metaborg.sdf2table/target/sdf2table-2.6.0-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="org.metaborg.sdf2table/target/sdf2table-2.6.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="org.spoofax.jsglr2/target/org.spoofax.jsglr2-2.6.0-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="org.spoofax.jsglr2/target/org.spoofax.jsglr2-2.6.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="Test/target/metaborg/stratego-javastrat.jar"/>
+	<classpathentry kind="lib" path="Tiger/Tiger/target/metaborg/stratego-javastrat.jar"/>
+	<classpathentry kind="output" path="IceDust/IceDust/target/classes"/>
+</classpath>

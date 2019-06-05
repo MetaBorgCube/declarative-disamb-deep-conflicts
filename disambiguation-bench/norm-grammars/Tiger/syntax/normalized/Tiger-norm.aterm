@@ -1,0 +1,175 @@
+Module(
+  Unparameterized("normalized/Tiger-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/Whitespace-norm"))
+      , Module(Unparameterized("normalized/Types-norm"))
+      , Module(Unparameterized("normalized/Identifiers-norm"))
+      , Module(Unparameterized("normalized/Bindings-norm"))
+      , Module(Unparameterized("normalized/Variables-norm"))
+      , Module(Unparameterized("normalized/Functions-norm"))
+      , Module(Unparameterized("normalized/Numbers-norm"))
+      , Module(Unparameterized("normalized/Strings-norm"))
+      , Module(Unparameterized("normalized/Records-norm"))
+      , Module(Unparameterized("normalized/Arrays-norm"))
+      , Module(Unparameterized("normalized/Control-Flow-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      Kernel(
+        [ SdfProduction(
+            Cf(Opt(Layout()))
+          , Rhs([Cf(Layout())])
+          , NoAttrs()
+          )
+        , SdfProduction(Cf(Opt(Layout())), Rhs([]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Cf(Sort("Module")), Constructor("Mod"))
+          , Rhs([Cf(Sort("Exp"))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Cf(Layout())
+          , Rhs([Cf(Layout()), Cf(Layout())])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProduction(
+            Start()
+          , Rhs(
+              [Cf(Opt(Layout())), Cf(Sort("Module")), Cf(Opt(Layout()))]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Start()
+          , Rhs(
+              [Cf(Opt(Layout())), Cf(Sort("Exp")), Cf(Opt(Layout()))]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Start()
+          , Rhs(
+              [Cf(Opt(Layout())), Cf(Sort("Id")), Cf(Opt(Layout()))]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            FileStart()
+          , Rhs([Start(), CharClass(Simple(Present(Numeric("\\256"))))])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      Restrictions(
+        [ Follow(
+            [Lit("\"$Module\"")]
+          , List(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        , Follow(
+            [Lit("\"$Exp\"")]
+          , List(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\65"), Numeric("\\90"))
+                      , Range(Numeric("\\97"), Numeric("\\122"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      Priorities(
+        [ Chain(
+            [ SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("Or")))
+            , SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("Array")))
+            ]
+          )
+        , Chain(
+            [ SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("Array")))
+            , SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("Assign")))
+            ]
+          )
+        , Chain(
+            [ SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("Uminus")))
+            , SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("Times")))
+            ]
+          )
+        , Chain(
+            [ SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("Uminus")))
+            , SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("Divide")))
+            ]
+          )
+        , Chain(
+            [ SimpleRefGroup(SortConsRef(Cf(Sort("LValue")), Constructor("FieldVar")))
+            , SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("Times")))
+            ]
+          )
+        , Chain(
+            [ SimpleRefGroup(SortConsRef(Cf(Sort("LValue")), Constructor("FieldVar")))
+            , SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("Divide")))
+            ]
+          )
+        , Assoc(
+            SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("Times")))
+          , Left()
+          , SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("Divide")))
+          )
+        , Assoc(
+            SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("Divide")))
+          , Left()
+          , SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("Times")))
+          )
+        , Chain(
+            [ SimpleRefGroup(SortConsRef(Cf(Sort("LValue")), Constructor("Subscript")))
+            , SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("Times")))
+            ]
+          )
+        , Chain(
+            [ SimpleRefGroup(SortConsRef(Cf(Sort("LValue")), Constructor("Subscript")))
+            , SimpleRefGroup(SortConsRef(Cf(Sort("Exp")), Constructor("Divide")))
+            ]
+          )
+        , Assoc(
+            SimpleGroup(
+              SdfProduction(
+                Cf(Layout())
+              , Rhs([Cf(Layout()), Cf(Layout())])
+              , NoAttrs()
+              )
+            )
+          , Left()
+          , SimpleGroup(
+              SdfProduction(
+                Cf(Layout())
+              , Rhs([Cf(Layout()), Cf(Layout())])
+              , NoAttrs()
+              )
+            )
+          )
+        ]
+      )
+    )
+  ]
+)

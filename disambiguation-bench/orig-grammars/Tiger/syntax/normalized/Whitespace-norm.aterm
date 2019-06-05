@@ -1,0 +1,144 @@
+Module(
+  Unparameterized("normalized/Whitespace-norm")
+, []
+, [ SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Layout()
+          , Rhs(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\9"), Numeric("\\10"))
+                      , Conc(Numeric("\\13"), Numeric("\\32"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("CommentChar")
+          , Rhs([CharClass(Simple(Present(Numeric("\\42"))))])
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Layout()
+          , Rhs(
+              [Lit("\"/*\""), IterStar(Sort("InsideComment")), Lit("\"*/\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("InsideComment")
+          , Rhs(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\0"), Numeric("\\41"))
+                      , Range(Numeric("\\43"), Numeric("\\255"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("InsideComment"), Rhs([Sort("CommentChar")]), NoAttrs())
+        , SdfProduction(Layout(), Rhs([Sort("SingleLineComment")]), NoAttrs())
+        , SdfProduction(
+            Sort("SingleLineComment")
+          , Rhs(
+              [ Lit("\"//\"")
+              , IterStar(
+                  CharClass(
+                    Simple(
+                      Present(
+                        Conc(
+                          Range(Numeric("\\0"), Numeric("\\9"))
+                        , Conc(
+                            Range(Numeric("\\11"), Numeric("\\12"))
+                          , Range(Numeric("\\14"), Numeric("\\255"))
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              , Sort("NewLineEOF")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("NewLineEOF")
+          , Rhs(
+              [CharClass(Simple(Present(Conc(Numeric("\\10"), Numeric("\\13")))))]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("NewLineEOF"), Rhs([Sort("EOF")]), NoAttrs())
+        , SdfProduction(Sort("EOF"), Rhs([]), NoAttrs())
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Sort("CommentChar")]
+          , Single(CharClass(Simple(Present(Numeric("\\47")))))
+          )
+        , Follow(
+            [Sort("EOF")]
+          , Single(
+              CharClass(Simple(Present(Range(Numeric("\\0"), Numeric("\\255")))))
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeRestrictions(
+        [ Follow(
+            [Opt(Layout())]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\9"), Numeric("\\10"))
+                    , Conc(Numeric("\\13"), Numeric("\\32"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        , Follow(
+            [Opt(Layout())]
+          , Single(
+              Seq(
+                Simple(Present(Numeric("\\47")))
+              , Single(CharClass(Simple(Present(Numeric("\\47")))))
+              )
+            )
+          )
+        , Follow(
+            [Opt(Layout())]
+          , Single(
+              Seq(
+                Simple(Present(Numeric("\\47")))
+              , Single(CharClass(Simple(Present(Numeric("\\42")))))
+              )
+            )
+          )
+        ]
+      )
+    )
+  ]
+)

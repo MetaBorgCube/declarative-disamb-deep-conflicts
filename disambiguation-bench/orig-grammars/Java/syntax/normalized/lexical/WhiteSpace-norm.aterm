@@ -1,0 +1,47 @@
+Module(
+  Unparameterized("normalized/lexical/WhiteSpace-norm")
+, []
+, [ SDFSection(
+      LexicalSyntax(
+        [ SdfProduction(
+            Layout()
+          , Rhs(
+              [ CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Range(Numeric("\\9"), Numeric("\\10"))
+                      , Conc(Range(Numeric("\\12"), Numeric("\\13")), Numeric("\\32"))
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeRestrictions(
+        [ Follow(
+            [Opt(Layout())]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\9"), Numeric("\\10"))
+                    , Conc(Range(Numeric("\\12"), Numeric("\\13")), Numeric("\\32"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  ]
+)

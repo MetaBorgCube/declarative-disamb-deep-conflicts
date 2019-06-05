@@ -1,0 +1,47 @@
+Module(
+  Unparameterized("normalized/Java-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/arrays/Main-norm"))
+      , Module(Unparameterized("normalized/classes/Main-norm"))
+      , Module(Unparameterized("normalized/interfaces/Main-norm"))
+      , Module(Unparameterized("normalized/lexical/Main-norm"))
+      , Module(Unparameterized("normalized/literals/Main-norm"))
+      , Module(Unparameterized("normalized/names/Names-norm"))
+      , Module(Unparameterized("normalized/packages/Main-norm"))
+      , Module(Unparameterized("normalized/statements/Main-norm"))
+      , Module(Unparameterized("normalized/types/Main-norm"))
+      , Module(Unparameterized("normalized/expressions/Main-norm"))
+      , Module(Unparameterized("normalized/expressions/Disambiguation-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(Sorts([DeclSort("CompilationUnit")]))
+  , SDFSection(ContextFreeStartSymbols([Sort("Start")]))
+  , SDFSection(
+      ContextFreeSyntax(
+        [SdfProduction(Sort("Start"), Rhs([Sort("CompilationUnit")]), NoAttrs())]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$Start\""), Lit("\"$CompilationUnit\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

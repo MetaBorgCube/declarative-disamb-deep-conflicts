@@ -1,0 +1,95 @@
+Module(
+  Unparameterized("normalized/literals/EscapeSequences-norm")
+, []
+, [ SDFSection(
+      LexicalSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("EscapeSeq"), Constructor("NamedEscape"))
+          , Rhs(
+              [ Lit("\"\\\\\"")
+              , CharClass(
+                  Simple(
+                    Present(
+                      Conc(
+                        Numeric("\\34")
+                      , Conc(
+                          Numeric("\\39")
+                        , Conc(
+                            Numeric("\\92")
+                          , Conc(
+                              Numeric("\\98")
+                            , Conc(
+                                Numeric("\\102")
+                              , Conc(Numeric("\\110"), Conc(Numeric("\\114"), Numeric("\\116")))
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("EscapeSeq"), Rhs([Sort("OctalEscape")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("OctalEscape"), Constructor("OctalEscape1"))
+          , Rhs([Lit("\"\\\\\""), Sort("LastOcta")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("OctalEscape"), Constructor("OctalEscape2"))
+          , Rhs(
+              [ Lit("\"\\\\\"")
+              , CharClass(Simple(Present(Range(Numeric("\\48"), Numeric("\\51")))))
+              , Sort("LastOcta")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("OctalEscape"), Constructor("OctalEscape2"))
+          , Rhs(
+              [ Lit("\"\\\\\"")
+              , CharClass(Simple(Present(Range(Numeric("\\52"), Numeric("\\55")))))
+              , CharClass(Simple(Present(Range(Numeric("\\48"), Numeric("\\55")))))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("OctalEscape"), Constructor("OctalEscape3"))
+          , Rhs(
+              [ Lit("\"\\\\\"")
+              , CharClass(Simple(Present(Range(Numeric("\\48"), Numeric("\\51")))))
+              , CharClass(Simple(Present(Range(Numeric("\\48"), Numeric("\\55")))))
+              , CharClass(Simple(Present(Range(Numeric("\\48"), Numeric("\\55")))))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProduction(
+            Sort("LastOcta")
+          , Rhs(
+              [CharClass(Simple(Present(Range(Numeric("\\48"), Numeric("\\55")))))]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Sort("LastOcta")]
+          , Single(
+              CharClass(Simple(Present(Range(Numeric("\\48"), Numeric("\\55")))))
+            )
+          )
+        ]
+      )
+    )
+  ]
+)

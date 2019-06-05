@@ -1,0 +1,36 @@
+Module(
+  Unparameterized("normalized/classes/StaticInitializers-norm")
+, [Imports([Module(Unparameterized("normalized/statements/Blocks-norm"))])]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("StaticInitializer"), Constructor("StaticInit"))
+          , Rhs([Lit("\"static\""), Sort("Block")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$StaticInitializer\""), Lit("\"$Block\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

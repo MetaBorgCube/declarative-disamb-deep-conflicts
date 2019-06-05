@@ -21,6 +21,7 @@ import org.metaborg.sdf2table.grammar.NormGrammar;
 import org.metaborg.sdf2table.parsetable.Action;
 import org.metaborg.sdf2table.parsetable.GoTo;
 import org.metaborg.sdf2table.parsetable.ParseTable;
+import org.metaborg.sdf2table.parsetable.ParseTable.DisambSemantics;
 import org.metaborg.sdf2table.parsetable.State;
 import org.metaborg.util.log.ILogger;
 import org.metaborg.util.log.LoggerUtils;
@@ -72,20 +73,20 @@ public class ParseTableIO {
 
     public void createParseTable(boolean dynamic, boolean dataDependent) throws Exception {
         NormGrammar grammar = new NormGrammarReader(paths).readGrammar(input);
-        pt = new ParseTable(grammar, dynamic, dataDependent, true);
+        pt = new ParseTable(grammar, dynamic, dataDependent, true, DisambSemantics.SDF3_SEMANTICS);
         tableCreated = true;
     }
 
-    public void createParseTable(boolean dynamic, boolean dataDependent, boolean solveDeepConflicts) throws Exception {
+    public void createParseTable(boolean dynamic, boolean dataDependent, boolean solveDeepConflicts, DisambSemantics semantics) throws Exception {
         NormGrammar grammar = new NormGrammarReader(paths).readGrammar(input);
-        pt = new ParseTable(grammar, dynamic, dataDependent, solveDeepConflicts);
+        pt = new ParseTable(grammar, dynamic, dataDependent, solveDeepConflicts, semantics);
         tableCreated = true;
     }
 
-    public void outputTable(boolean dynamic, boolean dataDependent, boolean solveDeepConflicts) throws Exception {
+    public void outputTable(boolean dynamic, boolean dataDependent, boolean solveDeepConflicts, DisambSemantics semantics) throws Exception {
         if(tableCreated == false) {
             try {
-                createParseTable(dynamic, dataDependent, solveDeepConflicts);
+                createParseTable(dynamic, dataDependent, solveDeepConflicts, semantics);
             } catch(Exception e) {
                 logger.error(e.getMessage());
                 throw e;

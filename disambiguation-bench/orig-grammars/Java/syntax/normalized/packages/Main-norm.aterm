@@ -1,0 +1,8 @@
+Module(
+  Unparameterized("normalized/packages/Main-norm")
+, [ Imports(
+      [Module(Unparameterized("normalized/packages/CompilationUnits-norm")), Module(Unparameterized("normalized/packages/ImportDeclarations-norm")), Module(Unparameterized("normalized/packages/PackageDeclarations-norm"))]
+    )
+  ]
+, []
+)

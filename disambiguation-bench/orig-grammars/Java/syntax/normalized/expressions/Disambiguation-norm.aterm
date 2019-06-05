@@ -1,0 +1,205 @@
+Module(
+  Unparameterized("normalized/expressions/Disambiguation-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/expressions/ClassInstanceCreation-norm"))
+      , Module(Unparameterized("normalized/expressions/Postfix-norm"))
+      , Module(Unparameterized("normalized/expressions/UnaryOperators-norm"))
+      , Module(Unparameterized("normalized/expressions/BinaryOperators-norm"))
+      , Module(Unparameterized("normalized/expressions/ArrayAccess-norm"))
+      , Module(Unparameterized("normalized/expressions/FieldAccess-norm"))
+      , Module(Unparameterized("normalized/expressions/MethodInvocation-norm"))
+      , Module(Unparameterized("normalized/expressions/AssignmentOperators-norm"))
+      , Module(Unparameterized("normalized/expressions/LambdaExpressions-norm"))
+      , Module(Unparameterized("normalized/names/Names-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ SimpleRefGroup(SortConsRef(Sort("FieldAccess"), Constructor("Field")))
+            , SimpleGroup(
+                SdfProduction(Sort("Expression"), Rhs([Sort("ExpressionName")]), NoAttrs())
+              )
+            ]
+          )
+        , Chain(
+            [ WithArguments(
+                SimpleGroup(
+                  SdfProduction(Sort("ElementValue"), Rhs([Sort("Expression")]), NoAttrs())
+                )
+              , Default(["0"])
+              )
+            , SimpleRefGroup(SortConsRef(Sort("Expression"), Constructor("Assign")))
+            ]
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ SimpleRefGroup(SortConsRef(Sort("Expression"), Constructor("QualifiedInstance")))
+            , AssocRefGroup(
+                Right()
+              , [ SortConsRef(Sort("Expression"), Constructor("PostIncr"))
+                , SortConsRef(Sort("Expression"), Constructor("PostDecr"))
+                ]
+              )
+            , ProdsRefGroup(
+                [ SortConsRef(Sort("Expression"), Constructor("CastPrimitive"))
+                , SortConsRef(Sort("Expression"), Constructor("CastReference"))
+                ]
+              )
+            ]
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ SimpleRefGroup(SortConsRef(Sort("Expression"), Constructor("CastPrimitive")))
+            , AssocRefGroup(
+                Left()
+              , [ SortConsRef(Sort("Expression"), Constructor("Mul"))
+                , SortConsRef(Sort("Expression"), Constructor("Div"))
+                , SortConsRef(Sort("Expression"), Constructor("Mod"))
+                ]
+              )
+            ]
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ SimpleRefGroup(SortConsRef(Sort("Expression"), Constructor("CastReference")))
+            , ProdsRefGroup(
+                [ SortConsRef(Sort("Expression"), Constructor("PreIncr"))
+                , SortConsRef(Sort("Expression"), Constructor("PreDecr"))
+                , SortConsRef(Sort("Expression"), Constructor("Plus"))
+                , SortConsRef(Sort("Expression"), Constructor("Minus"))
+                ]
+              )
+            ]
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ ProdsGroup(
+                [ SdfProduction(Sort("Expression"), Rhs([Sort("ArrayAccess")]), NoAttrs())
+                , SdfProduction(Sort("Expression"), Rhs([Sort("FieldAccess")]), NoAttrs())
+                ]
+              )
+            , AssocRefGroup(
+                Right()
+              , [ SortConsRef(Sort("Expression"), Constructor("PostIncr"))
+                , SortConsRef(Sort("Expression"), Constructor("PostDecr"))
+                ]
+              )
+            ]
+          )
+        , Chain(
+            [ ProdsRefGroup([SortConsRef(Sort("Expression"), Constructor("InvokeQExp"))])
+            , AssocRefGroup(
+                Right()
+              , [ SortConsRef(Sort("Expression"), Constructor("PostIncr"))
+                , SortConsRef(Sort("Expression"), Constructor("PostDecr"))
+                ]
+              )
+            , ProdsRefGroup(
+                [ SortConsRef(Sort("Expression"), Constructor("PreIncr"))
+                , SortConsRef(Sort("Expression"), Constructor("PreDecr"))
+                , SortConsRef(Sort("Expression"), Constructor("Plus"))
+                , SortConsRef(Sort("Expression"), Constructor("Minus"))
+                , SortConsRef(Sort("Expression"), Constructor("Complement"))
+                , SortConsRef(Sort("Expression"), Constructor("Not"))
+                ]
+              )
+            , AssocRefGroup(
+                Left()
+              , [ SortConsRef(Sort("Expression"), Constructor("Mul"))
+                , SortConsRef(Sort("Expression"), Constructor("Div"))
+                , SortConsRef(Sort("Expression"), Constructor("Mod"))
+                ]
+              )
+            , AssocRefGroup(
+                Left()
+              , [ SortConsRef(Sort("Expression"), Constructor("Add"))
+                , SortConsRef(Sort("Expression"), Constructor("Sub"))
+                ]
+              )
+            , AssocRefGroup(
+                Left()
+              , [ SortConsRef(Sort("Expression"), Constructor("LeftShift"))
+                , SortConsRef(Sort("Expression"), Constructor("RightShift"))
+                , SortConsRef(Sort("Expression"), Constructor("URightShift"))
+                ]
+              )
+            , AssocRefGroup(
+                Left()
+              , [ SortConsRef(Sort("Expression"), Constructor("InstanceOf"))
+                , SortConsRef(Sort("Expression"), Constructor("Lt"))
+                , SortConsRef(Sort("Expression"), Constructor("Gt"))
+                , SortConsRef(Sort("Expression"), Constructor("LtEq"))
+                , SortConsRef(Sort("Expression"), Constructor("GtEq"))
+                ]
+              )
+            , AssocRefGroup(
+                Left()
+              , [ SortConsRef(Sort("Expression"), Constructor("Eq"))
+                , SortConsRef(Sort("Expression"), Constructor("NotEq"))
+                ]
+              )
+            , SimpleRefGroup(SortConsRef(Sort("Expression"), Constructor("And")))
+            , SimpleRefGroup(SortConsRef(Sort("Expression"), Constructor("Xor")))
+            , SimpleRefGroup(SortConsRef(Sort("Expression"), Constructor("Or")))
+            , SimpleRefGroup(SortConsRef(Sort("Expression"), Constructor("LazyAnd")))
+            , SimpleRefGroup(SortConsRef(Sort("Expression"), Constructor("LazyOr")))
+            , SimpleRefGroup(SortConsRef(Sort("Expression"), Constructor("Cond")))
+            , AssocRefGroup(
+                Right()
+              , [ SortConsRef(Sort("Expression"), Constructor("Assign"))
+                , SortConsRef(Sort("Expression"), Constructor("AssignMul"))
+                , SortConsRef(Sort("Expression"), Constructor("AssignDiv"))
+                , SortConsRef(Sort("Expression"), Constructor("AssignMod"))
+                , SortConsRef(Sort("Expression"), Constructor("AssignAdd"))
+                , SortConsRef(Sort("Expression"), Constructor("AssignSub"))
+                , SortConsRef(Sort("Expression"), Constructor("AssignLeftShift"))
+                , SortConsRef(Sort("Expression"), Constructor("AssignRightShift"))
+                , SortConsRef(Sort("Expression"), Constructor("AssignURightShift"))
+                , SortConsRef(Sort("Expression"), Constructor("AssignAnd"))
+                , SortConsRef(Sort("Expression"), Constructor("AssignXor"))
+                , SortConsRef(Sort("Expression"), Constructor("AssignOr"))
+                , SortConsRef(Sort("Expression"), Constructor("LambdaExpression"))
+                ]
+              )
+            ]
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"+\"")]
+          , Single(CharClass(Simple(Present(Numeric("\\43")))))
+          )
+        , Follow(
+            [Lit("\"-\"")]
+          , Single(CharClass(Simple(Present(Numeric("\\45")))))
+          )
+        , Follow(
+            [Lit("\"/\"")]
+          , Single(CharClass(Simple(Present(Numeric("\\47")))))
+          )
+        ]
+      )
+    )
+  ]
+)

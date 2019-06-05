@@ -1,0 +1,16 @@
+Module(
+  Unparameterized("normalized/completion/interfaces/Main-completion-insertions-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/interfaces/Main-norm"))
+      , Module(Unparameterized("normalized/completion/interfaces/InterfaceDeclarations-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/interfaces/InterfaceMethodDeclarations-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/interfaces/AnnotationTypes-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/interfaces/Annotations-completion-insertions-norm"))
+      , Module(Unparameterized("normalized/completion/interfaces/ConstantDeclarations-completion-insertions-norm"))
+      ]
+    )
+  ]
+, [SDFSection(
+     LexicalSyntax([SdfProduction(Sort("COMPLETION-INSERTION"), Rhs([]), NoAttrs())])
+   )]
+)

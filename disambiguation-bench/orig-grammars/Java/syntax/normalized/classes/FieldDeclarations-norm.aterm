@@ -1,0 +1,194 @@
+Module(
+  Unparameterized("normalized/classes/FieldDeclarations-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/lexical/Identifiers-norm"))
+      , Module(Unparameterized("normalized/types/ReferenceTypes-norm"))
+      , Module(Unparameterized("normalized/types/PrimitiveTypes-norm"))
+      , Module(Unparameterized("normalized/types/ParameterizedTypes-norm"))
+      , Module(Unparameterized("normalized/interfaces/Annotations-norm"))
+      , Module(Unparameterized("normalized/arrays/ArrayInitializers-norm"))
+      , Module(Unparameterized("normalized/expressions/Main-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("FieldDeclaration"), Constructor("FieldDecl"))
+          , Rhs(
+              [ IterStar(Sort("FieldModifier"))
+              , Sort("UnannType")
+              , IterSep(Sort("VarDecl"), Lit("\",\""))
+              , Lit("\";\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("VarDeclId"), Constructor("VariableDecl"))
+          , Rhs([Sort("Id")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("VarDeclId"), Constructor("VariableDeclArray"))
+          , Rhs([Sort("Id"), Iter(Sort("AnnotatedDim"))])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("VarDecl"), Constructor("VariableDeclInit"))
+          , Rhs([Sort("VarDeclId"), Lit("\"=\""), Sort("VariableInitializer")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("VarDecl"), Rhs([Sort("VarDeclId")]), NoAttrs())
+        , SdfProduction(Sort("VariableInitializer"), Rhs([Sort("Expression")]), NoAttrs())
+        , SdfProduction(Sort("VariableInitializer"), Rhs([Sort("ArrayInitializer")]), NoAttrs())
+        , SdfProduction(Sort("FieldModifier"), Rhs([Sort("Annotation")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldModifier"), Constructor("Public"))
+          , Rhs([Lit("\"public\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldModifier"), Constructor("Protected"))
+          , Rhs([Lit("\"protected\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldModifier"), Constructor("Private"))
+          , Rhs([Lit("\"private\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldModifier"), Constructor("Static"))
+          , Rhs([Lit("\"static\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldModifier"), Constructor("Final"))
+          , Rhs([Lit("\"final\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldModifier"), Constructor("Transient"))
+          , Rhs([Lit("\"transient\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("FieldModifier"), Constructor("Volatile"))
+          , Rhs([Lit("\"volatile\"")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProduction(Sort("UnannType"), Rhs([Sort("UnannPrimitiveType")]), NoAttrs())
+        , SdfProduction(Sort("UnannType"), Rhs([Sort("UnannReferenceType")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("UnannPrimitiveType"), Constructor("NumericType"))
+          , Rhs([Sort("NumericType")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("UnannPrimitiveType"), Constructor("BooleanType"))
+          , Rhs([Lit("\"boolean\"")])
+          , NoAttrs()
+          )
+        , SdfProduction(Sort("UnannReferenceType"), Rhs([Sort("UnannClassType")]), NoAttrs())
+        , SdfProduction(Sort("UnannReferenceType"), Rhs([Sort("UnannArrayType")]), NoAttrs())
+        , SdfProductionWithCons(
+            SortCons(Sort("UnannClassType"), Constructor("ClassType"))
+          , Rhs([Sort("Id"), Opt(Sort("TypeArguments"))])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("UnannClassType"), Constructor("ClassOrInterfaceTypeMember"))
+          , Rhs(
+              [ Sort("UnannClassType")
+              , Lit("\".\"")
+              , IterStar(Sort("Annotation"))
+              , Sort("Id")
+              , Opt(Sort("TypeArguments"))
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("UnannArrayType"), Constructor("ArrayTypePrimitive"))
+          , Rhs([Sort("UnannPrimitiveType"), Iter(Sort("AnnotatedDim"))])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("UnannArrayType"), Constructor("ArrayTypeClassType"))
+          , Rhs([Sort("UnannClassType"), Iter(Sort("AnnotatedDim"))])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$FieldDeclaration\"")
+            , Lit("\"$UnannType\"")
+            , Lit("\"$Id\"")
+            , Lit("\"$AnnotatedDim\"")
+            , Lit("\"$VarDecl\"")
+            , Lit("\"$VarDeclId\"")
+            , Lit("\"$Expression\"")
+            , Lit("\"$VariableInitializer\"")
+            , Lit("\"$ArrayInitializer\"")
+            , Lit("\"$Annotation\"")
+            , Lit("\"$FieldModifier\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$UnannType\"")
+            , Lit("\"$NumericType\"")
+            , Lit("\"$UnannReferenceType\"")
+            , Lit("\"$Annotation\"")
+            , Lit("\"$Id\"")
+            , Lit("\"$TypeArguments\"")
+            , Lit("\"$UnannPrimitiveType\"")
+            , Lit("\"$UnannArrayType\"")
+            , Lit("\"$UnannClassType\"")
+            , Lit("\"$AnnotatedDim\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

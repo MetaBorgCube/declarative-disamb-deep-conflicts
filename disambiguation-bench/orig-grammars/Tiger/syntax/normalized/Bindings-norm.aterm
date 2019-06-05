@@ -1,0 +1,57 @@
+Module(
+  Unparameterized("normalized/Bindings-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/Control-Flow-norm"))
+      , Module(Unparameterized("normalized/Identifiers-norm"))
+      , Module(Unparameterized("normalized/Types-norm"))
+      , Module(Unparameterized("normalized/Functions-norm"))
+      , Module(Unparameterized("normalized/Variables-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(Sorts([DeclSort("Declarations")]))
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Exp"), Constructor("Let"))
+          , Rhs(
+              [ Lit("\"let\"")
+              , IterStar(Sort("Dec"))
+              , Lit("\"in\"")
+              , IterStarSep(Sort("Exp"), Lit("\";\""))
+              , Lit("\"end\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Declarations"), Constructor("Declarations"))
+          , Rhs([Lit("\"declarations\""), IterStar(Sort("Dec"))])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$Exp\""), Lit("\"$Declarations\""), Lit("\"$Dec\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

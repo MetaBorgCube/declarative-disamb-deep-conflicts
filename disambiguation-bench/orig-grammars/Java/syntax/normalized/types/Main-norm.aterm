@@ -1,0 +1,34 @@
+Module(
+  Unparameterized("normalized/types/Main-norm")
+, [Imports([Module(Unparameterized("normalized/types/PrimitiveTypes-norm")), Module(Unparameterized("normalized/types/ReferenceTypes-norm"))])]
+, [ SDFSection(ContextFreeStartSymbols([Sort("Type")]))
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProduction(Sort("Type"), Rhs([Sort("PrimitiveType")]), NoAttrs())
+        , SdfProduction(Sort("Type"), Rhs([Sort("ReferenceType")]), NoAttrs())
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$PrimitiveType\""), Lit("\"$Type\""), Lit("\"$ReferenceType\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

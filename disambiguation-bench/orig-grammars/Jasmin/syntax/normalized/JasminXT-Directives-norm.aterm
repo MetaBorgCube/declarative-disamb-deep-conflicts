@@ -1,0 +1,254 @@
+Module(
+  Unparameterized("normalized/JasminXT-Directives-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/JasminXT-Descriptors-norm"))
+      , Module(Unparameterized("normalized/JasminXT-Names-norm"))
+      , Module(Unparameterized("normalized/JasminXT-Numbers-norm"))
+      , Module(Unparameterized("normalized/JasminXT-Strings-norm"))
+      , Module(Unparameterized("normalized/JasminXT-Annotations-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeStartSymbols(
+        [Sort("Directive"), Sort("StackDirOffset"), Sort("StackDirLocalVar"), Sort("StackDirStackVar")]
+      )
+    )
+  , SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Directive"), Constructor("JBCLimitStack"))
+          , Rhs([Lit("\".limit\""), Lit("\"stack\""), Sort("Int")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Directive"), Constructor("JBCLimitLocals"))
+          , Rhs([Lit("\".limit\""), Lit("\"locals\""), Sort("Int")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Directive"), Constructor("JBCLine"))
+          , Rhs([Lit("\".line\""), Sort("Int")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Directive"), Constructor("JBCVarDecl"))
+          , Rhs(
+              [ Lit("\".var\"")
+              , Sort("Int")
+              , Lit("\"is\"")
+              , Sort("VarName")
+              , Sort("FieldDescriptor")
+              , Lit("\"from\"")
+              , Sort("LabelRef")
+              , Lit("\"to\"")
+              , Sort("LabelRef")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Directive"), Constructor("JBCThrows"))
+          , Rhs([Lit("\".throws\""), Sort("ClassRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Directive"), Constructor("JBCCatch"))
+          , Rhs(
+              [ Lit("\".catch\"")
+              , Sort("ClassRef")
+              , Lit("\"from\"")
+              , Sort("LabelRef")
+              , Lit("\"to\"")
+              , Sort("LabelRef")
+              , Lit("\"using\"")
+              , Sort("LabelRef")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Directive"), Constructor("JBCSignature"))
+          , Rhs([Lit("\".signature\""), Sort("String")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Directive"), Constructor("JBCStack"))
+          , Rhs(
+              [ Lit("\".stack\"")
+              , Sort("StackDirOffset")
+              , IterStar(Sort("StackDirLocalVar"))
+              , IterStar(Sort("StackDirStackVar"))
+              , Lit("\".end\"")
+              , Lit("\"stack\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Directive"), Constructor("JBCStack"))
+          , Rhs(
+              [ Lit("\".stack\"")
+              , Lit("\"use\"")
+              , Sort("Int")
+              , Lit("\"locals\"")
+              , Sort("StackDirOffset")
+              , IterStar(Sort("StackDirLocalVar"))
+              , IterStar(Sort("StackDirStackVar"))
+              , Lit("\".end\"")
+              , Lit("\"stack\"")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Directive"), Constructor("JBCDeprecated"))
+          , Rhs([Lit("\".deprecated\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Directive"), Constructor("JBCAttribute"))
+          , Rhs([Lit("\".attribute\""), Sort("AttributeName"), Sort("FileName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("StackDirOffset"), Constructor("Offset"))
+          , Rhs([Lit("\"offset\""), Sort("LabelRef")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("StackDirOffset"), Constructor("None"))
+          , Rhs([])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("StackDirLocalVar"), Constructor("LocalVar"))
+          , Rhs([Lit("\"locals\""), Sort("VerificationType")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("StackDirStackVar"), Constructor("StackVar"))
+          , Rhs([Lit("\"stack\""), Sort("VerificationType")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("VerificationType"), Constructor("Top"))
+          , Rhs([Lit("\"Top\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("VerificationType"), Constructor("Integer"))
+          , Rhs([Lit("\"Integer\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("VerificationType"), Constructor("Float"))
+          , Rhs([Lit("\"Float\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("VerificationType"), Constructor("Long"))
+          , Rhs([Lit("\"Long\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("VerificationType"), Constructor("Double"))
+          , Rhs([Lit("\"Double\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("VerificationType"), Constructor("Null"))
+          , Rhs([Lit("\"Null\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("VerificationType"), Constructor("UninitThis"))
+          , Rhs([Lit("\"UnitializedThis\"")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("VerificationType"), Constructor("Object"))
+          , Rhs([Lit("\"Object\""), Sort("ClassName")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("VerificationType"), Constructor("Uninit"))
+          , Rhs([Lit("\"Unitialized\""), Sort("LabelRef")])
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\".limit\"")
+            , Lit("\"stack\"")
+            , Lit("\"locals\"")
+            , Lit("\".line\"")
+            , Lit("\".throws\"")
+            , Lit("\".catch\"")
+            , Lit("\"from\"")
+            , Lit("\"to\"")
+            , Lit("\"using\"")
+            , Lit("\".var\"")
+            , Lit("\"is\"")
+            , Lit("\"from\"")
+            , Lit("\"to\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\0"), Numeric("\\8"))
+                    , Conc(
+                        Range(Numeric("\\10"), Numeric("\\31"))
+                      , Range(Numeric("\\33"), Numeric("\\255"))
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$VarName\"")
+            , Lit("\"$FieldDescriptor\"")
+            , Lit("\"$ClassRef\"")
+            , Lit("\"$String\"")
+            , Lit("\"$Int\"")
+            , Lit("\"$Directive\"")
+            , Lit("\"$AttributeName\"")
+            , Lit("\"$FileName\"")
+            , Lit("\"$StackDirOffset\"")
+            , Lit("\"$StackDirLocalVar\"")
+            , Lit("\"$StackDirStackVar\"")
+            , Lit("\"$ClassName\"")
+            , Lit("\"$VerificationType\"")
+            , Lit("\"$LabelRef\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

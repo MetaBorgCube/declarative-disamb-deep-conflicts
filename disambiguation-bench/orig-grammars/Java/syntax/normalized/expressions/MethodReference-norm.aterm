@@ -1,0 +1,117 @@
+Module(
+  Unparameterized("normalized/expressions/MethodReference-norm")
+, [ Imports(
+      [ Module(Unparameterized("normalized/types/ReferenceTypes-norm"))
+      , Module(Unparameterized("normalized/types/ParameterizedTypes-norm"))
+      , Module(Unparameterized("normalized/lexical/Identifiers-norm"))
+      , Module(Unparameterized("normalized/names/Names-norm"))
+      , Module(Unparameterized("normalized/expressions/UnaryOperators-norm"))
+      ]
+    )
+  ]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("MethodReferenceRType"))
+          , Rhs(
+              [Sort("ReferenceType"), Lit("\"::\""), Opt(Sort("TypeArguments")), Sort("Id")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("MethodReferenceExpr"))
+          , Rhs(
+              [Sort("Expression"), Lit("\"::\""), Opt(Sort("TypeArguments")), Sort("Id")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("MethodReferenceSuper"))
+          , Rhs(
+              [Lit("\"super\""), Lit("\"::\""), Opt(Sort("TypeArguments")), Sort("Id")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("MethodReferenceQSuper"))
+          , Rhs(
+              [ Sort("TypeName")
+              , Lit("\".super\"")
+              , Lit("\"::\"")
+              , Opt(Sort("TypeArguments"))
+              , Sort("Id")
+              ]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("MethodReferenceCType"))
+          , Rhs(
+              [Sort("ClassType"), Lit("\"::\""), Opt(Sort("TypeArguments")), Lit("\"new\"")]
+            )
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("MethodReferenceAType"))
+          , Rhs(
+              [Sort("ArrayType"), Lit("\"::\""), Opt(Sort("TypeArguments")), Lit("\"new\"")]
+            )
+          , NoAttrs()
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      ContextFreePriorities(
+        [ Chain(
+            [ SimpleRefGroup(SortConsRef(Sort("Expression"), Constructor("MethodReferenceExpr")))
+            , SimpleGroup(
+                SdfProduction(Sort("Expression"), Rhs([Sort("ExpressionName")]), NoAttrs())
+              )
+            ]
+          )
+        , Chain(
+            [ SimpleRefGroup(SortConsRef(Sort("Expression"), Constructor("MethodReferenceExpr")))
+            , ProdsRefGroup(
+                [ SortConsRef(Sort("Expression"), Constructor("CastReference"))
+                , SortConsRef(Sort("Expression"), Constructor("CastPrimitive"))
+                , SortConsRef(Sort("Expression"), Constructor("Not"))
+                , SortConsRef(Sort("Expression"), Constructor("Complement"))
+                ]
+              )
+            ]
+          )
+        ]
+      )
+    )
+  , TemplateOptions([Tokenize("\"::\"")])
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [ Lit("\"$ReferenceType\"")
+            , Lit("\"$TypeName\"")
+            , Lit("\"$Id\"")
+            , Lit("\"$ClassType\"")
+            , Lit("\"$Expression\"")
+            , Lit("\"$ArrayType\"")
+            , Lit("\"$TypeArguments\"")
+            ]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)

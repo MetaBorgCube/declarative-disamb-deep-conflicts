@@ -1,0 +1,143 @@
+Module(
+  Unparameterized("normalized/expressions/BinaryOperators-norm")
+, [Imports([Module(Unparameterized("normalized/types/ReferenceTypes-norm"))])]
+, [ SDFSection(
+      ContextFreeSyntax(
+        [ SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("Mul"))
+          , Rhs([Sort("Expression"), Lit("\"*\""), Sort("Expression")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("Div"))
+          , Rhs([Sort("Expression"), Lit("\"/\""), Sort("Expression")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("Mod"))
+          , Rhs([Sort("Expression"), Lit("\"%\""), Sort("Expression")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("Add"))
+          , Rhs([Sort("Expression"), Lit("\"+\""), Sort("Expression")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("Sub"))
+          , Rhs([Sort("Expression"), Lit("\"-\""), Sort("Expression")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("LeftShift"))
+          , Rhs([Sort("Expression"), Lit("\"<<\""), Sort("Expression")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("RightShift"))
+          , Rhs([Sort("Expression"), Lit("\">>\""), Sort("Expression")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("URightShift"))
+          , Rhs([Sort("Expression"), Lit("\">>>\""), Sort("Expression")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("Lt"))
+          , Rhs([Sort("Expression"), Lit("\"<\""), Sort("Expression")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("Gt"))
+          , Rhs([Sort("Expression"), Lit("\">\""), Sort("Expression")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("LtEq"))
+          , Rhs([Sort("Expression"), Lit("\"<=\""), Sort("Expression")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("GtEq"))
+          , Rhs([Sort("Expression"), Lit("\">=\""), Sort("Expression")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("InstanceOf"))
+          , Rhs([Sort("Expression"), Lit("\"instanceof\""), Sort("ReferenceType")])
+          , NoAttrs()
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("Eq"))
+          , Rhs([Sort("Expression"), Lit("\"==\""), Sort("Expression")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("NotEq"))
+          , Rhs([Sort("Expression"), Lit("\"!=\""), Sort("Expression")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("And"))
+          , Rhs([Sort("Expression"), Lit("\"&\""), Sort("Expression")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("Xor"))
+          , Rhs([Sort("Expression"), Lit("\"^\""), Sort("Expression")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("Or"))
+          , Rhs([Sort("Expression"), Lit("\"|\""), Sort("Expression")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("LazyAnd"))
+          , Rhs([Sort("Expression"), Lit("\"&&\""), Sort("Expression")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("LazyOr"))
+          , Rhs([Sort("Expression"), Lit("\"||\""), Sort("Expression")])
+          , Attrs([Assoc(Left())])
+          )
+        , SdfProductionWithCons(
+            SortCons(Sort("Expression"), Constructor("Cond"))
+          , Rhs(
+              [ Sort("Expression")
+              , Lit("\"?\"")
+              , Sort("Expression")
+              , Lit("\":\"")
+              , Sort("Expression")
+              ]
+            )
+          , Attrs([Assoc(Right())])
+          )
+        ]
+      )
+    )
+  , SDFSection(
+      LexicalRestrictions(
+        [ Follow(
+            [Lit("\"$ReferenceType\""), Lit("\"$Expression\"")]
+          , Single(
+              CharClass(
+                Simple(
+                  Present(
+                    Conc(
+                      Range(Numeric("\\65"), Numeric("\\90"))
+                    , Range(Numeric("\\97"), Numeric("\\122"))
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    )
+  , SDFSection(LexicalSyntax([]))
+  ]
+)
