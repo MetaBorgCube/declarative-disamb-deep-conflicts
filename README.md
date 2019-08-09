@@ -7,16 +7,21 @@ This repository contains the SDF3 grammars for Tiger, Jasmin, IceDust, OCaml and
 - [SGLR parser with support for data-dependent parsing](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/org.spoofax.jsglr2).
 - [Parse Table Generator](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/org.metaborg.sdf2table).
 - Grammars:
-	 - [Tiger](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/Tiger)
-	 - [IceDust](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/IceDust)
-	 - [Jasmin](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/Jasmin)
-	 - [Java](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/Java)
-	 - [OCaml](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/OCaml)
-	 - [Test](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/Test)
+	 - [Tiger](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/spoofax-language-projects/Tiger)
+	 - [IceDust](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/spoofax-language-projects/IceDust)
+	 - [Jasmin](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/spoofax-language-projects/Jasmin)
+	 - [Java](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/spoofax-language-projects/Java)
+	 - [OCaml](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/spoofax-language-projects/OCaml)
+	 - [Miscellaneous Grammars](https://github.com/MetaBorgCube/declarative-disamb-deep-conflicts/tree/master/spoofax-language-projects/Misc)
 
 ## Running the Benchmark
 
-To run the benchmark, make sure you have maven installed (tested with Maven 3.5.4) and execute `mvn clean verify` in the root of the project.
+To run the benchmark, download the image from ... and run the [Docker](https://www.docker.com) container using the following commands (with memory preferences set to at least 4.0GiB):
+
+ 		`docker load --input decl-disamb-docker.tar`
+		`docker run -it decl-disamb`
+
+.
 
 ## Installing Spoofax
 
