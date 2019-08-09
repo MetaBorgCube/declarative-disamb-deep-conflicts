@@ -1,0 +1,28 @@
+module syntax
+
+language nonassoc
+
+test a [[
+  a 
+]] parse succeeds
+
+test nonassoc brackets [[
+  a = (b = c)
+]] parse succeeds
+
+test nonassoc [[
+  a = b = c
+]] parse succeeds
+
+test nonassoc [[
+  lazy assert b
+]] parse succeeds
+
+test nonassoc [[
+  lazy (assert b)
+]] 1 warning
+
+test assert arg [[
+  f assert a
+]] parse to App(Var("f"), Assert(Var("b")))
+

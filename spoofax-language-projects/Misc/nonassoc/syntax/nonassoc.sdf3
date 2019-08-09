@@ -1,0 +1,39 @@
+module nonassoc
+
+imports Common
+
+context-free start-symbols Start
+
+context-free syntax
+  
+  Start = Exp
+  
+  Exp.Var = ID
+  
+  Exp.Or  = Exp "||" Exp {left}
+  Exp.Eq  = Exp "="  Exp {non-assoc}
+  Exp.Neq = Exp "!=" Exp {non-assoc}
+  Exp.Geq = Exp ">=" Exp {non-assoc}
+  Exp.Add = Exp "+"  Exp {left}
+  Exp.Mul = Exp "*"  Exp {left}
+  Exp.Pow = Exp "^"  Exp {right}
+  
+  Exp     = "(" Exp ")" {bracket}
+  
+  Exp.Assert = "assert" Exp
+  Exp.Lazy   = "lazy" Exp
+  Exp.App    = Exp Exp {left}
+  
+context-free priorities
+
+  Exp.Pow
+  > Exp.App
+  > Exp.Mul
+  > Exp.Add 
+  > {non-assoc: Exp.Eq Exp.Neq Exp.Geq}
+  > Exp.Or
+  > {non-nested: Exp.Assert Exp.Lazy} 
+  
+template options
+
+  ID = keyword {reject} 

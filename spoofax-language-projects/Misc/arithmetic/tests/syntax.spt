@@ -1,0 +1,21 @@
+module syntax
+
+language arithmetic
+
+test var [[ a ]] parse to Var("a")
+
+test deep [[ 
+  a + if b then c + d
+]] parse to Add(Var("a"), If(Var("b"), Add(Var("c"),Var("d"))))
+
+test deep [[ 
+  a * if b then c + d
+]] parse to  Mul(Var("a"),If(Var("b"),Add(Var("c"),Var("d"))))
+
+test deep [[ 
+  a * if b then c + d
+]] parse to  Mul(Var("a"),If(Var("b"),Add(Var("c"),Var("d"))))
+
+test deep [[ 
+  a * if b then c + d
+]] parse to  Mul(Var("a"),If(Var("b"),Add(Var("c"),Var("d"))))

@@ -1,0 +1,144 @@
+module syntax
+
+language inherent
+
+test var [[
+  a
+]] parse to Var("a")
+
+test infix [[
+  a - b
+]] parse to Min(Var("a"),Var("b"))
+
+test postfix [[
+  a -
+]] parse to MinPost(Var("a"))
+
+test prefix [[
+  - a
+]] parse to MinPre(Var("a"))
+
+test prefix postfix [[
+  - a -
+]] parse to MinPost(MinPre(Var("a")))
+
+
+test min assoc [[ 
+  a - b - c
+]] parse to  Min(Min(Var("a"),Var("b")),Var("c")) 
+
+
+test prefix infix bracket [[
+  (- a) - b
+]] parse to Min(MinPre(Var("a")),Var("b")) 
+
+test prefix infix  [[  
+  - a - b
+]] parse to Min(MinPre(Var("a")),Var("b"))
+
+test prefix infix infix [[
+  - a - b - c  
+]] parse to  
+     Min(Min(MinPre(Var("a")), Var("b")), Var("c"))
+        
+
+test infix postfix bracket [[
+  a - (b -)
+]] parse to Min(Var("a"), MinPost(Var("b"))) 
+
+test infix postfix  [[
+  a - b -
+]] parse to Min(Var("a"), MinPost(Var("b"))) 
+
+test infix infix postfix [[  
+  a - b - c -
+]] parse to 
+     Min(Min(Var("a"),Var("b")), MinPost(Var("c")))
+
+
+test min min [[ 
+  a - - b 
+]] parse fails
+
+// amb(
+//  [ Min(Var("a"), MinPre(Var("b")))
+//  , Min(MinPost(Var("a")), Var("b"))
+//  ]
+
+// alternative
+//test min min [[ 
+//  a - - b 
+//]] parse to Min(MinPost(Var("a")),Var("b"))
+
+test infix prefix [[
+  a - (- b)
+]] parse to Min(Var("a"),MinPre(Var("b"))) 
+
+test postfix infix [[
+  (a -) - b
+]] parse to Min(MinPost(Var("a")),Var("b")) 
+
+
+
+test min min min [[
+  a - - - b
+]] parse fails
+
+test min min min [[
+  a - (- - b)
+]] parse to Min(Var("a"),MinPre(MinPre(Var("b"))))
+
+
+test infix deep prefix [[
+  a - - b * c
+]] parse fails 
+// to Min(Var("a"),Mul(MinPre(Var("b")),Var("c"))) 
+
+test infix deep prefix [[
+  a - - let b = c in d
+]] parse fails
+
+test infix deep prefix [[ 
+  a - - b + c
+]] parse fails   
+
+test infix deep prefix [[
+  a - - b - c
+]] parse fails   
+     
+test infix prefix [[
+  a - - b ^ c
+]] parse fails
+
+      
+
+test infix deep postfix [[
+  a * b - - c
+]] parse fails
+// to Min(Mul(Var("a"),MinPost(Var("b"))),Var("c"))
+     
+test infix deep postfix [[
+  a + b - - c
+]] parse fails
+// to Min(Add(Var("a"),MinPost(Var("b"))),Var("c"))
+
+     
+
+test min min [[
+  a + - b - c - * d
+]] parse to 
+     Min(
+       Add(Var("a"), MinPre(Var("b")))
+     , Mul(MinPost(Var("c")), Var("d"))
+     ) 
+
+test min min min [[ 
+  - a - * - b - 
+]] parse to  Mul(MinPost(MinPre(Var("a"))),MinPost(MinPre(Var("b"))))
+
+test min min min [[
+  - let a = b in c - - -
+]] parse to MinPre(Let("a",Var("b"),MinPost(MinPost(MinPost(Var("c"))))))
+     
+     
+     

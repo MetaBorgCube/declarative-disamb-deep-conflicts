@@ -1,0 +1,43 @@
+module formatting 
+
+language functional
+
+test var [[
+  a
+]] run pp-functional-string to "a"
+
+test var par [[
+  (a)
+]] run pp-functional-string to "a"
+
+test app app [[
+  (a b) c
+]] run pp-functional-string to "a b c" 
+
+test app app [[
+  a (b c)
+]] run pp-functional-string to "a (b c)"
+
+test min [[
+  a - b
+]] run pp-functional-string to "a - b"
+
+test min [[
+  a - - b
+]] run pp-functional-string to "a - - b"
+
+test min min min [[
+  (a - - b) - c
+]] run pp-functional-string to "a - - b - c"
+
+test min par [[
+  a (- b)
+]] run pp-functional-string to "a (- b)"
+
+test min min par [[
+  - (a - b)
+]] run pp-functional-string to "- (a - b)"
+
+test min min [[
+  - a - b
+]] run pp-functional-string to "- a - b"

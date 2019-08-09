@@ -1,0 +1,70 @@
+module syntax
+
+language dangling
+
+test identifier [[
+ a
+]] parse to Var("a")
+
+test add [[
+ a + b
+]] parse to Add(Var("a"),Var("b"))
+
+//context-free priorities
+//  E.If > E.Add > E.IfElse
+
+test nested if-else [[
+  if a then if b then d else e else f
+]] parse to 
+     IfElse(Var("a"), IfElse(Var("b"), Var("d"), Var("e")), Var("f"))
+
+test dangling else [[
+  if a then if b then d else e
+]] parse to 
+      IfElse(Var("a"), If(Var("b"),Var("d")), Var("e"))
+   
+test identifier [[
+  if a then b + if c then d else e  
+]] parse to
+     IfElse( 
+       Var("a")
+     , Add(Var("b"), If(Var("c"), Var("d")))
+     , Var("e")
+     )    
+
+//test identifier [[
+//  if a then if b then d else e
+//]] parse to 
+//     If(
+//       Var("a")
+//     , IfElse(Var("b"), Var("d"), Var("e"))
+//     )
+
+
+      
+//test identifier [[
+//  if a then b + if c then d else e 
+//]] parse to
+//     If(
+//       Var("a") 
+//     , Add(
+//         Var("b")
+//       , IfElse(Var("c"), Var("d"), Var("e"))
+//       )
+//     )
+
+ 
+
+  
+//amb(
+//  [ IfElse(
+//      Var("a")
+//    , Add(Var("b"), If(Var("c"), Var("d")))
+//    , Var("e")
+//    )
+//  , Add(
+//      If(Var("a"), Var("b"))
+//    , IfElse(Var("c"), Var("d"), Var("e"))
+//    )
+//  ]
+//)

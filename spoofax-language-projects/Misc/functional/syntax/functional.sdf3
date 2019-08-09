@@ -1,0 +1,39 @@
+module functional
+
+imports Common
+
+context-free start-symbols Start
+
+context-free syntax
+  
+  Start = Exp
+  
+context-free syntax
+
+  Exp.Var = ID
+  Exp.Lam = "\\" ID "." Exp
+  Exp.App = Exp Exp {left}
+  
+  Exp.Let = "let" ID "=" Exp "in" Exp 
+  
+  Exp.Sub = Exp "-" Exp {left}
+  Exp.Min = "-" Exp
+  Exp.Add = Exp "+" Exp {left}
+  
+  Exp     = <(<Exp>)> {bracket}
+  
+context-free priorities
+
+  Exp.Min 
+  > Exp.App 
+  > {left: Exp.Sub Exp.Add} 
+  > Exp.Let 
+  > Exp.Lam
+  
+context-free priorities
+
+  Exp.App <1> .> Exp.Min
+
+template options
+
+  ID = keyword {reject}

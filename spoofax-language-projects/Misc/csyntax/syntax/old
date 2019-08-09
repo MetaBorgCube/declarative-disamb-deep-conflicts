@@ -1,0 +1,130 @@
+
+ 
+// module c-syntax
+//
+//imports Common
+//
+//context-free start-symbols Start
+
+
+//context-free syntax
+//  Start.Prog       = AssignExp
+//  AssignExp.Assign = PrimaryExp "=" AssignExp 
+//  AssignExp        = AdditiveExp
+//  AdditiveExp.Add  = AdditiveExp "+" PrimaryExp
+//  AdditiveExp      = PrimaryExp
+//  PrimaryExp.Var   = ID
+//  PrimaryExp.Int   = INT
+
+//context-free syntax
+//  Start.Prog = Exp
+//  Exp.Var    = ID
+//  Exp.Add    = Exp "+" Exp {left}
+//  Exp.Mul    = Exp "*" Exp {left}
+//  Exp.Assign = Exp "=" Exp {right}
+//  Exp.Int    = INT
+//context-free priorities
+//  Exp.Mul > Exp.Add > Exp.Assign,
+//  Exp.Assign <0> .> {Exp.Add Exp.Mul}
+
+
+
+//context-free syntax
+//  Start.Prog = Exp
+//  Exp.Var    = ID
+//  Exp.Add    = Exp "+" Exp {left}
+//  Exp.Assign = Exp "=" Exp {non-assoc}
+//  Exp.Int    = INT
+//context-free priorities
+//  Exp.Add > Exp.Assign
+
+//context-free syntax
+//  Start.Prog = Stmt*
+//  Stmt.Exp   = Exp ";"
+//  Exp.Comma  = Exp "," Exp {right}
+//  Exp.Var    = ID
+//  Exp.Mul    = Exp "*" Exp {left}
+//  Exp.Add    = Exp "+" Exp {left}
+//  Exp.Assign = Exp "=" Exp {right}
+//  Exp.Call   = ID "(" Lst ")"
+//  Exp.Cond   = Exp "?" Exp ":" Exp
+//  Lst.One    = Exp
+//  Lst.App    = Lst "," Lst {right}
+//
+//context-free priorities
+//  Exp.Mul > Exp.Add > Exp.Assign > Exp.Comma > Exp.Cond,
+//  Lst.One <0> .> Exp.Comma,
+//  Exp.Assign <0> .> {Exp.Add Exp.Mul}
+
+//context-free syntax
+//  Start.Prog  = Stmt*
+//  Stmt.Exp    = Exp ";"
+//  Exp.Comma   = Exp "," Exp {right}
+//  Exp.Var     = ID
+//  Exp.Mul     = Exp "*" Exp {left}
+//  Exp.Add     = Exp "+" Exp {left}
+//  Exp.Assign  = Exp "=" Exp {right}
+//  Exp.Call    = ID "(" {Exp ","}* ")"
+//  Exp.Cond    = Exp "?" Exp ":" Exp
+//context-free priorities
+//  Exp.Add > Exp.Assign > Exp.Comma > Exp.Cond,
+//  {Exp ","}+ = Exp .> Exp.Comma,
+//  Exp.Assign <0> .> {Exp.Add Exp.Mul}
+  
+//context-free syntax
+//  Start.Prog  = Stmt*
+//  Stmt.Exp    = Exp ";"
+//  Exp.Comma   = Exp "," Exp {right}
+//  Exp.Var     = ID
+//  Exp.Mul     = Exp "*" Exp {left}
+//  Exp.Add     = Exp "+" Exp {left}
+//  Exp.Min     = Exp "-" Exp {left}
+//  Exp.MinPre  = "-" Exp 
+//  Exp.MinPost = Exp "-" 
+//  Exp.Assign  = Exp "=" Exp {right}
+//  Exp.Call    = ID "(" {Exp ","}* ")"
+//  Exp.Cond    = Exp "?" Exp ":" Exp
+//  Exp         = "(" Exp ")" {bracket}
+//context-free priorities
+//  {Exp.MinPre Exp.MinPost} >
+//  {left: Exp.Add Exp.Min} 
+//  > Exp.Assign > Exp.Comma > Exp.Cond,
+//  {Exp ","}+ = Exp .> Exp.Comma,
+//  Exp.Assign <0> .> {Exp.Add Exp.Mul},
+//  {non-assoc: Exp.MinPre Exp.MinPost Exp.Min}
+  
+//context-free syntax
+//  Start.Prog  = Stmt*
+//  Stmt.Exp    = Exp ";"
+//  Exp.Var     = ID
+//  Exp.Min     = Exp "-" Exp {left}
+//  Exp.MinPre  = "-" Exp 
+//  Exp.MinPost = Exp "-" 
+//  Exp.Mul     = Exp "*" Exp {left}
+//  Exp.Add     = Exp "+" Exp {left}
+//  Exp         = "(" Exp ")" {bracket}
+//context-free priorities
+//  {Exp.MinPre Exp.MinPost} > Exp.Mul > {left: Exp.Add Exp.Min},
+//  {non-assoc: Exp.MinPre Exp.MinPost Exp.Min}
+
+//context-free syntax
+//  Start.Prog        = Stmt*
+//  Stmt.Exp          = Exp ";"
+//  Exp.Add           = OptLabel Exp "+" Exp {left}
+//  Exp.Int           = INT
+//  OptLabel.NoLabel  =
+//  OptLabel.Label    = ID ":"  
+//context-free priorities
+//  Exp.Add > OptLabel.Label
+  
+//context-free syntax
+//  Start.Prog = Stmt*
+//  Stmt.Exp   = Exp ";"
+//  Exp.Comma  = Exp "," Exp {right}
+//  Exp.Var = ID
+//  Exp.Add    = Exp "+" Exp {left}
+//  Exp.Assign = Exp "=" Exp {non-assoc}
+//  Exp.Call   = ID "(" Exp ")"
+//  Exp.Cond   = Exp "?" Exp ":" Exp
+//context-free priorities
+//  Exp.Add > Exp.Assign > Exp.Call > Exp.Comma > Exp.Cond

@@ -1,0 +1,18 @@
+module pmo
+
+imports Common
+
+context-free start-symbols Start
+
+context-free syntax  
+  Start = Exp  
+  
+context-free syntax  
+  Exp.Num = INT
+  Exp.Dlr = "$" Exp 
+  Exp.Add = Exp "+" Exp {left}
+  Exp.Hsh = "#" Exp
+  Exp     = "(" Exp ")" {bracket}
+context-free priorities
+  Exp.Hsh > Exp.Add > Exp.Dlr,
+  {non-nested: Exp.Hsh Exp.Dlr}

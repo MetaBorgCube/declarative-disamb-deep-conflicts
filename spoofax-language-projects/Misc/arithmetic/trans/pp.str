@@ -1,0 +1,49 @@
+module pp
+
+imports
+
+  libstratego-gpp
+  libspoofax/sdf/pp
+  libspoofax/editor/refactoring/-
+  pp/arithmetic-parenthesize
+  pp/arithmetic-pp
+
+rules
+
+  editor-format:
+    (node, _, ast, path, project-path) -> (filename, result)
+    with
+      ext      := <get-extension> path
+    ; filename := <guarantee-extension(|$[pp.[ext]])> path
+    ; result   := <pp-debug> node
+
+rules
+  
+  pp-arithmetic-string =
+    parenthesize-arithmetic
+    ; prettyprint-arithmetic-start-symbols
+    ; !V([], <id>)
+    ; box2text-string(|120)
+      
+  pp-partial-arithmetic-string =
+    parenthesize-arithmetic
+    ; prettyprint-arithmetic
+    ; !V([], <id>)
+    ; box2text-string(|120)
+    
+  pp-partial-arithmetic-string(|sort) =
+    parenthesize-arithmetic
+    ; prettyprint-arithmetic(|sort)
+    ; !V([], <id>)
+    ; box2text-string(|120)  
+      
+  pp-debug :
+    ast -> result
+    with
+       result := <pp-arithmetic-string> ast
+    <+ <bottomup(try(not(is-string); not(is-list); not(pp-arithmetic-string); debug(!"cannot pp ")))> ast
+    ;  result := ""
+
+rules
+  
+  construct-textual-change = construct-textual-change(pp-partial-arithmetic-string, parenthesize, override-reconstruction, resugar)

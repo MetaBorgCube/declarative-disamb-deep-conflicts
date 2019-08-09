@@ -1,0 +1,213 @@
+module cexp-bnf
+
+imports Common
+
+context-free start-symbols Start
+
+context-free syntax
+  
+  Start = 
+    Expression
+  
+  Expression = 
+    AssignmentExpression
+  
+  Expression.Comma = 
+    Expression "," AssignmentExpression
+  
+  AssignmentExpression = 
+    ConditionalExpression
+  
+  AssignmentExpression.Assign = 
+    UnaryExpression AssignmentOperator AssignmentExpression
+  
+  AssignmentOperator.Assign    = "="
+  AssignmentOperator.AssignMul = "*="
+  AssignmentOperator.AssignDiv = "/="
+  AssignmentOperator.AssignMod = "%="
+  AssignmentOperator.AssignAdd = "+="
+  AssignmentOperator.AssignMin = "-="
+  AssignmentOperator.AssignLsh = "<<="
+  AssignmentOperator.AssignRsh = ">>="
+  AssignmentOperator.AssignAnd = "&="
+  AssignmentOperator.AssignPow = "^="
+  AssignmentOperator.AssignOr  = "|="
+  
+  ConditionalExpression = 
+    LogicalOrExpression
+    
+  ConditionalExpression.Cond = 
+    LogicalOrExpression "?" Expression ":" ConditionalExpression
+
+  ConstantExpression = 
+    ConditionalExpression
+    
+  LogicalOrExpression = 
+    LogicalAndExpression 
+    
+  LogicalOrExpression.LOr = 
+    LogicalOrExpression "||" LogicalAndExpression 
+    
+  LogicalAndExpression = 
+    InclusiveOrExpression
+    
+  LogicalAndExpression.LAnd = 
+    LogicalAndExpression "&&" InclusiveOrExpression
+    
+  InclusiveOrExpression = 
+    ExclusiveOrExpression 
+    
+  InclusiveOrExpression.Ior = 
+    InclusiveOrExpression "|" ExclusiveOrExpression
+    
+  ExclusiveOrExpression = 
+    AndExpression 
+    
+  ExclusiveOrExpression.Eor =
+    ExclusiveOrExpression "^" AndExpression 
+    
+  AndExpression =
+    EqualityExpression 
+    
+  AndExpression.And = 
+    AndExpression "&" EqualityExpression 
+    
+  EqualityExpression = 
+    RelationalExpression
+    
+  EqualityExpression.Eq = 
+    EqualityExpression "==" RelationalExpression
+    
+  EqualityExpression.Neq = 
+    EqualityExpression "!=" RelationalExpression 
+    
+  RelationalExpression = 
+    ShiftExpression
+    
+  RelationalExpression.Lt = 
+    RelationalExpression "<" ShiftExpression
+    
+  RelationalExpression.Gt = 
+    RelationalExpression ">" ShiftExpression
+    
+  RelationalExpression.Leq = 
+    RelationalExpression "<=" ShiftExpression
+    
+  RelationalExpression.Geq = 
+    RelationalExpression ">=" ShiftExpression
+    
+  ShiftExpression = 
+    AdditiveExpression 
+    
+  ShiftExpression.Lshift = 
+    ShiftExpression "<<" AdditiveExpression 
+    
+  ShiftExpression.Rshift = 
+    ShiftExpression ">>" AdditiveExpression 
+    
+  AdditiveExpression =
+    MultiplicativeExpression  
+    
+  AdditiveExpression.Add =
+    AdditiveExpression "+" MultiplicativeExpression 
+    
+  AdditiveExpression.Sub =
+    AdditiveExpression "-" MultiplicativeExpression 
+    
+  MultiplicativeExpression = 
+    CastExpression
+    
+  MultiplicativeExpression.Mul = 
+    MultiplicativeExpression "*" CastExpression
+    
+  MultiplicativeExpression.Div = 
+    MultiplicativeExpression "/" CastExpression
+    
+  MultiplicativeExpression.Mod = 
+    MultiplicativeExpression "%" CastExpression
+    
+  CastExpression =
+    UnaryExpression
+    
+  CastExpression.Cast =
+    "(" TypeName ")" CastExpression
+  
+  UnaryExpression = 
+    PostfixExpression
+  
+  UnaryExpression.PreInc = 
+    "++" UnaryExpression
+  
+  UnaryExpression.PreDec = 
+    "--" UnaryExpression
+  
+  UnaryExpression.UnOp = 
+    UnaryOperator CastExpression // weird
+  
+  UnaryExpression.Sizeof = 
+    "sizeof" UnaryExpression
+  
+  UnaryExpression.SizeofT = 
+    "sizeof" "(" TypeName ")"
+    
+  UnaryOperator.Addr  = "&"
+  UnaryOperator.Deref = "*"
+  UnaryOperator.Uplus = "+"
+  UnaryOperator.Umin  = "-"
+  UnaryOperator.Tilde = "~"
+  UnaryOperator.Not   = "!"
+    
+  PostfixExpression = 
+    PrimaryExpression  
+    
+  PostfixExpression.Subscript = 
+    PostfixExpression "[" Expression "]"  
+    
+  PostfixExpression.Call = 
+    PostfixExpression "(" ArgumentExpressionListOpt ")"    
+  
+//  PostfixExpression.Call = 
+//    PostfixExpression "(" ArgumentExpressionList? ")" 
+    
+  PostfixExpression.Proj = 
+    PostfixExpression "." ID
+    
+  PostfixExpression.DerefProj = 
+    PostfixExpression "->" ID
+    
+  PostfixExpression.PostInc = 
+    PostfixExpression "++"
+    
+  PostfixExpression.PostDec = 
+    PostfixExpression "--"
+  
+  PrimaryExpression.Var    = ID  
+  PrimaryExpression        = Constant
+  PrimaryExpression.String = STRING
+  PrimaryExpression        = "(" Expression ")" {bracket}
+  
+  ArgumentExpressionListOpt = {AssignmentExpression ","}*
+    
+  ArgumentExpressionList.One =
+    AssignmentExpression
+    
+  ArgumentExpressionList.App =
+    ArgumentExpressionList "," AssignmentExpression 
+    
+  Constant = IntegerConstant
+//  Constant = CharacterConstant
+//  Constant = FloatingConstant
+//  Constant = EnumerationConstant
+  
+  IntegerConstant.Int = INT
+  
+  TypeName = ID
+  
+lexical restrictions 
+
+  "+" -/- [\+]
+  "-" -/- [\-]
+  
+context-free syntax
+
+  ID = "sizeof" {reject}

@@ -1,0 +1,49 @@
+module pp
+
+imports
+
+  libstratego-gpp
+  libspoofax/sdf/pp
+  libspoofax/editor/refactoring/-
+  pp/cexp-bnf-parenthesize
+  pp/cexp-bnf-pp
+
+rules
+
+  editor-format:
+    (node, _, ast, path, project-path) -> (filename, result)
+    with
+      ext      := <get-extension> path
+    ; filename := <guarantee-extension(|$[pp.[ext]])> path
+    ; result   := <pp-debug> node
+
+rules
+  
+  pp-cexp-bnf-string =
+    parenthesize-cexp-bnf
+    ; prettyprint-cexp-bnf-start-symbols
+    ; !V([], <id>)
+    ; box2text-string(|120)
+      
+  pp-partial-cexp-bnf-string =
+    parenthesize-cexp-bnf
+    ; prettyprint-cexp-bnf
+    ; !V([], <id>)
+    ; box2text-string(|120)
+    
+  pp-partial-cexp-bnf-string(|sort) =
+    parenthesize-cexp-bnf
+    ; prettyprint-cexp-bnf(|sort)
+    ; !V([], <id>)
+    ; box2text-string(|120)  
+      
+  pp-debug :
+    ast -> result
+    with
+       result := <pp-cexp-bnf-string> ast
+    <+ <bottomup(try(not(is-string); not(is-list); not(pp-cexp-bnf-string); debug(!"cannot pp ")))> ast
+    ;  result := ""
+
+rules
+  
+  construct-textual-change = construct-textual-change(pp-partial-cexp-bnf-string, parenthesize, override-reconstruction, resugar)

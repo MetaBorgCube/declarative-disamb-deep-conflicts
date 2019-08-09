@@ -1,0 +1,49 @@
+module pp
+
+imports
+
+  libstratego-gpp
+  libspoofax/sdf/pp
+  libspoofax/editor/refactoring/-
+  pp/inherent-parenthesize
+  pp/inherent-pp
+
+rules
+
+  editor-format:
+    (node, _, ast, path, project-path) -> (filename, result)
+    with
+      ext      := <get-extension> path
+    ; filename := <guarantee-extension(|$[pp.[ext]])> path
+    ; result   := <pp-debug> node
+
+rules
+  
+  pp-inherent-string =
+    parenthesize-inherent
+    ; prettyprint-inherent-start-symbols
+    ; !V([], <id>)
+    ; box2text-string(|120)
+      
+  pp-partial-inherent-string =
+    parenthesize-inherent
+    ; prettyprint-inherent
+    ; !V([], <id>)
+    ; box2text-string(|120)
+    
+  pp-partial-inherent-string(|sort) =
+    parenthesize-inherent
+    ; prettyprint-inherent(|sort)
+    ; !V([], <id>)
+    ; box2text-string(|120)  
+      
+  pp-debug :
+    ast -> result
+    with
+       result := <pp-inherent-string> ast
+    <+ <bottomup(try(not(is-string); not(is-list); not(pp-inherent-string); debug(!"cannot pp ")))> ast
+    ;  result := ""
+
+rules
+  
+  construct-textual-change = construct-textual-change(pp-partial-inherent-string, parenthesize, override-reconstruction, resugar)

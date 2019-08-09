@@ -1,0 +1,149 @@
+module c-syntax
+
+imports Common
+
+context-free start-symbols Start
+
+context-free syntax
+  Start = Exp
+  
+sorts Exp
+context-free syntax
+
+  Exp.Comma     = Exp "," Exp {left}
+  Exp.Assign    = Exp AssignOp Exp {right}
+  Exp.Cond      = Exp "?" Exp ":" Exp {right}
+  
+  Exp.LOr       = Exp "||" Exp {left}
+  Exp.LAnd      = Exp "&&" Exp {left}
+  
+  Exp.Ior       = Exp "|" Exp {left}
+  Exp.Eor       = Exp "^" Exp {left}
+  Exp.And       = Exp "&" Exp {left}
+  
+  Exp.Eq        = Exp "==" Exp {left}
+  Exp.Neq       = Exp "!=" Exp {left}
+  
+  Exp.Lt        = Exp "<"  Exp {left}
+  Exp.Gt        = Exp ">"  Exp {left}
+  Exp.Leq       = Exp "<=" Exp {left}
+  Exp.Geq       = Exp ">=" Exp {left}
+  
+  Exp.Lshift    = Exp "<<" Exp {left} 
+  Exp.Rshift    = Exp ">>" Exp {left}
+  
+  Exp.Add       = Exp "+" Exp {left}
+  Exp.Sub       = Exp "-" Exp {left}
+  
+  Exp.Mul       = Exp "*" Exp {left}
+  Exp.Div       = Exp "/" Exp {left}
+  Exp.Mod       = Exp "%" Exp {left}
+  
+  Exp.Cast      = "(" TypeName ")" Exp
+  
+  Exp.PreInc    = "++" Exp
+  Exp.PreDec    = "--" Exp
+  Exp.UnOp      = UnaryOp Exp
+  Exp.Sizeof    = "sizeof" Exp
+  Exp.SizeofT   = "sizeof" "(" TypeName ")"
+  
+  Exp.Subscript = Exp "[" Exp "]"     
+  Exp.Call      = Exp "(" {Exp ","}* ")"       
+  Exp.Proj      = Exp "." ID    
+  Exp.DerefProj = Exp "->" ID    
+  Exp.PostInc   = Exp "++" 
+  Exp.PostDec   = Exp "--"
+  
+  Exp.Var       = ID  
+  Exp           = Constant
+  Exp.String    = STRING
+  Exp           = "(" Exp ")" {bracket}
+
+context-free priorities  
+
+  {Exp.Subscript Exp.Call Exp.Proj Exp.DerefProj Exp.PostInc Exp.PostDec}
+  > {Exp.PreInc Exp.PreDec Exp.UnOp Exp.Sizeof Exp.SizeofT} 
+  > Exp.Cast
+  > {left: Exp.Mul Exp.Div Exp.Mod}
+  > {left: Exp.Add Exp.Sub}
+  > {left: Exp.Lshift Exp.Rshift}
+  > {left: Exp.Lt Exp.Gt Exp.Leq Exp.Geq}
+  > {left: Exp.Eq Exp.Neq}
+  > Exp.And
+  > Exp.Eor
+  > Exp.Ior
+  > Exp.LAnd 
+  > Exp.LOr
+  > Exp.Cond
+  > Exp.Assign 
+  > Exp.Comma
+   
+context-free priorities
+
+  {Exp ","}+ = Exp                <0> .> Exp.Comma,
+  {Exp ","}+ = {Exp ","}+ "," Exp <2> .> Exp.Comma
+ 
+context-free priorities
+
+  Exp.Assign <0> .> {
+    Exp.Cast
+    Exp.Mul Exp.Div Exp.Mod
+    Exp.Add Exp.Sub
+    Exp.Lshift Exp.Rshift
+    Exp.Lt Exp.Gt Exp.Leq Exp.Geq
+    Exp.Eq Exp.Neq
+    Exp.And
+    Exp.Eor
+    Exp.Ior
+    Exp.LAnd 
+    Exp.LOr
+    Exp.Cond
+  }
+  
+context-free syntax   
+  AssignOp.Assign    = "="
+  AssignOp.AssignMul = "*="
+  AssignOp.AssignDiv = "/="
+  AssignOp.AssignMod = "%="
+  AssignOp.AssignAdd = "+="
+  AssignOp.AssignMin = "-="
+  AssignOp.AssignLsh = "<<="
+  AssignOp.AssignRsh = ">>="
+  AssignOp.AssignAnd = "&="
+  AssignOp.AssignPow = "^="
+  AssignOp.AssignOr  = "|="
+  
+context-free syntax
+  UnaryOp.Addr  = "&"
+  UnaryOp.Deref = "*"
+  UnaryOp.Uplus = "+"
+  UnaryOp.Umin  = "-"
+  UnaryOp.Tilde = "~"
+  UnaryOp.Not   = "!"
+  
+context-free syntax
+
+  Constant = IntegerConstant
+  Constant = CharacterConstant
+  Constant = FloatingConstant
+  Constant = EnumerationConstant
+  
+  IntegerConstant.Int      = INT
+  CharacterConstant.Char   = CHAR
+  FloatingConstant.Float   = FLOAT
+  EnumerationConstant.Enum = "?"
+
+context-free syntax
+
+  TypeName    = ID
+  
+lexical restrictions 
+
+  "+" -/- [\+]
+  "-" -/- [\-]
+  
+context-free syntax
+
+  ID = "sizeof" {reject}
+ 
+ 

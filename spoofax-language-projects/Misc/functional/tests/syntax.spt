@@ -1,0 +1,79 @@
+module syntax
+
+language functional 
+
+test var [[
+  a
+]] parse to Var("a")
+
+test application [[
+  f a b c
+]] parse to App(App(App(Var("f"),Var("a")),Var("b")),Var("c"))
+
+test let [[
+  let a = b in c
+]] parse to Let("a",Var("b"),Var("c")) 
+
+test add [[
+  a + b
+]] parse to Add(Var("a"),Var("b"))
+
+test add min sub [[
+  a + - b - c
+]] parse to  Sub(Add(Var("a"),Min(Var("b"))),Var("c"))
+
+test sub [[ 
+  a - b
+]] parse to Sub(Var("a"),Var("b"))
+
+test apply min [[ 
+  f (- b)
+]] parse to App(Var("f"),Min(Var("b")))
+
+test sub min [[
+  a - - b
+]] parse to Sub(Var("a"),Min(Var("b")))
+
+test min sub [[
+  - a - b
+]] parse to Sub(Min(Var("a")),Var("b"))
+
+test min app min [[
+  (- a) (- b)
+]] parse to App(Min(Var("a")),Min(Var("b")))
+
+
+test min let [[
+  - let a = b in c
+]] parse to Min(Let("a",Var("b"),Var("c"))) 
+
+test let min min [[
+  let a = - b in - c
+]] parse to Let("a",Min(Var("b")),Min(Var("c")))
+
+test lam let sub sub [[
+  \ x . let a = b in c - d e - f
+]] parse to Lam("x",Let("a",Var("b"),Sub(Sub(Var("c"),App(Var("d"),Var("e"))),Var("f"))))
+
+
+test app lam [[
+  f \ x . a
+]] parse to App(Var("f"),Lam("x",Var("a")))
+
+test lam app [[
+  \ x . a b
+]] parse to Lam("x",App(Var("a"),Var("b"))) 
+
+test app lam app [[
+  a \ b . c d e
+]] parse to App(Var("a"),Lam("b",App(App(Var("c"),Var("d")),Var("e"))))
+
+test sub lam [[
+  a - \ b . c
+]] parse to Sub(Var("a"),Lam("b",Var("c"))) 
+
+test min lam [[
+  - \ b . c
+]] parse to Min(Lam("b",Var("c")))
+
+

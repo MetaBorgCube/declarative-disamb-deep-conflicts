@@ -1,0 +1,92 @@
+module syntax
+
+language cexp-core
+
+test identifier [[ 
+  a
+]] parse to Var("a")
+
+test assign [[
+  a = b
+]] parse to Assign(Var("a"), Var("b")) 
+
+test assign [[
+  a = b + c
+]] parse to  Assign(Var("a"), Add(Var("b"),Var("c")))
+
+test assign [[
+  a = b = c + d
+]] parse to Assign(Var("a"), Assign(Var("b"), Add(Var("c"),Var("d"))))
+
+test assign lhs [[ 
+  a + b = c
+]] parse fails 
+
+
+
+
+test function call [[ 
+  f(a)
+]] parse to Call(Var("f"),[Var("a")])  
+
+test function call [[ 
+  f(a, b)
+]] parse to Call(Var("f"),[Var("a"),Var("b")])
+
+test function call [[
+  f(a, b, c)
+]] parse to Call(Var("f"), [Var("a"),Var("b"),Var("c")])
+
+test function call [[
+  f(a, b, c, d)
+]] parse to Call(Var("f"), [Var("a"),Var("b"),Var("c"),Var("d")]) 
+
+
+test conditional [[
+  a ? b : c
+]] parse to Cond(Var("a"),Var("b"),Var("c"))
+
+test conditional binary [[ 
+  a + b ? b : c 
+]] parse to Cond(Add(Var("a"),Var("b")),Var("b"),Var("c"))
+
+test conditional binary [[ 
+  (a + b) ? b : c 
+]] parse to Cond(Add(Var("a"),Var("b")),Var("b"),Var("c"))
+
+
+
+test conditional assign [[
+  a ? b : c = b + c
+]] parse fails  
+
+test conditional assign [[  
+  a ? b : (c = b + c)
+]] parse to Cond(Var("a"),Var("b"),Assign(Var("c"), Add(Var("b"),Var("c"))))
+
+test conditional assign [[ 
+  a ? b = c : d
+]] parse to Cond(Var("a"),Assign(Var("b"), Var("c")),Var("d"))
+
+test conditional assign [[   
+  a = b ? c : d
+]] parse to Assign(Var("a"), Cond(Var("b"),Var("c"),Var("d")))
+
+test conditional assign [[  
+  (a = b) ? c : d
+]] parse to Cond(Assign(Var("a"), Var("b")),Var("c"),Var("d"))
+
+
+test conditional comma [[
+  a ? b : c, d
+]] parse to Comma(Cond(Var("a"),Var("b"),Var("c")), Var("d"))
+
+test conditional comma [[
+  a ? b, c : d
+]] parse to  Cond(Var("a"), Comma(Var("b"),Var("c")), Var("d"))
+ 
+test conditional comma [[
+  a, b ? c : d
+]] parse to Comma(Var("a"), Cond(Var("b"),Var("c"), Var("d")))
+
+

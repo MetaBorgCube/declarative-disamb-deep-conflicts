@@ -1,0 +1,42 @@
+module inherent
+
+imports Common
+
+context-free start-symbols Start
+  
+context-free syntax
+  Start       = Exp
+  Exp.Var     = ID
+  Exp.Pow     = Exp "^" Exp {right}
+  Exp.MinPre  = "-" Exp 
+  Exp.MinPost = Exp "-"  
+  Exp.Mul     = Exp "*" Exp {left}
+  Exp.Min     = Exp "-" Exp {left}
+  Exp.Add     = Exp "+" Exp {left}
+  Exp.Let     = "let" ID "=" Exp "in" Exp
+  Exp         = "(" Exp ")" {bracket}
+context-free priorities
+  Exp.Pow
+  > Exp.MinPre 
+  > Exp.MinPost
+  > Exp.Let
+  > Exp.Mul 
+  > {left: Exp.Add Exp.Min}
+  , Exp.Min <2> .> Exp.MinPre
+  , Exp.Min <0> .> Exp.MinPost
+  
+/*
+
+The unsafe disambiguation rules, rule out the case `a - - b`,
+which would have the following inherent ambiguity
+
+ amb(
+  [ Min(Var("a"), MinPre(Var("b")))
+  , Min(MinPost(Var("a")), Var("b"))
+  ]
+  
+The disambiguation could be rendered safe by only using one
+of the disambiguation rules, but that would still leave the
+ambiguity for the reader.
+
+*/

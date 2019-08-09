@@ -14,7 +14,7 @@
 			<version>2.6.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
-	
+
 	<properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -26,7 +26,7 @@
 
     <!-- Name of the benchmark Uber-JAR to generate. -->
     <uberjar.name>benchmarks</uberjar.name>
-    
+
     <main-class>org.metaborg.Benchmarks</main-class>
   </properties>
 
@@ -37,11 +37,11 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.6.1</version>
 				<configuration>
-					<source />
-					<target />
-				</configuration>
+            <source>1.7</source>
+            <target>1.7</target>
+        </configuration>
 			</plugin>
-			
+
 			<!-- Create an executable JAR -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -91,8 +91,8 @@
       </plugin>
 		</plugins>
 	</build>
-	
-	
-	
-	
+
+
+
+
 </project>

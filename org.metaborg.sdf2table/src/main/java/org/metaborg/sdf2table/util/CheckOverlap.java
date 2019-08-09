@@ -4,10 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.metaborg.sdf2table.grammar.AltSymbol;
-import org.metaborg.sdf2table.grammar.ContextFreeSymbol;
 import org.metaborg.sdf2table.grammar.IProduction;
-import org.metaborg.sdf2table.grammar.LexicalSymbol;
+import org.metaborg.sdf2table.grammar.ISymbol;
 import org.metaborg.sdf2table.grammar.Sort;
 import org.metaborg.sdf2table.grammar.Symbol;
 
@@ -19,7 +17,7 @@ import com.google.common.collect.Sets;
 
 public class CheckOverlap {
 
-    private final SCCNodes<Symbol> scc;
+    private final SCCNodes<ISymbol> scc;
     private final Set<IProduction> p;
     private final Set<IProduction> q;
     private final int maxDepth;
@@ -30,12 +28,12 @@ public class CheckOverlap {
 
     private class Node {
 
-        private final Symbol symbol;
+        private final ISymbol symbol;
         private final List<Node> children;
         private final List<Node> leaves;
         public final Set<IProduction> productions;
 
-        public Node(Symbol s) {
+        public Node(ISymbol s) {
             this.symbol = s;
             leaves = Lists.newArrayList();
             children = Lists.newArrayList();
@@ -47,7 +45,7 @@ public class CheckOverlap {
             leaves = Lists.newArrayList();
             children = Lists.newArrayList();
             productions = Sets.newHashSet(p);
-            for(Symbol symb_rhs : p.rightHand()) {
+            for(ISymbol symb_rhs : p.rightHand()) {
                 Node child = new Node(symb_rhs);
                 children.add(child);
                 leaves.add(child);
@@ -82,7 +80,7 @@ public class CheckOverlap {
             }
 
             for(Node leaf : leaves) {
-                Symbol leafSymb = leaf.symbol;
+                ISymbol leafSymb = leaf.symbol;
                 if(leafSymb.toString().equals("LAYOUT?-CF")) {
                     result += " ";
                 } else if(leafSymb instanceof Sort && ((Sort) leafSymb).getType() != null) {
@@ -91,34 +89,21 @@ public class CheckOverlap {
                     if(scc.nodeSCCNodesMapping.get(leafSymb) != null) {
                         result += "[";
 
-                        List<Symbol> sccNode = Lists.newArrayList(scc.nodeSCCNodesMapping.get(leafSymb));
+                        List<ISymbol> sccNode = Lists.newArrayList(scc.nodeSCCNodesMapping.get(leafSymb));
 
                         for(int i = 0; i < sccNode.size() - 1; i++) {
-                            result += getSort(sccNode.get(i)) + ", ";
+                            result += Symbol.getSort(sccNode.get(i)) + ", ";
                         }
-                        result += getSort(sccNode.get(sccNode.size() - 1)) + "]";
+                        result += Symbol.getSort(sccNode.get(sccNode.size() - 1)) + "]";
 
                         scc.nodeSCCNodesMapping.get(leafSymb).toString();
                     } else {
-                        result += getSort(leafSymb).toString();
+                        result += Symbol.getSort(leafSymb).toString();
                     }
                 }
             }
-
+            
             return result;
-        }
-
-        private String getSort(Symbol s) {
-            if(s instanceof Sort && ((Sort) s).getType() == null) {
-                return s.name();
-            } else if(s instanceof ContextFreeSymbol) {
-                return getSort(((ContextFreeSymbol) s).getSymbol());
-            } else if(s instanceof LexicalSymbol) {
-                return getSort(((LexicalSymbol) s).getSymbol());
-            } else if(s instanceof AltSymbol) {
-                return getSort(((AltSymbol) s).left()) + "_" + getSort(((AltSymbol) s).right());
-            }
-            return s.toString();
         }
 
         @Override public int hashCode() {
@@ -156,7 +141,7 @@ public class CheckOverlap {
 
     }
 
-    public CheckOverlap(Set<IProduction> p, Set<IProduction> q, int maxDepth, SCCNodes<Symbol> scc) {
+    public CheckOverlap(Set<IProduction> p, Set<IProduction> q, int maxDepth, SCCNodes<ISymbol> scc) {
         this.p = p;
         this.q = q;
         this.maxDepth = maxDepth;

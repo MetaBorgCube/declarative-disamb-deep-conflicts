@@ -14,8 +14,7 @@
 	</parent>
 
 	<modules>
-		<module>org.metaborg.characterclasses</module>
-		<module>org.metaborg.tableinterfaces</module>
+		<module>org.metaborg.parsetable</module>
 		<module>org.metaborg.sdf2table</module>
 		<module>disambiguation-bench</module>
 	</modules>

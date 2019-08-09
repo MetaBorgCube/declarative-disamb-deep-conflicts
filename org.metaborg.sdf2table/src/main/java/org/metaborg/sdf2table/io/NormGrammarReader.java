@@ -10,20 +10,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.metaborg.characterclasses.CharacterClassFactory;
+import org.metaborg.parsetable.characterclasses.CharacterClassFactory;
 import org.metaborg.parsetable.characterclasses.ICharacterClass;
 import org.metaborg.sdf2table.exceptions.ModuleNotFoundException;
 import org.metaborg.sdf2table.exceptions.UnexpectedTermException;
 import org.metaborg.sdf2table.grammar.AltSymbol;
-import org.metaborg.sdf2table.grammar.CharacterClass;
+import org.metaborg.sdf2table.grammar.CharacterClassSymbol;
 import org.metaborg.sdf2table.grammar.ConstructorAttribute;
 import org.metaborg.sdf2table.grammar.ContextFreeSymbol;
 import org.metaborg.sdf2table.grammar.DeprecatedAttribute;
 import org.metaborg.sdf2table.grammar.FileStartSymbol;
 import org.metaborg.sdf2table.grammar.GeneralAttribute;
 import org.metaborg.sdf2table.grammar.IAttribute;
-import org.metaborg.sdf2table.grammar.IPriority;
-import org.metaborg.sdf2table.grammar.IProduction;
+import org.metaborg.sdf2table.grammar.ISymbol;
 import org.metaborg.sdf2table.grammar.IterSepSymbol;
 import org.metaborg.sdf2table.grammar.IterStarSepSymbol;
 import org.metaborg.sdf2table.grammar.IterStarSymbol;
@@ -57,30 +56,33 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 public class NormGrammarReader {
-    
+
     private final Map<String, Boolean> modules;
     private final NormGrammar grammar;
     private final List<String> paths;
     private final Collection<FileVisitor> fileVisitors;
-    
+    private final List<StrategoAppl> prioritySections;
+
     public NormGrammarReader() {
         this.modules = Maps.newHashMap();
         this.grammar = new NormGrammar();
         this.paths = Collections.emptyList();
         this.fileVisitors = new LinkedList<>();
+        this.prioritySections = Lists.newArrayList();
     }
-    
+
     public NormGrammarReader(List<String> paths) {
         this.modules = Maps.newHashMap();
         this.grammar = new NormGrammar();
         this.paths = paths;
         this.fileVisitors = new LinkedList<>();
+        this.prioritySections = Lists.newArrayList();
     }
-    
-    public static interface FileVisitor {
+
+    public interface FileVisitor {
         void visit(File file);
     }
-    
+
     public void accept(FileVisitor fileVisitor) {
         this.fileVisitors.add(fileVisitor);
     }
@@ -93,18 +95,37 @@ public class NormGrammarReader {
 
     public NormGrammar readGrammar(IStrategoTerm mainModule) throws Exception {
         readModule(mainModule);
-        
-        Set<IPriority> allPriorities = Sets.newHashSet();
-        allPriorities.addAll(grammar.getTransitivePriorities());
-        allPriorities.addAll(grammar.getNonTransitivePriorities());
+
+        // only read priority sections after reading all productions to get constructor references
+        for(StrategoAppl section : prioritySections) {
+            addPriorities(section);
+        }
         
         grammar.setInputPriorities(grammar.getNonTransitivePriorities().size() - 1);
-        
+
         grammar.priorityTransitiveClosure();
-        
         grammar.normalizeFollowRestrictionLookahead();
 
+        // treat indexed priorities separately
+        normalizeIndexedPriorities();
+
         return grammar;
+    }
+
+    private void normalizeIndexedPriorities() {
+        for(Priority p : grammar.priorities().keys()) {
+            for(Integer arg : grammar.priorities().get(p)) {
+                if(arg != -1 && arg != Integer.MIN_VALUE && arg != Integer.MAX_VALUE) {
+                    grammar.getIndexedPriorities().put(p, arg);
+                } 
+            }
+        }
+
+        for(Priority p : grammar.getIndexedPriorities().keys()) {
+            for(Integer arg : grammar.getIndexedPriorities().get(p)) {
+                grammar.priorities().get(p).remove(arg);
+            }
+        }
     }
 
     private void readModule(IStrategoTerm module) throws Exception {
@@ -169,11 +190,7 @@ public class NormGrammarReader {
                     StrategoAppl tsection = null;
                     if(!(t.getSubterm(0) instanceof StrategoAppl))
                         continue;
-                    try {
-                        tsection = (StrategoAppl) t.getSubterm(0);
-                    } catch(Exception e) {
-                        System.out.println("here");
-                    }
+                    tsection = (StrategoAppl) t.getSubterm(0);
                     switch(tsection.getName()) {
                         case "ContextFreeSyntax":
                             addProds(tsection);
@@ -188,7 +205,7 @@ public class NormGrammarReader {
                             addRestrictions(tsection);
                             break;
                         case "Priorities":
-                            addPriorities(tsection);
+                            prioritySections.add(tsection);
                             break;
                         default:
 //                            System.err.println("Unknown module section `" + tsection.getName() + "'");
@@ -226,9 +243,10 @@ public class NormGrammarReader {
         }
     }
 
-    private IProduction processProduction(IStrategoTerm term) throws Exception {
-        IProduction prod = null;
+    private Production processProduction(IStrategoTerm term) throws Exception {
+        Production prod = null;
         prod = grammar.getCacheProductionsRead().get(term.toString());
+
 
         if(prod != null) {
             return prod;
@@ -243,6 +261,7 @@ public class NormGrammarReader {
                 String cons = null;
                 ConstructorAttribute cons_attr = null;
                 List<Symbol> rhs_symbols = Lists.newArrayList();
+                Set<ISymbol> literals = Sets.newHashSet();
                 StrategoAppl tattrs;
 
                 if(with_cons) {
@@ -259,6 +278,9 @@ public class NormGrammarReader {
                     Symbol s = processSymbol(t);
                     if(s != null)
                         rhs_symbols.add(s);
+                    if(s instanceof Sort && ((Sort) s).getType() != null) {
+                        literals.add(s);
+                    }
                 }
 
                 // Read attributes
@@ -304,6 +326,9 @@ public class NormGrammarReader {
 
                 // processing a new production
                 prod = new Production(symbol, rhs_symbols);
+                for(ISymbol literal : literals) {
+                    grammar.getLiteralProductionsMapping().put(literal, prod);
+                }
 
                 if(cons_attr != null) {
                     grammar.getSortConsProductionMapping().put(new ProductionReference(symbol, cons_attr), prod);
@@ -314,14 +339,29 @@ public class NormGrammarReader {
                 }
 
                 for(IAttribute a : attrs) {
+                    if(a.toString().equals("longest-match")) {
+                        ISymbol lastSymbol = prod.rightHand().get(prod.rightHand().size() - 1);
+                        ISymbol firstSymbol = prod.rightHand().get(0);
 
-                    if(a.toString().equals("longest-match")
-                        && Symbol.isListNonTerminal(prod.rightHand().get(prod.rightHand().size() - 1))) {
-                        grammar.getLongestMatchProds().put(prod.rightHand().get(prod.rightHand().size() - 1), prod);
+                        if(Symbol.isListNonTerminal(lastSymbol)) {
+                            grammar.getLongestMatchProdsBack().put((Symbol) lastSymbol, prod);
+                        }
+
+                        else if(Symbol.isListNonTerminal(firstSymbol)) {
+                            grammar.getLongestMatchProdsFront().put((Symbol) firstSymbol, prod);
+                        }
                     }
-                    if(a.toString().equals("shortest-match")
-                        && Symbol.isListNonTerminal(prod.rightHand().get(prod.rightHand().size() - 1))) {
-                        grammar.getShortestMatchProds().put(prod.rightHand().get(prod.rightHand().size() - 1), prod);
+                    if(a.toString().equals("shortest-match")) {
+                        ISymbol lastSymbol = prod.rightHand().get(prod.rightHand().size() - 1);
+                        ISymbol firstSymbol = prod.rightHand().get(0);
+
+                        if(Symbol.isListNonTerminal(lastSymbol)) {
+                            grammar.getShortestMatchProdsBack().put((Symbol) lastSymbol, prod);
+                        }
+
+                        else if(Symbol.isListNonTerminal(firstSymbol)) {
+                            grammar.getShortestMatchProdsFront().put((Symbol) firstSymbol, prod);
+                        }
                     }
 
                     grammar.getProductionAttributesMapping().put(prod, a);
@@ -332,12 +372,6 @@ public class NormGrammarReader {
                     grammar.getCacheProductionsRead().put(term.toString(), prod);
                 }
 
-                for(Symbol s : prod.rightHand()) {
-                    if (s instanceof Sort && ((Sort) s).getType() != null) {
-                        grammar.getLiteralProductionsMapping().put(s, prod);
-                    }
-                }
-                
                 grammar.getSymbolProductionsMapping().put(symbol, prod);
                 grammar.getUniqueProductionMapping().put(unique_prod, prod);
 
@@ -366,10 +400,9 @@ public class NormGrammarReader {
 
         if(term instanceof StrategoAppl) {
             StrategoAppl app = (StrategoAppl) term;
+            Sort sep;
             switch(app.getName()) {
                 case "SortDef":
-                    symbol = new Sort(((StrategoString) app.getSubterm(0)).stringValue());
-                    break;
                 case "Sort":
                     symbol = new Sort(((StrategoString) app.getSubterm(0)).stringValue());
                     break;
@@ -377,7 +410,7 @@ public class NormGrammarReader {
                     symbol = new Layout();
                     break;
                 case "CharClass":
-                    symbol = new CharacterClass(processCharClass(term.getSubterm(0)));
+                    symbol = new CharacterClassSymbol(processCharClass(term.getSubterm(0)));
                     break;
                 case "Lit":
                     enquoted = ((StrategoString) app.getSubterm(0)).stringValue();
@@ -403,10 +436,12 @@ public class NormGrammarReader {
                     symbol = new IterStarSymbol(processSymbol(app.getSubterm(0)));
                     break;
                 case "IterSep":
-                    symbol = new IterSepSymbol(processSymbol(app.getSubterm(0)), processSymbol(app.getSubterm(1)));
+                    sep = (Sort) processSymbol(app.getSubterm(1));
+                    symbol = new IterSepSymbol(processSymbol(app.getSubterm(0)), sep);
                     break;
                 case "IterStarSep":
-                    symbol = new IterStarSepSymbol(processSymbol(app.getSubterm(0)), processSymbol(app.getSubterm(1)));
+                    sep = (Sort) processSymbol(app.getSubterm(1));
+                    symbol = new IterStarSepSymbol(processSymbol(app.getSubterm(0)), sep);
                     break;
                 case "Lex":
                     symbol = new LexicalSymbol(processSymbol(app.getSubterm(0)));
@@ -480,7 +515,7 @@ public class NormGrammarReader {
                     return ccFactory.fromSingle(Integer.parseInt(str.substring(1)));
                 case "Conc":
                     ICharacterClass head = processCharClass(app.getSubterm(0));
-                    return ccFactory.union(head, processCharClass(app.getSubterm(1)));
+                    return head.union(processCharClass(app.getSubterm(1)));
                 default:
                     System.err.println("Unknown character class `" + app.getName() + "'. Is that normalized SDF3?");
                     return ccFactory.fromEmpty();
@@ -620,8 +655,8 @@ public class NormGrammarReader {
             StrategoAppl res = (StrategoAppl) restriction;
             switch(res.getName()) {
                 case "Follow":
-                    List<CharacterClass[]> restrictionLookahead = Lists.newArrayList();
-                    CharacterClass restrictionNoLookahead =
+                    List<ICharacterClass[]> restrictionLookahead = Lists.newArrayList();
+                    ICharacterClass restrictionNoLookahead =
                         importFollowRestriction(res.getSubterm(1), restrictionLookahead);
                     StrategoList subjects = (StrategoList) res.getSubterm(0);
                     for(IStrategoTerm subject : subjects) {
@@ -638,11 +673,11 @@ public class NormGrammarReader {
         }
     }
 
-    public CharacterClass importFollowRestriction(IStrategoTerm term, List<CharacterClass[]> restrictionsLookahead)
+    public ICharacterClass importFollowRestriction(IStrategoTerm term, List<ICharacterClass[]> restrictionsLookahead)
         throws UnexpectedTermException {
         StrategoList slist;
 
-        CharacterClass restriction = new CharacterClass(null);
+        ICharacterClass restriction = CharacterClassFactory.EMPTY_CHARACTER_CLASS;
 
         if(term instanceof StrategoAppl) {
             StrategoAppl app = (StrategoAppl) term;
@@ -650,20 +685,17 @@ public class NormGrammarReader {
                 case "List":
                     slist = (StrategoList) app.getSubterm(0);
                     for(IStrategoTerm t : slist) {
-                        restriction =
-                            CharacterClass.union(importFollowRestriction(t, restrictionsLookahead), restriction);
+                        restriction = importFollowRestriction(t, restrictionsLookahead).union(restriction);
                     }
                     break;
                 // NON TERMINALS
                 case "Seq":
-                    List<CharacterClass> lookahead =
-                        Lists.newArrayList(new CharacterClass(processCharClass(app.getSubterm(0))));
+                    List<ICharacterClass> lookahead = Lists.newArrayList(processCharClass(app.getSubterm(0)));
                     createNewLookahead(app.getSubterm(1), lookahead, restrictionsLookahead);
                     break;
                 // TERMINALS
                 case "CharClass":
-                    restriction =
-                        CharacterClass.union(restriction, new CharacterClass(processCharClass(app.getSubterm(0))));
+                    restriction = restriction.union(processCharClass(app.getSubterm(0)));
                     break;
                 default:
                     throw new UnexpectedTermException(app.toString(), "List or Seq or CharClass");
@@ -673,8 +705,8 @@ public class NormGrammarReader {
         return restriction;
     }
 
-    private void createNewLookahead(IStrategoTerm term, List<CharacterClass> lookahead,
-        List<CharacterClass[]> restrictionsLookahead) throws UnexpectedTermException {
+    private void createNewLookahead(IStrategoTerm term, List<ICharacterClass> lookahead,
+        List<ICharacterClass[]> restrictionsLookahead) throws UnexpectedTermException {
 
         StrategoList slist;
 
@@ -684,20 +716,20 @@ public class NormGrammarReader {
                 case "List":
                     slist = (StrategoList) app.getSubterm(0);
                     for(IStrategoTerm t : slist) {
-                        List<CharacterClass> firstChars = Lists.newArrayList(lookahead);
+                        List<ICharacterClass> firstChars = Lists.newArrayList(lookahead);
                         createNewLookahead(t, firstChars, restrictionsLookahead);
                     }
                     break;
                 // NON TERMINALS
                 case "Seq":
-                    lookahead.add(new CharacterClass(processCharClass(app.getSubterm(0))));
+                    lookahead.add(processCharClass(app.getSubterm(0)));
                     createNewLookahead(app.getSubterm(1), lookahead, restrictionsLookahead);
                     break;
                 // TERMINALS
                 case "CharClass":
-                    CharacterClass lastChar = new CharacterClass(processCharClass(app.getSubterm(0)));
+                    ICharacterClass lastChar = processCharClass(app.getSubterm(0));
                     lookahead.add(lastChar);
-                    restrictionsLookahead.add(lookahead.toArray(new CharacterClass[lookahead.size()]));
+                    restrictionsLookahead.add(lookahead.toArray(new ICharacterClass[0]));
                     break;
                 default:
                     throw new UnexpectedTermException(app.toString(), "List or Seq or CharClass");
@@ -721,7 +753,7 @@ public class NormGrammarReader {
     private void processPriorityChain(IStrategoTerm chain) throws Exception {
         if(chain instanceof IStrategoAppl && ((StrategoAppl) chain).getName().equals("Chain")) {
             StrategoList groups = (StrategoList) chain.getSubterm(0);
-            IProduction higher = null, lower = null;
+            Production higher = null, lower = null;
             boolean transitive = true;
             List<Integer> arguments = Lists.newArrayList();
 
@@ -819,8 +851,8 @@ public class NormGrammarReader {
             IStrategoTerm second_group = chain.getSubterm(2);
 
 
-            IProduction higher = processGroup(first_group);
-            IProduction lower = processGroup(second_group);
+            Production higher = processGroup(first_group);
+            Production lower = processGroup(second_group);
 
             Priority p = new Priority(higher, lower, false);
 
@@ -831,9 +863,29 @@ public class NormGrammarReader {
                 grammar.getNonTransitivePriorityArgs().put(p, Integer.MAX_VALUE);
             } else if(assoc.toString().contains("Right")) {
                 grammar.getNonTransitivePriorityArgs().put(p, Integer.MIN_VALUE);
-            } else {
-                grammar.getNonTransitivePriorityArgs().put(p, Integer.MIN_VALUE);
+            } else if(assoc.toString().contains("NonAssoc")) {
+                // consider non-assoc as left and add warning
+                // grammar.getNonTransitivePriorityArgs().put(p, Integer.MIN_VALUE);
                 grammar.getNonTransitivePriorityArgs().put(p, Integer.MAX_VALUE);
+
+                String higherSort = Symbol.getSort(p.higher().leftHand());
+                String higherConstructor = grammar.getConstructors().get(p.higher()).getConstructor();
+
+                String lowerSort = Symbol.getSort(p.lower().leftHand());
+                String lowerConstructor = grammar.getConstructors().get(p.lower()).getConstructor();
+
+                grammar.getNonAssocPriorities().put(higherSort + "." + higherConstructor,
+                    lowerSort + "." + lowerConstructor);
+            } else if(assoc.toString().contains("NonNested")) {
+                // add warning for non-nested
+                String higherSort = Symbol.getSort(p.higher().leftHand());
+                String higherConstructor = grammar.getConstructors().get(p.higher()).getConstructor();
+
+                String lowerSort = Symbol.getSort(p.lower().leftHand());
+                String lowerConstructor = grammar.getConstructors().get(p.lower()).getConstructor();
+
+                grammar.getNonNestedPriorities().put(higherSort + "." + higherConstructor,
+                    lowerSort + "." + lowerConstructor);
             }
 
         } else {
@@ -841,12 +893,12 @@ public class NormGrammarReader {
         }
     }
 
-    private List<Integer> normalizePriorityArguments(IProduction production, List<Integer> arguments) {
-        Symbol optLayout = new ContextFreeSymbol(new OptionalSymbol(new Layout()));
+    private List<Integer> normalizePriorityArguments(Production production, List<Integer> arguments) {
+        ISymbol optLayout = new ContextFreeSymbol(new OptionalSymbol(new Layout()));
         List<Integer> norm_arguments = Lists.newArrayList();
         for(int arg : arguments) {
             int norm_arg = 0;
-            for(Symbol s : production.rightHand()) {
+            for(ISymbol s : production.rightHand()) {
                 if(arg == 0 && norm_arg == 0) {
                     norm_arguments.add(norm_arg);
                     break;
@@ -867,9 +919,9 @@ public class NormGrammarReader {
         return arguments;
     }
 
-    private IProduction processGroup(IStrategoTerm group) throws UnexpectedTermException, Exception {
+    private Production processGroup(IStrategoTerm group) throws UnexpectedTermException, Exception {
 
-        IProduction production = null;
+        Production production = null;
 
         if(group instanceof StrategoAppl && ((StrategoAppl) group).getName().equals("SimpleGroup")) {
             production = processProduction(group.getSubterm(0));
@@ -897,7 +949,7 @@ public class NormGrammarReader {
 
     private IStrategoTerm termFromFile(File file) throws Exception {
         fileVisitors.forEach(visitor -> visitor.visit(file));
-        
+
         FileReader reader = null;
         IStrategoTerm term = null;
         ITermFactory termFactory = ParseTableIO.getTermfactory();

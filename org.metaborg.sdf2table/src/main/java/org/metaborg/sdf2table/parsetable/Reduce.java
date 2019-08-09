@@ -2,12 +2,12 @@ package org.metaborg.sdf2table.parsetable;
 
 import java.io.Serializable;
 
-import org.metaborg.parsetable.IProduction;
-import org.metaborg.parsetable.ProductionType;
+import org.metaborg.parsetable.productions.IProduction;
+import org.metaborg.parsetable.productions.ProductionType;
 import org.metaborg.parsetable.actions.IReduce;
-import org.metaborg.sdf2table.grammar.CharacterClass;
-import org.metaborg.sdf2table.grammar.GeneralAttribute;
 import org.metaborg.sdf2table.grammar.IAttribute;
+import org.metaborg.parsetable.characterclasses.ICharacterClass;
+import org.metaborg.sdf2table.grammar.GeneralAttribute;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 
@@ -18,33 +18,39 @@ public class Reduce extends Action implements IReduce, Serializable {
     int prod_label;
     ParseTableProduction prod;
 
-    public Reduce(ParseTableProduction prod, int prod_label, CharacterClass cc) {
+    public Reduce(ParseTableProduction prod, int prod_label, ICharacterClass cc) {
         this.prod = prod;
         this.prod_label = prod_label;
         this.cc = cc;
     }
 
     @Override public IStrategoTerm toAterm(ITermFactory tf, ParseTable pt) {
-        int status = 0;
+        return tf.makeAppl(tf.makeConstructor("reduce", 3), tf.makeInt(prod.getProduction().rightHand().size()),
+            tf.makeInt(prod_label), tf.makeInt(getStatusFromParseTableProduction(pt)));
+    }
+
+    /**
+     * @return A status integer that indicates whether the production rule is a "reject", "prefer", or "avoid" rule.
+     */
+    protected int getStatusFromParseTableProduction(ParseTable pt) {
         for(IAttribute attr : pt.normalizedGrammar().getProductionAttributesMapping().get(prod.getProduction())) {
             if(attr instanceof GeneralAttribute) {
                 GeneralAttribute ga = (GeneralAttribute) attr;
-                if(ga.getName().equals("reject")) {
-                    status = 1;
-                } else if(ga.getName().equals("prefer")) {
-                    status = 2;
-                } else if(ga.getName().equals("avoid")) {
-                    status = 4;
+                switch(ga.getName()) {
+                    case "reject":
+                        return 1;
+                    case "prefer":
+                        return 2;
+                    case "avoid":
+                        return 4;
                 }
             }
         }
-
-        return tf.makeAppl(tf.makeConstructor("reduce", 3), tf.makeInt(prod.getProduction().rightHand().size()), tf.makeInt(prod_label),
-            tf.makeInt(status));
+        return 0;
     }
 
     @Override public String toString() {
-        return "reduce(" + prod.getProduction().rightHand().size() + ", " + prod_label + ", " + productionType() + "))";
+        return "reduce(" + prod.getProduction().rightHand().size() + "," + prod_label + "," + productionType() + ")";
     }
 
     @Override public int hashCode() {
@@ -78,7 +84,5 @@ public class Reduce extends Action implements IReduce, Serializable {
     @Override public int arity() {
         return prod.getProduction().rightHand().size();
     }
-
-    
 
 }

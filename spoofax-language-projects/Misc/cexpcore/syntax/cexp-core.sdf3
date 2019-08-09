@@ -1,0 +1,27 @@
+module cexp-core
+
+imports Common
+
+context-free start-symbols Start
+
+context-free syntax
+  Start       = Exp
+  Exp.Comma   = Exp "," Exp {left}
+  Exp.Cond    = Exp "?" Exp ":" Exp {right}
+  Exp.Assign  = Exp "=" Exp {right}
+  Exp.Mul     = Exp "*" Exp {left}
+  Exp.Add     = Exp "+" Exp {left}
+  Exp.Call    = Exp "(" {Exp ","}* ")"
+  Exp.Var     = ID
+  Exp         = "(" Exp ")" {bracket}
+  
+context-free priorities
+  Exp.Call > Exp.Mul > Exp.Add > Exp.Cond > Exp.Assign > Exp.Comma,
+  
+  {Exp ","}+ = Exp                <0> .> Exp.Comma,
+  {Exp ","}+ = {Exp ","}+ "," Exp <2> .> Exp.Comma,
+  
+  Exp.Assign <0> .> {
+    Exp.Add Exp.Mul Exp.Cond 
+  }
+ 

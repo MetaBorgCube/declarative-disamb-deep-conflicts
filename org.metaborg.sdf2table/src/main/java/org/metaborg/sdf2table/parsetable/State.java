@@ -1,24 +1,25 @@
 package org.metaborg.sdf2table.parsetable;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.metaborg.characterclasses.CharacterClassFactory;
-import org.metaborg.parsetable.IParseInput;
-import org.metaborg.parsetable.IState;
+import org.metaborg.parsetable.characterclasses.CharacterClassFactory;
+import org.metaborg.parsetable.query.IActionQuery;
+import org.metaborg.parsetable.states.IState;
 import org.metaborg.parsetable.actions.IAction;
 import org.metaborg.parsetable.actions.IGoto;
 import org.metaborg.parsetable.actions.IReduce;
-import org.metaborg.sdf2table.grammar.CharacterClass;
+import org.metaborg.parsetable.characterclasses.ICharacterClass;
 import org.metaborg.sdf2table.grammar.IProduction;
+import org.metaborg.sdf2table.grammar.ISymbol;
+import org.metaborg.sdf2table.grammar.CharacterClassSymbol;
 import org.metaborg.sdf2table.grammar.Symbol;
-import org.metaborg.sdf2table.parsetable.query.ActionsForCharacterDisjointSorted;
-import org.metaborg.sdf2table.parsetable.query.ActionsPerCharacterClass;
-import org.metaborg.sdf2table.parsetable.query.IActionsForCharacter;
+import org.metaborg.parsetable.query.ActionsForCharacterDisjointSorted;
+import org.metaborg.parsetable.query.ActionsPerCharacterClass;
+import org.metaborg.parsetable.query.IActionsForCharacter;
+
 
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Maps;
@@ -32,12 +33,12 @@ public class State implements IState, Comparable<State>, Serializable {
     ParseTable pt;
 
     private final int label;
-    private Set<GoTo> gotos;
+    private Set<Goto> gotos;
     private Map<Integer, IGoto> gotosMapping;
     private final Set<LRItem> kernel;
     private Set<LRItem> items;
     private LinkedHashMultimap<Symbol, LRItem> symbol_items;
-    private LinkedHashMultimap<CharacterClass, Action> lr_actions;
+    private LinkedHashMultimap<ICharacterClass, Action> lr_actions;
     IActionsForCharacter actionsForCharacter;
     private boolean rejectable;
 
@@ -93,17 +94,17 @@ public class State implements IState, Comparable<State>, Serializable {
 
     public void doShift() {
         for(Symbol s_at_dot : symbol_items.keySet()) {
-            if(s_at_dot instanceof CharacterClass) {
+            if(s_at_dot instanceof CharacterClassSymbol) {
                 Set<LRItem> new_kernel = Sets.newLinkedHashSet();
-                Set<GoTo> new_gotos = Sets.newLinkedHashSet();
+                Set<Goto> new_gotos = Sets.newLinkedHashSet();
                 Set<Shift> new_shifts = Sets.newLinkedHashSet();
                 for(LRItem item : symbol_items.get(s_at_dot)) {
-                    Shift shift = new Shift((CharacterClass) s_at_dot);
+                    Shift shift = new Shift(((CharacterClassSymbol) s_at_dot).getCC());
                     new_kernel.add(item.shiftDot());
                     if(!(item.getProd().equals(pt.initialProduction()) && item.getDotPosition() == 1)) {
                         new_shifts.add(shift);
                     }
-                    new_gotos.add(new GoTo((CharacterClass) s_at_dot, pt));
+                    new_gotos.add(new Goto(((CharacterClassSymbol) s_at_dot).getCC(), pt));
                 }
                 if(!new_kernel.isEmpty()) {
                     checkKernel(new_kernel, new_gotos, new_shifts);
@@ -117,13 +118,13 @@ public class State implements IState, Comparable<State>, Serializable {
                     }
 
                     Set<LRItem> new_kernel = Sets.newLinkedHashSet();
-                    Set<GoTo> new_gotos = Sets.newLinkedHashSet();
+                    Set<Goto> new_gotos = Sets.newLinkedHashSet();
                     Set<Shift> new_shifts = Sets.newLinkedHashSet();
                     for(LRItem item : symbol_items.get(s_at_dot)) {
                         // if item.prod does not conflict with p
-                        if(!LRItem.isPriorityConflict(item, p, pt.normalizedGrammar().priorities())) {
+                        if(!item.isPriorityConflict(p)) {
                             new_kernel.add(item.shiftDot());
-                            new_gotos.add(new GoTo(pt.productionLabels().get(p), pt));
+                            new_gotos.add(new Goto(pt.productionLabels().get(p), pt));
                         }
                     }
                     if(!new_kernel.isEmpty()) {
@@ -142,20 +143,21 @@ public class State implements IState, Comparable<State>, Serializable {
             if(item.getDotPosition() == item.getProd().rightHand().size()) {
                 int prod_label = pt.productionLabels().get(item.getProd());
 
-                CharacterClass fr = item.getProd().leftHand().followRestriction();
-                if((fr == null || fr.isEmptyCC()) && item.getProd().leftHand().followRestrictionLookahead() == null) {
-                    addReduceAction(item.getProd(), prod_label, CharacterClass.getFullCharacterClass(), null);
+                ISymbol leftHandSymbol = item.getProd().leftHand();
+                ICharacterClass fr = leftHandSymbol.followRestriction();
+                if((fr == null || fr.isEmpty()) && leftHandSymbol.followRestrictionLookahead() == null) {
+                    addReduceAction(item.getProd(), prod_label, CharacterClassFactory.FULL_RANGE, null);
                 } else {
-                    CharacterClass final_range = CharacterClass.getFullCharacterClass();
+                    ICharacterClass final_range = CharacterClassFactory.FULL_RANGE;
                     // Not based on first and follow sets thus, only considering the follow restrictions
-                    if(fr != null && !fr.isEmptyCC()) {
-                        final_range = final_range.difference(item.getProd().leftHand().followRestriction());
+                    if(fr != null && !fr.isEmpty()) {
+                        final_range = final_range.difference(leftHandSymbol.followRestriction());
                     }
-                    for(CharacterClass[] s : item.getProd().leftHand().followRestrictionLookahead()) {
+                    for(ICharacterClass[] s : leftHandSymbol.followRestrictionLookahead()) {
                         final_range = final_range.difference(s[0]);
 
                         // create reduce Lookahead actions
-                        CharacterClass[] lookahead = Arrays.copyOfRange(s, 1, s.length);
+                        ICharacterClass[] lookahead = Arrays.copyOfRange(s, 1, s.length);
                         addReduceAction(item.getProd(), prod_label, s[0], lookahead);
                     }
                     addReduceAction(item.getProd(), prod_label, final_range, null);
@@ -163,24 +165,23 @@ public class State implements IState, Comparable<State>, Serializable {
             }
             // <Start> = <START> . EOF
             if(item.getProd().equals(pt.initialProduction()) && item.getDotPosition() == 1) {
-                lr_actions.put(new CharacterClass(CharacterClassFactory.EOF_SINGLETON),
-                    new Accept(new CharacterClass(CharacterClassFactory.EOF_SINGLETON)));
+                lr_actions.put(CharacterClassFactory.EOF_SINGLETON, new Accept(CharacterClassFactory.EOF_SINGLETON));
             }
         }
     }
 
-    private void addReduceAction(IProduction p, Integer label, CharacterClass cc, CharacterClass[] lookahead) {
-        CharacterClass final_range = cc;
+    private void addReduceAction(IProduction p, Integer label, ICharacterClass cc, ICharacterClass[] lookahead) {
+        ICharacterClass final_range = cc;
         ParseTableProduction prod = pt.productionsMapping().get(p);
 
-        LinkedHashMultimap<CharacterClass, Action> newLR_actions = LinkedHashMultimap.create();
-        
-        for(CharacterClass range : lr_actions.keySet()) {
-            if(final_range.isEmptyCC()) {
+        LinkedHashMultimap<ICharacterClass, Action> newLR_actions = LinkedHashMultimap.create();
+
+        for(ICharacterClass range : lr_actions.keySet()) {
+            if(final_range.isEmpty()) {
                 break;
             }
-            CharacterClass intersection = CharacterClass.intersection(final_range, range);
-            if(!intersection.isEmptyCC()) {
+            ICharacterClass intersection = final_range.intersection(range);
+            if(!intersection.isEmpty()) {
                 if(intersection.equals(range)) {
                     if(lookahead != null) {
                         newLR_actions.put(intersection, new ReduceLookahead(prod, label, intersection, lookahead));
@@ -194,7 +195,7 @@ public class State implements IState, Comparable<State>, Serializable {
 
         lr_actions.putAll(newLR_actions);
 
-        if(!final_range.isEmptyCC()) {
+        if(!final_range.isEmpty()) {
             if(lookahead != null) {
                 lr_actions.put(final_range, new ReduceLookahead(prod, label, final_range, lookahead));
             } else {
@@ -203,7 +204,7 @@ public class State implements IState, Comparable<State>, Serializable {
         }
     }
 
-    private void checkKernel(Set<LRItem> new_kernel, Set<GoTo> new_gotos, Set<Shift> new_shifts) {
+    private void checkKernel(Set<LRItem> new_kernel, Set<Goto> new_gotos, Set<Shift> new_shifts) {
         if(pt.kernelMap().containsKey(new_kernel)) {
             int stateNumber = pt.kernelMap().get(new_kernel).getLabel();
             // set recently added shift and goto actions to new state
@@ -213,7 +214,7 @@ public class State implements IState, Comparable<State>, Serializable {
                 this.lr_actions.put(shift.cc, shift);
                 // this.lr_actions.add(new LRAction(shift.cc, shift));
             }
-            for(GoTo g : new_gotos) {
+            for(Goto g : new_gotos) {
                 g.setState(stateNumber);
                 this.gotos.add(g);
                 this.gotosMapping.put(g.label, g);
@@ -225,7 +226,7 @@ public class State implements IState, Comparable<State>, Serializable {
                 this.lr_actions.put(shift.cc, shift);
                 // this.lr_actions.add(new LRAction(shift.cc, shift));
             }
-            for(GoTo g : new_gotos) {
+            for(Goto g : new_gotos) {
                 g.setState(new_state.getLabel());
                 this.gotos.add(g);
                 this.gotosMapping.put(g.label, g);
@@ -251,7 +252,7 @@ public class State implements IState, Comparable<State>, Serializable {
             buf += "\nActions: ";
         }
         i = 0;
-        for(CharacterClass cc : lr_actions.keySet()) {
+        for(ICharacterClass cc : lr_actions.keySet()) {
             if(i != 0)
                 buf += "\n       , ";
             buf += cc + ": ";
@@ -339,7 +340,7 @@ public class State implements IState, Comparable<State>, Serializable {
         this.setStatus(StateStatus.DIRTY);
     }
 
-    public Set<GoTo> gotos() {
+    public Set<Goto> gotos() {
         return gotos;
     }
 
@@ -348,7 +349,7 @@ public class State implements IState, Comparable<State>, Serializable {
         return actions;
     }
 
-    public SetMultimap<CharacterClass, Action> actionsMapping() {
+    public SetMultimap<ICharacterClass, Action> actionsMapping() {
         return lr_actions;
     }
 
@@ -364,12 +365,12 @@ public class State implements IState, Comparable<State>, Serializable {
         return label;
     }
 
-    @Override public Iterable<IAction> getApplicableActions(IParseInput parseInput) {
-        return actionsForCharacter.getApplicableActions(parseInput);
+    @Override public Iterable<IAction> getApplicableActions(IActionQuery actionQuery) {
+        return actionsForCharacter.getApplicableActions(actionQuery);
     }
 
-    @Override public Iterable<IReduce> getApplicableReduceActions(IParseInput parseInput) {
-        return actionsForCharacter.getApplicableReduceActions(parseInput);
+    @Override public Iterable<IReduce> getApplicableReduceActions(IActionQuery actionQuery) {
+        return actionsForCharacter.getApplicableReduceActions(actionQuery);
     }
 
     @Override public int getGotoId(int productionId) {
@@ -377,21 +378,21 @@ public class State implements IState, Comparable<State>, Serializable {
     }
 
     public void calculateActionsForCharacter() {
-        ActionsPerCharacterClass[] actions = readActions();
-
-        actionsForCharacter = new ActionsForCharacterDisjointSorted(actions);
+        actionsForCharacter = new ActionsForCharacterDisjointSorted(readActions());
     }
 
     private ActionsPerCharacterClass[] readActions() {
-        List<ActionsPerCharacterClass> actionsPerCharacterClasses =
-            new ArrayList<ActionsPerCharacterClass>(lr_actions.size());
+        Set<ICharacterClass> characterClasses = lr_actions.keySet();
 
-        for(CharacterClass cc : lr_actions.keySet()) {
-            actionsPerCharacterClasses.add(
-                new ActionsPerCharacterClass(cc, lr_actions.get(cc).toArray(new IAction[lr_actions.get(cc).size()])));
+        ActionsPerCharacterClass[] actionsPerCharacterClasses = new ActionsPerCharacterClass[characterClasses.size()];
+
+        int i = 0;
+        for(ICharacterClass cc : characterClasses) {
+            actionsPerCharacterClasses[i++] =
+                new ActionsPerCharacterClass(cc, lr_actions.get(cc).toArray(new IAction[0]));
         }
 
-        return actionsPerCharacterClasses.toArray(new ActionsPerCharacterClass[actionsPerCharacterClasses.size()]);
+        return actionsPerCharacterClasses;
     }
 
 

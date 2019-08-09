@@ -3,37 +3,37 @@ package org.metaborg.sdf2table.parsetable;
 import java.io.Serializable;
 
 import org.metaborg.parsetable.actions.IGoto;
-import org.metaborg.sdf2table.grammar.CharacterClass;
+import org.metaborg.parsetable.characterclasses.ICharacterClass;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 
-public class GoTo implements Serializable, IGoto {
+public class Goto implements Serializable, IGoto {
 
     private static final long serialVersionUID = -6437393243737838862L;
 
     ParseTable pt;
     int label = -1;
-    CharacterClass cc = null;
+    ICharacterClass cc = null;
     private int state;
 
-    public GoTo(CharacterClass cc, int toState, ParseTable pt) {
+    public Goto(ICharacterClass cc, int toState, ParseTable pt) {
         this.pt = pt;
         this.cc = cc;
         this.setState(toState);
     }
 
-    public GoTo(CharacterClass cc, ParseTable pt) {
+    public Goto(ICharacterClass cc, ParseTable pt) {
         this.pt = pt;
         this.cc = cc;
     }
 
-    public GoTo(int label, int toState, ParseTable pt) {
+    public Goto(int label, int toState, ParseTable pt) {
         this.pt = pt;
         this.label = label;
         this.setState(toState);
     }
 
-    public GoTo(int label, ParseTable pt) {
+    public Goto(int label, ParseTable pt) {
         this.pt = pt;
         this.label = label;
     }
@@ -69,7 +69,7 @@ public class GoTo implements Serializable, IGoto {
             return false;
         if(getClass() != obj.getClass())
             return false;
-        GoTo other = (GoTo) obj;
+        Goto other = (Goto) obj;
         if(cc == null) {
             if(other.cc != null)
                 return false;
@@ -86,7 +86,7 @@ public class GoTo implements Serializable, IGoto {
         if(label != -1) {
             return tf.makeAppl(tf.makeConstructor("goto", 2), tf.makeList(tf.makeInt(label)), tf.makeInt(state));
         }
-        return tf.makeAppl(tf.makeConstructor("goto", 2), cc.toStateAterm(tf), tf.makeInt(state));
+        return tf.makeAppl(tf.makeConstructor("goto", 2), cc.toAtermList(tf), tf.makeInt(state));
     }
 
     @Override public int[] productionIds() {

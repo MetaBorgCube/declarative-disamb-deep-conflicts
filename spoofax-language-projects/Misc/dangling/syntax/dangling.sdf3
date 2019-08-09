@@ -1,0 +1,36 @@
+module dangling
+
+imports Common
+
+context-free start-symbols Start
+
+context-free syntax
+  Start      = E
+  E.IfElse   = "if" E "then" E "else" E
+  E.Add      = E "+" E {left}
+  E.If       = "if" E "then" E 
+  E.Let      = "let" ID "=" E "in" E
+  E.Var      = ID
+  E.Seq      = E ";" E {left}
+  E          = "(" E ")" {bracket}
+  
+//context-free priorities
+//   E.If > E.Add > E.IfElse > E.Let 
+   
+//context-free priorities
+//   E.Add > E.If > E.IfElse
+   
+//context-free priorities
+//   E.Let > E.If > E.IfElse > E.Add
+     
+//context-free priorities
+//  E.Add > E.IfElse > E.If 
+
+//context-free priorities
+//  E.IfElse > E.Add > E.If 
+
+//context-free priorities
+//  E.IfElse > E.If > E.Add
+
+context-free priorities
+  E.Add > E.IfElse > E.If > E.Seq > E.Let

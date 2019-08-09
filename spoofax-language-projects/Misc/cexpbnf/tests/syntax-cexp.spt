@@ -1,0 +1,195 @@
+module syntax
+
+language cexp-bnf
+
+test identifier [[ 
+  a
+]] parse to Var("a")
+
+
+//-------------------- Assignment -----------------------------------
+
+test assign [[
+  a = b
+]] parse to Assign(Var("a"), Assign(), Var("b")) 
+
+test assign [[
+  a = b + c
+]] parse to  Assign(Var("a"),Assign(),Add(Var("b"),Var("c")))
+
+test assignment is right associative [[
+  a = b = c
+]] parse to Assign(Var("a"),Assign(),Assign(Var("b"),Assign(),Var("c")))
+
+test assign lhs [[ (a)b = c ]] parse fails
+test assign lhs [[ a * b = c ]] parse fails
+test assign lhs [[ a / b = c ]] parse fails
+test assign lhs [[ a % b = c ]] parse fails
+test assign lhs [[ a + b = c ]] parse fails
+test assign lhs [[ a - b = c ]] parse fails
+test assign lhs [[ a << b = c ]] parse fails
+test assign lhs [[ a >> b = c ]] parse fails
+test assign lhs [[ a < b = c ]] parse fails
+test assign lhs [[ a > b = c ]] parse fails
+test assign lhs [[ a <= b = c ]] parse fails
+test assign lhs [[ a >= b = c ]] parse fails
+test assign lhs [[ a == b = c ]] parse fails
+test assign lhs [[ a != b = c ]] parse fails
+test assign lhs [[ a & b = c ]] parse fails
+test assign lhs [[ a | b = c ]] parse fails
+test assign lhs [[ a ^ b = c ]] parse fails
+test assign lhs [[ a && b = c ]] parse fails
+test assign lhs [[ a || b = c ]] parse fails
+test assign lhs [[ a ? b : c = d ]] parse fails
+
+test assign [[ 
+  ++a = b 
+]] parse to Assign(PreInc(Var("a")), Assign(), Var("b"))
+
+test assign [[  
+  --a = b 
+]] parse to Assign(PreDec(Var("a")), Assign(), Var("b"))
+
+
+test assign [[  
+  a[b] = c 
+]] parse to Assign(Subscript(Var("a"),Var("b")),Assign(),Var("c")) 
+
+test assign [[  
+  a(c,d,e) = c 
+]] parse to Assign(Call(Var("a"),[Var("c"),Var("d"),Var("e")]),Assign(),Var("c"))
+
+test assign [[   
+  a.b = c 
+]] parse to Assign(Proj(Var("a"),"b"),Assign(),Var("c"))
+
+test assign [[   
+  a->b = c 
+]] parse to Assign(DerefProj(Var("a"),"b"),Assign(),Var("c"))
+
+test assign [[ 
+  a++ = b 
+]] parse to Assign(PostInc(Var("a")), Assign(), Var("b"))
+
+test assign [[ 
+  a-- = b 
+]] parse to Assign(PostDec(Var("a")), Assign(), Var("b"))
+
+
+//--------------------- function calls ----------------------
+
+test function call [[  
+  f(a) 
+]] parse to Call(Var("f"),[Var("a")]) 
+
+test function call [[
+  f(a, b)
+]] parse to Call(Var("f"),[Var("a"),Var("b")])
+
+test function call [[
+  f(a, b, c)
+]] parse to Call(Var("f"), [Var("a"),Var("b"),Var("c")])
+
+test function call [[
+  f(a, b, c, d)
+]] parse to Call(Var("f"), [Var("a"),Var("b"),Var("c"),Var("d")]) 
+
+
+test function call [[
+  f((a, b, c), d)
+]] parse to Call(Var("f"), [Comma(Comma(Var("a"),Var("b")),Var("c")),Var("d")])
+
+
+test function call [[ 
+  x.f(a)
+]] parse to Call(Proj(Var("x"),"f"),[Var("a")]) 
+
+
+//--------------------- conditional ----------------------
+
+test conditional [[
+  a ? b : c
+]] parse to Cond(Var("a"),Var("b"),Var("c"))
+
+test conditional binary [[ 
+  a + b ? b : c 
+]] parse to Cond(Add(Var("a"),Var("b")),Var("b"),Var("c"))
+
+test conditional binary [[ 
+  (a + b) ? b : c 
+]] parse to Cond(Add(Var("a"),Var("b")),Var("b"),Var("c"))
+
+
+test conditional assign [[
+  a ? b : c = b + c
+]] parse fails
+
+test conditional assign [[ 
+  a ? b : (c = b + c)
+]] parse to Cond(Var("a"),Var("b"),Assign(Var("c"),Assign(),Add(Var("b"),Var("c"))))
+
+test conditional assign [[ 
+  a ? b = c : d
+]] parse to Cond(Var("a"),Assign(Var("b"),Assign(),Var("c")),Var("d"))
+
+test conditional assign [[  
+  a = b ? c : d
+]] parse to Assign(Var("a"),Assign(),Cond(Var("b"),Var("c"),Var("d")))
+
+test conditional assign [[  
+  (a = b) ? c : d
+]] parse to Cond(Assign(Var("a"),Assign(),Var("b")),Var("c"),Var("d"))
+
+
+test conditional comma [[
+  a ? b : c, d
+]] parse to Comma(Cond(Var("a"),Var("b"),Var("c")), Var("d"))
+
+test conditional comma [[
+  a ? b, c : d
+]] parse to  Cond(Var("a"), Comma(Var("b"),Var("c")), Var("d"))
+ 
+test conditional comma [[
+  a, b ? c : d
+]] parse to Comma(Var("a"), Cond(Var("b"),Var("c"), Var("d")))
+
+
+
+
+
+//--------------------- sizeof and cast ----------------------
+
+test address of cast [[
+  & (t) 2
+]] parse to UnOp(Addr(),Cast("t",Int("2")))
+
+test sizeof [[
+  sizeof x + 2
+]] parse to Add(Sizeof(Var("x")),Int("2")) 
+
+test sizeof type [[
+  sizeof(t) + 2
+]] parse to amb(_) 
+
+
+//--------------------- overlapping operators ----------------------
+
+
+test addr and [[
+  & a & b
+]] parse to And(UnOp(Addr(),Var("a")),Var("b"))
+
+test addr and [[
+  a & & b
+]] parse to And(Var("a"),UnOp(Addr(),Var("b")))
+
+test min min min min [[
+  - a -= - b - c
+]] parse to Assign(UnOp(Umin(),Var("a")),AssignMin(),Sub(UnOp(Umin(),Var("b")),Var("c")))
+
+test rshift [[
+  a >> b
+]] parse to Rshift(Var("a"),Var("b"))
+
+
+

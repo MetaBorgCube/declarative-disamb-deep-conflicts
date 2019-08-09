@@ -1,0 +1,23 @@
+module arithmetic
+
+imports Common
+
+context-free start-symbols Start
+
+context-free syntax
+  
+  Start = Exp
+  
+  Exp.Var = ID
+  Exp.Add = Exp "+" Exp {left}  
+  Exp.If  = "if" Exp "then" Exp
+  
+  Exp.Assign = Exp "=" Exp {right}
+  
+context-free priorities
+
+  Exp.Add > Exp.Assign,
+
+  Exp.Add <0> .> Exp.If,
+  
+  Exp.Assign <0> .> Exp.Add
