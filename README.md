@@ -18,8 +18,8 @@ This repository contains the SDF3 grammars for Tiger, Jasmin, IceDust, OCaml and
 
 To run the benchmark, download the image from ... and run the [Docker](https://www.docker.com) container using the following commands (with memory preferences set to at least 4.0GiB):
 
- 		`docker load --input decl-disamb-docker.tar`
-		`docker run -it decl-disamb`
+ 		 `docker load --input decl-disamb-docker.tar
+		 docker run -it decl-disamb`
 
 .
 
