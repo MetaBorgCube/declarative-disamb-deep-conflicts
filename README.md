@@ -16,12 +16,12 @@ This repository contains the SDF3 grammars for Tiger, Jasmin, IceDust, OCaml and
 
 ## Running the Benchmark
 
-To run the benchmark, download the image from ... and run the [Docker](https://www.docker.com) container using the following commands (with memory preferences set to at least 4.0GiB):
+To run the benchmark, make sure you have [Docker](https://www.docker.com) and [git-lfs](https://git-lfs.github.com) installed. Load container and run the experiment using the following commands (with the host memory preferences in docker set to at least 4.0GiB):
 
- 		 docker load --input decl-disamb-docker.tar
-		 docker run -it decl-disamb
+ 		 docker load < decl-disamb-docker.tar
+		 docker run -it decl-disamb-v1
+		 mvn clean verify
 
-.
 
 ## Installing Spoofax
 
