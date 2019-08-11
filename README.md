@@ -20,6 +20,7 @@ To run the benchmark, make sure you have [Docker](https://www.docker.com) and [g
 
  		 docker load < decl-disamb-docker.tar
 		 docker run -it decl-disamb-v1
+		 cd declarative-disamb-deep-conflicts
 		 mvn clean verify
 
 
